@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>神奇學苑 × 靈應壇｜系統入口</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   主題變數：深色（預設）／淺色／大字模式
+   ============================================================ */
+:root{
+  color-scheme:dark; /* 告訴瀏覽器：目前是深色，別自動反轉 */
+  --violet:#a58bb8;
+  --violet-dim:#75648a;
+  --bg:#1c1a17;
+  --bg-card:#26231f;
+  --bg-card-hover:#2e2a25;
+  --text:#f2efe9;
+  --text-dim:#b8b0a4;
+  --gold:#c9a45c;
+  --gold-dim:#8a7344;
+  --green:#8fae9b;
+  --green-dim:#5d7a6a;
+  --line:#3a352e;
+  --local-badge:#5a5348;
+  --danger:#c46a5a;
+  --fs-body:15px;
+  --fs-card-title:17px;
+  --fs-cat:20px;
+  --fs-h1:30px;
+  --fs-bigmenu:34px;
+}
+html[data-theme="light"]{
+  color-scheme:light;
+  --violet:#7d5f96;
+  --violet-dim:#b7a6c9;
+  --bg:#f5f2ec;
+  --bg-card:#ffffff;
+  --bg-card-hover:#faf6ee;
+  --text:#2a2620;
+  --text-dim:#7a7263;
+  --gold:#a07f38;
+  --gold-dim:#c9b98f;
+  --green:#5d8570;
+  --green-dim:#9db8a9;
+  --line:#e2dcd0;
+  --local-badge:#cfc7b8;
+  --danger:#b0503f;
+}
+html[data-size="large"]{
+  --fs-body:18px;--fs-card-title:21px;--fs-cat:24px;--fs-h1:36px;--fs-bigmenu:40px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{background:var(--bg);} /* html 也鎖背景，避免 WebView 填自己的底色 */
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Noto Sans TC',sans-serif;
+  font-size:var(--fs-body);min-height:100vh;
+  transition:background .3s,color .3s;
+}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 90px;}
+button{font-family:inherit;}
+
+/* ---------- 頁首 ---------- */
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+h1{font-family:'Noto Serif TC',serif;font-size:var(--fs-h1);font-weight:900;letter-spacing:.06em;line-height:1.3;}
+h1 .sub{display:block;font-size:.48em;font-weight:500;color:var(--text-dim);letter-spacing:.28em;margin-top:6px;}
+.toggles{display:flex;gap:8px;flex-shrink:0;padding-top:6px;}
+.toggles button{
+  background:var(--bg-card);border:1px solid var(--line);color:var(--text);
+  border-radius:8px;padding:8px 12px;font-size:14px;cursor:pointer;transition:border-color .2s;
+}
+.toggles button:hover{border-color:var(--gold);}
+:is(button,a):focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+/* ---------- 首頁大選單 ---------- */
+.big-menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:44px;min-height:56vh;}
+.big-menu button{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;
+  background:var(--bg-card);border:1px solid var(--line);border-radius:16px;
+  color:var(--text);padding:40px 20px;cursor:pointer;
+  transition:background .2s,border-color .2s,transform .15s;
+}
+.big-menu button:hover{background:var(--bg-card-hover);transform:translateY(-2px);}
+.big-menu .zone-name{font-family:'Noto Serif TC',serif;font-weight:900;font-size:var(--fs-bigmenu);letter-spacing:.2em;}
+.big-menu .zone-desc{color:var(--text-dim);letter-spacing:.08em;}
+.big-menu .n{font-size:.85em;color:var(--text-dim);}
+#menu-admin{border-top:4px solid var(--gold);}
+#menu-admin .zone-name{color:var(--gold);}
+#menu-teacher{border-top:4px solid var(--green);}
+#menu-teacher .zone-name{color:var(--green);}
+#menu-student{border-top:4px solid var(--violet);}
+#menu-student .zone-name{color:var(--violet);}
+
+/* ---------- 分區內頁 ---------- */
+.zone{display:none;}
+.zone.active{display:block;}
+.zone-head{display:flex;align-items:center;gap:14px;margin:30px 0 6px;flex-wrap:wrap;}
+.back{
+  background:var(--bg-card);border:1px solid var(--line);color:var(--text);
+  border-radius:8px;padding:8px 14px;font-size:14px;cursor:pointer;
+}
+.back:hover{border-color:var(--gold);}
+.zone-title{font-family:'Noto Serif TC',serif;font-weight:900;font-size:var(--fs-h1);letter-spacing:.15em;}
+#zone-admin .zone-title{color:var(--gold);}
+#zone-teacher .zone-title{color:var(--green);}
+#zone-student .zone-title{color:var(--violet);}
+
+.cat{margin-top:28px;}
+.cat-head{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:14px;flex-wrap:wrap;}
+.cat-head .cat-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:var(--fs-cat);letter-spacing:.1em;}
+.cat-head .count{color:var(--text-dim);font-size:.82em;}
+
+/* ---------- 卡片 ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.card{
+  position:relative;display:flex;flex-direction:column;gap:6px;
+  background:var(--bg-card);border:1px solid var(--line);border-left:3px solid var(--gold-dim);
+  border-radius:10px;padding:16px 16px 14px;text-decoration:none;color:var(--text);
+  transition:background .2s,border-color .2s,transform .15s;min-height:86px;
+}
+#zone-teacher .card{border-left-color:var(--green-dim);}
+#zone-student .card{border-left-color:var(--violet-dim);}
+.card:hover{background:var(--bg-card-hover);border-color:var(--gold);transform:translateY(-1px);}
+.card .name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:var(--fs-card-title);letter-spacing:.04em;}
+.card .desc{color:var(--text-dim);font-size:.88em;line-height:1.5;}
+.card .badge{align-self:flex-start;margin-top:auto;font-size:.75em;letter-spacing:.1em;background:var(--local-badge);color:var(--text);border-radius:4px;padding:2px 8px;}
+.card.is-local{cursor:pointer;opacity:.82;}
+.card .go{margin-top:auto;align-self:flex-end;color:var(--gold);font-size:.85em;letter-spacing:.06em;}
+#zone-teacher .card .go{color:var(--green);}
+#zone-student .card .go{color:var(--violet);}
+
+/* ---------- 編輯模式 ---------- */
+.edit-only{display:none;}
+body.editing .edit-only{display:inline-flex;}
+body.editing .card{padding-top:40px;}
+.mini{
+  border:1px solid var(--line);background:var(--bg-card);color:var(--text);
+  border-radius:6px;padding:4px 9px;font-size:13px;cursor:pointer;
+}
+.mini:hover{border-color:var(--gold);}
+.mini.danger{color:var(--danger);}
+.card .card-tools{position:absolute;top:8px;right:8px;display:none;gap:6px;}
+body.editing .card .card-tools{display:flex;}
+.add-cat{margin-top:24px;width:100%;padding:12px;border:1px dashed var(--line);background:none;color:var(--text-dim);border-radius:10px;cursor:pointer;font-size:1em;}
+.add-cat:hover{border-color:var(--gold);color:var(--gold);}
+#editbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:9;display:none;
+  background:var(--bg-card);border-top:1px solid var(--line);
+  padding:10px 16px;justify-content:center;gap:10px;flex-wrap:wrap;align-items:center;
+}
+body.editing #editbar{display:flex;}
+#editbar button{padding:10px 20px;border-radius:8px;border:1px solid var(--line);cursor:pointer;font-size:15px;}
+#btn-save{background:var(--gold);color:#1c1a17;border-color:var(--gold);font-weight:700;}
+#btn-exit{background:var(--bg);color:var(--text);}
+#save-status{font-size:.85em;color:var(--text-dim);width:100%;text-align:center;}
+
+/* ---------- 彈窗（本機說明＋編輯表單共用外框） ---------- */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:10;}
+.modal.show{display:flex;}
+.modal .box{background:var(--bg-card);border:1px solid var(--line);border-radius:12px;width:100%;max-width:440px;padding:24px;line-height:1.7;max-height:88vh;overflow:auto;}
+.modal .box b{color:var(--gold);}
+.modal label{display:block;margin-top:12px;font-size:.88em;color:var(--text-dim);}
+.modal input[type=text],.modal textarea,.modal select{
+  width:100%;margin-top:4px;padding:10px;border-radius:8px;
+  border:1px solid var(--line);background:var(--bg);color:var(--text);
+  font-family:inherit;font-size:15px;
+}
+.modal textarea{min-height:64px;resize:vertical;}
+.modal .row{display:flex;gap:10px;margin-top:18px;}
+.modal .row button{flex:1;padding:11px;border-radius:8px;border:1px solid var(--line);cursor:pointer;font-size:15px;background:var(--bg);color:var(--text);}
+.modal .row .primary{background:var(--gold);color:#1c1a17;border-color:var(--gold);font-weight:700;}
+
+/* ---------- 公告區 ---------- */
+.board{margin-top:20px;background:var(--bg-card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 16px;}
+#zone-teacher .board{border-left-color:var(--green);}
+#zone-student .board{border-left-color:var(--violet);}
+.board-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.board-head .board-title{font-family:'Noto Serif TC',serif;font-weight:700;letter-spacing:.12em;}
+.ann-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line);line-height:1.6;}
+.ann-item:first-of-type{border-top:none;margin-top:8px;}
+.ann-date{flex-shrink:0;color:var(--text-dim);font-size:.82em;padding-top:2px;}
+.ann-new{flex-shrink:0;font-size:.7em;background:var(--danger);color:#fff;border-radius:4px;padding:2px 6px;letter-spacing:.08em;margin-top:2px;}
+.ann-text{white-space:pre-wrap;word-break:break-word;flex:1;}
+.ann-tools{display:none;gap:6px;flex-shrink:0;}
+body.editing .ann-tools{display:flex;}
+footer{margin-top:48px;text-align:center;color:var(--text-dim);font-size:.8em;letter-spacing:.1em;}
+#site-link{display:inline-block;color:var(--gold);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:10px 18px;font-size:1.15em;letter-spacing:.08em;transition:border-color .2s;}
+#site-link:hover{border-color:var(--gold);}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+@media (max-width:560px){
+  header{flex-direction:column;}
+  .big-menu{grid-template-columns:1fr;min-height:auto;}
+  .big-menu button{padding:34px 20px;}
+  .grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>系統入口<span class="sub">神奇身心靈學苑 × 靈應壇</span></h1>
+    <div class="toggles">
+      <button id="btn-theme" title="深/淺色切換">🌗</button>
+      <button id="btn-size" title="大字模式">Ａ⁺</button>
+      <button id="btn-edit" title="編輯模式">⚙</button>
+    </div>
+  </header>
+
+  <nav class="big-menu" id="home">
+    <button type="button" data-zone="admin" id="menu-admin">
+      <span class="zone-name">行政區</span>
+      <span class="zone-desc">財務・法會・管理系統</span>
+    </button>
+    <button type="button" data-zone="teacher" id="menu-teacher">
+      <span class="zone-name">老師區</span>
+      <span class="zone-desc">填單・積點・教學資源</span>
+    </button>
+    <button type="button" data-zone="student" id="menu-student">
+      <span class="zone-name">學員區</span>
+      <span class="zone-desc">積點・課程・官方 LINE</span>
+    </button>
+  </nav>
+
+  <div class="zone" id="zone-admin">
+    <div class="zone-head">
+      <button type="button" class="back">← 回首頁</button>
+      <span class="zone-title">行政區</span>
+    </div>
+    <div class="board" data-board="admin"></div>
+    <div class="cats"></div>
+    <button class="add-cat edit-only" data-zone="admin">＋ 新增分類</button>
+  </div>
+
+  <div class="zone" id="zone-teacher">
+    <div class="zone-head">
+      <button type="button" class="back">← 回首頁</button>
+      <span class="zone-title">老師區</span>
+    </div>
+    <div class="board" data-board="teacher"></div>
+    <div class="cats"></div>
+    <button class="add-cat edit-only" data-zone="teacher">＋ 新增分類</button>
+  </div>
+
+  <div class="zone" id="zone-student">
+    <div class="zone-head">
+      <button type="button" class="back">← 回首頁</button>
+      <span class="zone-title">學員區</span>
+    </div>
+    <div class="board" data-board="student"></div>
+    <div class="cats"></div>
+    <button class="add-cat edit-only" data-zone="student">＋ 新增分類</button>
+  </div>
+
+  <footer>
+    <a href="https://www.miiragic913514.com/" target="_blank" rel="noopener" id="site-link">🌐 神奇官網 miiragic913514.com</a>
+    <div style="margin-top:10px;">MIIRAGIC INTERNAL PORTAL</div>
+  </footer>
+</div>
+
+<div id="editbar">
+  <span id="save-status"></span>
+  <button id="btn-save">💾 儲存變更</button>
+  <button id="btn-exit">離開編輯</button>
+</div>
+
+<!-- 本機工具說明 -->
+<div id="local-tip" class="modal" role="dialog" aria-modal="true">
+  <div class="box">
+    <div id="local-tip-text"></div>
+    <div class="row"><button class="primary" onclick="closeModal('local-tip')">知道了</button></div>
+  </div>
+</div>
+
+<!-- 公告編輯表單 -->
+<div id="ann-modal" class="modal" role="dialog" aria-modal="true">
+  <div class="box">
+    <b id="ann-modal-title">新增公告</b>
+    <label>日期<input type="text" id="a-date" placeholder="2026-07-08"></label>
+    <label>公告內容（可多行）<textarea id="a-text" style="min-height:110px"></textarea></label>
+    <div class="row">
+      <button onclick="closeModal('ann-modal')">取消</button>
+      <button class="primary" id="a-submit">確定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 系統編輯表單 -->
+<div id="item-modal" class="modal" role="dialog" aria-modal="true">
+  <div class="box">
+    <b id="item-modal-title">編輯系統</b>
+    <label>名稱<input type="text" id="f-name"></label>
+    <label>說明<input type="text" id="f-desc"></label>
+    <label>類型
+      <select id="f-type">
+        <option value="web">連結（開新分頁）</option>
+        <option value="local">本機工具（顯示說明）</option>
+        <option value="note">問答／說明（點卡片看內容）</option>
+      </select>
+    </label>
+    <label id="f-url-wrap">網址<textarea id="f-url" placeholder="https://..."></textarea></label>
+    <label id="f-hint-wrap"><span id="f-hint-label">開啟說明</span><textarea id="f-hint" placeholder="例：開啟電腦上的 XXX.html"></textarea></label>
+    <div class="row">
+      <button onclick="closeModal('item-modal')">取消</button>
+      <button class="primary" id="f-submit">確定</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ① 基本設定
+   ============================================================ */
+const EDIT_PASSWORD = "miiragic2026";           // 編輯模式密碼（自行修改）
+const ZONE_PASSWORDS = { admin:"admin888", teacher:"teacher888", student:"" }; // 分區密碼，留空 = 免密碼
+const SUPABASE_URL  = "https://plgrsxtlaznajzqgcuqr.supabase.co";
+const SUPABASE_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZ3JzeHRsYXpuYWp6cWdjdXFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5Njg1MDIsImV4cCI6MjA5MDU0NDUwMn0.XyZ0wQbZQ-CInglRpv-MHMuMvkviRovm-o-On_FeyGs"; // anon key（前端公開金鑰）
+const TABLE = "game_data";           // 共用通用表（miiragic-daily 建的），免建新表
+const ROW_ID = "portal_config_main";
+
+/* ============================================================
+   ② 預設內容（第一次使用或讀不到雲端時顯示）
+   ============================================================ */
+const DEFAULT_CONFIG = {
+  admin: [
+    { category:"法會文件", items:[
+      { name:"疏文批次產生器", desc:"線上批次產生疏文", type:"web",
+        url:"https://kevin87265-pixel.github.io/statistics.html/%E7%96%8F%E6%96%87%E6%89%B9%E6%AC%A1%E7%94%A2%E7%94%9F%E5%99%A8_2.html" },
+      { name:"香量總表", desc:"各位老師的香量表（Google Sheet）", type:"web",
+        url:"https://docs.google.com/spreadsheets/d/1EJsLHTamRMZCfA4EvIkF-G0Js6nA2uX2fgVTGBT_KKY/edit?gid=901576554#gid=901576554" },
+    ]},
+    { category:"財務業績", items:[
+      { name:"月度獎金計算系統", desc:"全組織 PV 與獎金計算", type:"web",
+        url:"https://kevin87265-pixel.github.io/statistics.html/%E7%8D%8E%E9%87%91%E8%A8%88%E7%AE%97%E7%B3%BB%E7%B5%B1.html" },
+      { name:"業績驗算", desc:"月度業績交叉核對", type:"local",
+        hint:"本機工具：開啟電腦上的「業績驗算」HTML 檔。" },
+      { name:"財務儀表板", desc:"營運財務健檢報表", type:"local",
+        hint:"本機工具：開啟電腦上的「財務儀表板」HTML 檔。" },
+    ]},
+    { category:"管理系統", items:[
+      { name:"積點管理系統", desc:"客戶積點查詢與管理", type:"web",
+        url:"https://kevin87265-pixel.github.io/miiragic-points/" },
+      { name:"斗燈包年管理", desc:"斗燈席位與平面圖管理", type:"local",
+        hint:"本機工具：開啟電腦上的「斗燈包年管理系統」HTML 檔（v3+）。" },
+    ]},
+  ],
+  teacher: [
+    { category:"日常工具", items:[
+      { name:"香量填單系統", desc:"神奇老師香量線上填單", type:"web",
+        url:"https://kevin87265-pixel.github.io/statistics.html/" },
+      { name:"積點管理系統", desc:"客戶積點查詢與登錄", type:"web",
+        url:"https://kevin87265-pixel.github.io/miiragic-points/" },
+      { name:"下單付款", desc:"訂單與付款連結（待設定）", type:"web", url:"" },
+    ]},
+    { category:"課程資料區", items:[] },
+    { category:"法會資料區", items:[] },
+    { category:"資料問題統整", items:[] },
+    { category:"教學影片", items:[] },
+  ],
+  student: [
+    { category:"學員專區", items:[
+      { name:"積點查詢", desc:"MIIRAGIC Magic Halo 積點系統", type:"web",
+        url:"https://kevin87265-pixel.github.io/miiragic-points/" },
+      { name:"每月課程", desc:"本月課程資訊（待設定連結）", type:"web", url:"" },
+      { name:"課程資料", desc:"課程講義與資料（待設定連結）", type:"web", url:"" },
+      { name:"學苑官方 LINE", desc:"加入官方帳號聯繫我們", type:"web",
+        url:"https://lin.ee/n2N8qhh" },
+    ]},
+  ]
+};
+
+/* ============================================================
+   ③ 狀態與存取
+   ============================================================ */
+let state = null;
+let editing = false;
+const $ = s => document.querySelector(s);
+const esc = s => String(s??"").replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const sbHeaders = ()=>({ "apikey":SUPABASE_KEY, "Authorization":"Bearer "+SUPABASE_KEY, "Content-Type":"application/json" });
+const sbReady = ()=> SUPABASE_URL && SUPABASE_KEY;
+
+async function loadConfig(){
+  if(sbReady()){
+    try{
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${ROW_ID}&select=data`,{headers:sbHeaders()});
+      if(r.ok){
+        const rows = await r.json();
+        if(rows.length && rows[0].data && rows[0].data.admin){
+          state = rows[0].data; renderAll(); return;
+        }
+      }
+    }catch(e){ console.warn("Supabase 讀取失敗，改用本機資料", e); }
+  }
+  const cached = localStorage.getItem("portal-config");
+  state = cached ? JSON.parse(cached) : structuredClone(DEFAULT_CONFIG);
+  renderAll();
+}
+
+async function saveConfig(){
+  localStorage.setItem("portal-config", JSON.stringify(state));
+  if(!sbReady()){
+    $("#save-status").textContent = "已儲存（單機模式：尚未設定 Supabase key，其他裝置看不到變更）";
+    return;
+  }
+  $("#save-status").textContent = "儲存中…";
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`,{
+      method:"POST",
+      headers:{...sbHeaders(), "Prefer":"return=minimal,resolution=merge-duplicates"},
+      body:JSON.stringify({ id:ROW_ID, table_name:"portal_config", row_key:"main",
+                            data:state, updated_at:new Date().toISOString() })
+    });
+    $("#save-status").textContent = r.ok ? "✅ 已同步到雲端，所有裝置都會看到" : "⚠️ 雲端儲存失敗（已存本機）";
+  }catch(e){
+    $("#save-status").textContent = "⚠️ 網路問題，僅存本機";
+  }
+}
+
+/* ============================================================
+   ④ 渲染
+   ============================================================ */
+function makeCard(item, zoneKey, ci, ii){
+  let el;
+  if(item.type === "web"){
+    el = document.createElement("a");
+    el.href = item.url || "#"; el.target = "_blank"; el.rel = "noopener";
+    el.innerHTML = `<span class="name">${esc(item.name)}</span>
+                    <span class="desc">${esc(item.desc)}</span>
+                    <span class="go">前往 →</span>`;
+    if(editing) el.addEventListener("click", e=> e.preventDefault());
+  }else{
+    const isNote = item.type === "note";
+    el = document.createElement("div");
+    el.className = "is-local"; el.tabIndex = 0;
+    el.innerHTML = `<span class="name">${esc(item.name)}</span>
+                    <span class="desc">${esc(item.desc)}</span>
+                    <span class="badge">${isNote ? "查看內容 ▾" : "本機工具"}</span>`;
+    const showTip = ()=>{
+      if(editing) return;
+      $("#local-tip-text").innerHTML =
+        `<b>${esc(item.name)}</b><br>${esc(item.hint||"").replace(/\n/g,"<br>")}`;
+      $("#local-tip").classList.add("show");
+    };
+    el.addEventListener("click", showTip);
+    el.addEventListener("keydown", e=>{ if(e.key==="Enter") showTip(); });
+  }
+  el.classList.add("card");
+  const tools = document.createElement("span");
+  tools.className = "card-tools";
+  tools.innerHTML = `<button class="mini" data-a="up">↑</button>
+                     <button class="mini" data-a="down">↓</button>
+                     <button class="mini" data-a="edit">✎</button>
+                     <button class="mini danger" data-a="del">✕</button>`;
+  tools.addEventListener("click", e=>{
+    e.preventDefault(); e.stopPropagation();
+    const a = e.target.dataset.a; if(!a) return;
+    const items = state[zoneKey][ci].items;
+    if(a==="del" && confirm(`刪除「${item.name}」？`)) items.splice(ii,1);
+    if(a==="up" && ii>0) [items[ii-1],items[ii]]=[items[ii],items[ii-1]];
+    if(a==="down" && ii<items.length-1) [items[ii+1],items[ii]]=[items[ii],items[ii+1]];
+    if(a==="edit"){ openItemModal(zoneKey, ci, ii); return; }
+    renderAll();
+  });
+  el.appendChild(tools);
+  return el;
+}
+
+function renderZone(zoneKey, sectionId){
+  const catsWrap = document.querySelector(`#${sectionId} .cats`);
+  catsWrap.innerHTML = "";
+  state[zoneKey].forEach((cat, ci)=>{
+    const sec = document.createElement("section");
+    sec.className = "cat";
+    const head = document.createElement("div");
+    head.className = "cat-head";
+    head.innerHTML = `<span class="cat-name">${esc(cat.category)}</span>
+      <button class="mini edit-only" data-a="rename">✎ 改名</button>
+      <button class="mini edit-only" data-a="up">↑</button>
+      <button class="mini edit-only" data-a="down">↓</button>
+      <button class="mini edit-only" data-a="add">＋ 新增系統</button>
+      <button class="mini danger edit-only" data-a="delcat">✕ 刪分類</button>`;
+    head.addEventListener("click", e=>{
+      const a = e.target.dataset.a; if(!a) return;
+      const cats = state[zoneKey];
+      if(a==="rename"){ const n = prompt("分類名稱：", cat.category); if(n) cat.category = n.trim(); }
+      if(a==="up" && ci>0) [cats[ci-1],cats[ci]]=[cats[ci],cats[ci-1]];
+      if(a==="down" && ci<cats.length-1) [cats[ci+1],cats[ci]]=[cats[ci],cats[ci+1]];
+      if(a==="add"){ openItemModal(zoneKey, ci, null); return; }
+      if(a==="delcat"){
+        if(cat.items.length && !confirm(`「${cat.category}」內有 ${cat.items.length} 個系統，一併刪除？`)) return;
+        if(!cat.items.length && !confirm(`刪除分類「${cat.category}」？`)) return;
+        cats.splice(ci,1);
+      }
+      renderAll();
+    });
+    sec.appendChild(head);
+    const grid = document.createElement("div");
+    grid.className = "grid";
+    cat.items.forEach((item, ii)=> grid.appendChild(makeCard(item, zoneKey, ci, ii)));
+    sec.appendChild(grid);
+    catsWrap.appendChild(sec);
+  });
+}
+/* ---------- 公告區 ---------- */
+function ensureAnn(){ if(!state.ann) state.ann = {}; state.ann.admin ||= []; state.ann.teacher ||= []; state.ann.student ||= []; if(!state.student) state.student = structuredClone(DEFAULT_CONFIG.student); }
+function isNew(dateStr){
+  const d = new Date(dateStr); if(isNaN(d)) return false;
+  return (Date.now() - d.getTime()) < 7*24*60*60*1000;
+}
+let annTarget = null; // {zoneKey, idx|null}
+function openAnnModal(zoneKey, idx){
+  annTarget = {zoneKey, idx};
+  const isAdd = idx === null;
+  const a = isAdd ? {date:new Date().toISOString().slice(0,10), text:""} : state.ann[zoneKey][idx];
+  $("#ann-modal-title").textContent = isAdd ? "新增公告" : "編輯公告";
+  $("#a-date").value = a.date||"";
+  $("#a-text").value = a.text||"";
+  $("#ann-modal").classList.add("show");
+}
+$("#a-submit").addEventListener("click", ()=>{
+  const {zoneKey, idx} = annTarget;
+  const a = { date: $("#a-date").value.trim(), text: $("#a-text").value.trim() };
+  if(!a.text){ closeModal("ann-modal"); return; }
+  if(idx===null) state.ann[zoneKey].unshift(a);
+  else state.ann[zoneKey][idx] = a;
+  closeModal("ann-modal");
+  renderAll();
+});
+function renderBoard(zoneKey){
+  ensureAnn();
+  const wrap = document.querySelector(`[data-board="${zoneKey}"]`);
+  const list = state.ann[zoneKey];
+  wrap.innerHTML = "";
+  if(!editing && list.length===0){ wrap.style.display="none"; return; }
+  wrap.style.display = "block";
+  const head = document.createElement("div");
+  head.className = "board-head";
+  head.innerHTML = `<span class="board-title">📢 公告</span>
+    <button class="mini edit-only" data-a="add">＋ 新增公告</button>`;
+  head.addEventListener("click", e=>{
+    if(e.target.dataset.a==="add") openAnnModal(zoneKey, null);
+  });
+  wrap.appendChild(head);
+  list.forEach((a, idx)=>{
+    const row = document.createElement("div");
+    row.className = "ann-item";
+    row.innerHTML = `<span class="ann-date">${esc(a.date||"")}</span>
+      ${isNew(a.date) ? '<span class="ann-new">NEW</span>' : ''}
+      <span class="ann-text">${esc(a.text)}</span>
+      <span class="ann-tools">
+        <button class="mini" data-a="edit">✎</button>
+        <button class="mini danger" data-a="del">✕</button>
+      </span>`;
+    row.addEventListener("click", e=>{
+      const act = e.target.dataset.a; if(!act) return;
+      if(act==="edit") openAnnModal(zoneKey, idx);
+      if(act==="del" && confirm("刪除這則公告？")){ state.ann[zoneKey].splice(idx,1); renderAll(); }
+    });
+    wrap.appendChild(row);
+  });
+}
+function renderAll(){ ensureAnn(); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); }
+
+/* ============================================================
+   ⑤ 系統編輯表單
+   ============================================================ */
+let modalTarget = null; // {zoneKey, ci, ii|null}
+function openItemModal(zoneKey, ci, ii){
+  modalTarget = {zoneKey, ci, ii};
+  const isNew = ii === null;
+  const item = isNew ? {name:"",desc:"",type:"web",url:"",hint:""} : state[zoneKey][ci].items[ii];
+  $("#item-modal-title").textContent = isNew ? "新增系統" : "編輯系統";
+  $("#f-name").value = item.name||"";
+  $("#f-desc").value = item.desc||"";
+  $("#f-type").value = item.type||"web";
+  $("#f-url").value = item.url||"";
+  $("#f-hint").value = item.hint||"";
+  syncTypeFields();
+  $("#item-modal").classList.add("show");
+}
+function syncTypeFields(){
+  const t = $("#f-type").value;
+  $("#f-url-wrap").style.display  = t==="web" ? "block":"none";
+  $("#f-hint-wrap").style.display = t==="web" ? "none":"block";
+  $("#f-hint-label").textContent  = t==="note" ? "內容（答案／說明，可多行）" : "開啟說明";
+}
+$("#f-type").addEventListener("change", syncTypeFields);
+$("#f-submit").addEventListener("click", ()=>{
+  const {zoneKey, ci, ii} = modalTarget;
+  const item = {
+    name: $("#f-name").value.trim() || "未命名",
+    desc: $("#f-desc").value.trim(),
+    type: $("#f-type").value,
+    url:  $("#f-url").value.trim(),
+    hint: $("#f-hint").value.trim(),
+  };
+  if(ii===null) state[zoneKey][ci].items.push(item);
+  else state[zoneKey][ci].items[ii] = item;
+  closeModal("item-modal");
+  renderAll();
+});
+function closeModal(id){ document.getElementById(id).classList.remove("show"); }
+
+document.querySelectorAll(".add-cat").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const n = prompt("新分類名稱：");
+    if(n){ state[btn.dataset.zone].push({category:n.trim(), items:[]}); renderAll(); }
+  });
+});
+
+/* ============================================================
+   ⑥ 編輯模式開關
+   ============================================================ */
+$("#btn-edit").addEventListener("click", ()=>{
+  if(editing) return;
+  const pw = prompt("請輸入編輯密碼：");
+  if(pw !== EDIT_PASSWORD){ if(pw!==null) alert("密碼錯誤"); return; }
+  editing = true;
+  document.body.classList.add("editing");
+  $("#save-status").textContent = sbReady() ? "" : "單機模式：改完會存在這台裝置，設定 Supabase key 後才會全員同步";
+  renderAll();
+});
+$("#btn-exit").addEventListener("click", ()=>{
+  editing = false;
+  document.body.classList.remove("editing");
+  renderAll();
+});
+$("#btn-save").addEventListener("click", saveConfig);
+
+/* ============================================================
+   ⑦ 首頁 / 分區切換（純 JS，不動網址）
+   老師專用網址：後面加 #teacher 或 ?v=t 直接進老師區
+   ============================================================ */
+const ZONES = ["admin","teacher","student"];
+function show(zone){
+  $("#home").style.display = ZONES.includes(zone) ? "none" : "grid";
+  ZONES.forEach(z=> document.getElementById("zone-"+z).classList.toggle("active", zone===z));
+  window.scrollTo(0,0);
+}
+const ZONE_LABEL = { admin:"行政區", teacher:"老師區", student:"學員區" };
+function enterZone(zone){
+  const pw = ZONE_PASSWORDS[zone] || "";
+  if(pw && localStorage.getItem("portal-unlock-"+zone) !== "1"){
+    const input = prompt(`請輸入${ZONE_LABEL[zone]}密碼：`);
+    if(input === null) return;
+    if(input !== pw){ alert("密碼錯誤"); return; }
+    localStorage.setItem("portal-unlock-"+zone, "1"); // 這台裝置記住，之後免輸入
+  }
+  show(zone);
+}
+document.querySelectorAll(".big-menu button").forEach(btn=> btn.addEventListener("click", ()=> enterZone(btn.dataset.zone)));
+document.querySelectorAll(".back").forEach(btn=> btn.addEventListener("click", ()=> show(null)));
+const q = new URLSearchParams(location.search);
+const startZone =
+  location.hash === "#teacher" || q.get("v")==="t" ? "teacher"
+  : location.hash === "#student" || q.get("v")==="s" ? "student"
+  : location.hash === "#admin" ? "admin" : null;
+if(startZone) enterZone(startZone);
+
+/* ============================================================
+   ⑧ 主題與字級（記住選擇；首次跟隨手機系統）
+   ============================================================ */
+const root = document.documentElement;
+const savedTheme = localStorage.getItem("portal-theme");
+if(savedTheme==="light"){ root.dataset.theme="light"; }
+else if(!savedTheme && window.matchMedia("(prefers-color-scheme: light)").matches){ root.dataset.theme="light"; }
+if(localStorage.getItem("portal-size")==="large") root.dataset.size="large";
+$("#btn-theme").onclick = ()=>{
+  const next = root.dataset.theme==="light" ? "" : "light";
+  root.dataset.theme = next;
+  localStorage.setItem("portal-theme", next||"dark");
+};
+$("#btn-size").onclick = ()=>{
+  const next = root.dataset.size==="large" ? "" : "large";
+  root.dataset.size = next;
+  localStorage.setItem("portal-size", next||"normal");
+};
+
+loadConfig();
+</script>
+</body>
+</html>
