@@ -242,7 +242,7 @@ body.editing #editbar{display:flex;}
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:none;}}
 .modal .box > b:first-child,#local-tip-text b{display:block;font-family:'Noto Serif TC',serif;font-size:1.2em;color:var(--gold);letter-spacing:.08em;margin-bottom:4px;}
 .modal label{display:block;margin-top:14px;font-size:.82em;letter-spacing:.1em;color:var(--text-dim);}
-.modal input[type=text],.modal textarea,.modal select{
+.modal input[type=text],.modal input[type=date],.modal textarea,.modal select{
   width:100%;margin-top:6px;padding:12px 14px;border-radius:12px;
   border:1px solid var(--line-strong);background:var(--bg);color:var(--text);
   font-family:inherit;font-size:15px;letter-spacing:0;transition:border-color .2s,box-shadow .2s;
@@ -270,6 +270,57 @@ body.editing #editbar{display:flex;}
 .ann-text{white-space:pre-wrap;word-break:break-word;flex:1;min-width:180px;}
 .ann-tools{display:none;gap:6px;flex-shrink:0;}
 body.editing .ann-tools{display:flex;}
+
+/* ---------- 行事曆 ---------- */
+.cal{margin-top:16px;background:var(--bg-card);border:1px solid var(--line);border-radius:20px;padding:16px 16px 14px;box-shadow:var(--shadow);}
+.cal-head{display:flex;align-items:center;gap:8px;}
+.cal-title{display:inline-flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.16em;font-size:.95em;color:var(--accent);}
+.cal-month{margin-left:auto;display:flex;align-items:center;gap:4px;}
+.cal-month b{min-width:92px;text-align:center;font-size:.95em;letter-spacing:.06em;font-variant-numeric:tabular-nums;}
+.cal-nav{display:grid;place-items:center;width:32px;height:32px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;color:var(--text-dim);}
+.cal-nav:hover{color:var(--accent);border-color:var(--accent);}
+.cal-nav svg.i{width:15px;height:15px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:12px;}
+.cal-wd{text-align:center;font-size:11px;color:var(--text-faint);padding:2px 0 4px;letter-spacing:.1em;}
+.cal-day{
+  position:relative;aspect-ratio:1/1;max-height:54px;border:0;border-radius:12px;background:transparent;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:14px;color:var(--text);
+  font-variant-numeric:tabular-nums;transition:background .15s;
+}
+.cal-day:hover{background:var(--bg-2);}
+.cal-day.out{color:var(--text-faint);opacity:.45;}
+.cal-day.today{box-shadow:inset 0 0 0 1.5px var(--accent);font-weight:700;}
+.cal-day.sel{background:var(--accent);color:#fff;}
+.cal-day .dots{display:flex;gap:2px;height:5px;}
+.cal-day .dots i{width:5px;height:5px;border-radius:50%;background:var(--accent);}
+.cal-day.sel .dots i{background:#fff;}
+.cal-list{margin-top:12px;border-top:1px solid var(--line);padding-top:10px;}
+.cal-list-h{font-size:12px;letter-spacing:.14em;color:var(--text-faint);margin-bottom:6px;}
+.ev{display:flex;gap:12px;align-items:flex-start;padding:10px 10px;border-radius:12px;cursor:default;}
+body.editing .ev{cursor:pointer;}
+body.editing .ev:hover{background:var(--bg-2);}
+.ev-date{flex-shrink:0;width:44px;text-align:center;border-radius:10px;background:var(--accent-soft);color:var(--accent);padding:4px 0;line-height:1.15;}
+.ev-date b{display:block;font-size:17px;font-variant-numeric:tabular-nums;}
+.ev-date small{font-size:10px;letter-spacing:.08em;}
+.ev-body{flex:1;min-width:0;}
+.ev-title{font-weight:700;letter-spacing:.03em;}
+.ev-meta{font-size:.82em;color:var(--text-dim);white-space:pre-wrap;word-break:break-word;}
+.cal-empty{font-size:13px;color:var(--text-faint);letter-spacing:.1em;padding:6px 10px;}
+.danger-btn{color:var(--danger)!important;}
+
+/* ---------- 內嵌系統視窗 ---------- */
+#viewer{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;background:var(--bg);animation:slidein .28s cubic-bezier(.2,.8,.2,1);}
+#viewer.show{display:flex;}
+@keyframes slidein{from{transform:translateY(24px);opacity:0;}to{transform:none;opacity:1;}}
+.viewer-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;padding-top:max(10px,env(safe-area-inset-top));background:var(--bg-card);border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(60,45,20,.06);}
+.viewer-bar b{flex:1;min-width:0;text-align:center;font-family:'Noto Serif TC',serif;font-size:16px;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.viewer-back{display:inline-flex;align-items:center;gap:4px;height:38px;padding:0 14px 0 8px;border-radius:999px;border:1px solid var(--line-strong);background:var(--bg);cursor:pointer;font-size:14px;letter-spacing:.08em;}
+#viewer-ext{display:grid;place-items:center;width:38px;height:38px;border-radius:999px;border:1px solid var(--line-strong);color:var(--text-dim);}
+#viewer-frame{flex:1;width:100%;border:0;background:#fff;}
+.viewer-load{position:absolute;top:50%;left:0;right:0;text-align:center;color:var(--text-faint);font-size:13px;letter-spacing:.14em;pointer-events:none;}
+.viewer-load span{display:block;width:28px;height:28px;margin:0 auto 10px;border-radius:50%;border:2.5px solid var(--line-strong);border-top-color:var(--gold);animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+body.viewing{overflow:hidden;}
 
 /* ---------- 頁尾 ---------- */
 footer{margin-top:60px;text-align:center;color:var(--text-faint);font-size:11px;letter-spacing:.3em;}
@@ -343,6 +394,7 @@ footer .foot-note{margin-top:16px;}
       <p class="hero-desc">財務・法會・管理系統</p>
     </div>
     <div class="board" data-board="admin"></div>
+    <div class="cal" data-cal="admin"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="admin"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
@@ -358,6 +410,7 @@ footer .foot-note{margin-top:16px;}
       <p class="hero-desc">填單・積點・教學資源</p>
     </div>
     <div class="board" data-board="teacher"></div>
+    <div class="cal" data-cal="teacher"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="teacher"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
@@ -373,6 +426,7 @@ footer .foot-note{margin-top:16px;}
       <p class="hero-desc">積點・課程・官方 LINE</p>
     </div>
     <div class="board" data-board="student"></div>
+    <div class="cal" data-cal="student"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="student"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
@@ -387,6 +441,33 @@ footer .foot-note{margin-top:16px;}
   <span id="save-status"></span>
   <button id="btn-save"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>儲存變更</button>
   <button id="btn-exit">離開編輯</button>
+</div>
+
+<!-- 系統內嵌視窗 -->
+<div id="viewer" aria-hidden="true">
+  <div class="viewer-bar">
+    <button type="button" class="viewer-back" id="viewer-close" aria-label="返回"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>返回</span></button>
+    <b id="viewer-title"></b>
+    <a id="viewer-ext" target="_blank" rel="noopener" title="用新分頁開啟"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>
+  </div>
+  <div class="viewer-load" id="viewer-load"><span></span>載入中…</div>
+  <iframe id="viewer-frame" title="系統畫面" allow="clipboard-write; fullscreen"></iframe>
+</div>
+
+<!-- 行事曆活動表單 -->
+<div id="ev-modal" class="modal" role="dialog" aria-modal="true">
+  <div class="box">
+    <b id="ev-modal-title">新增活動</b>
+    <label>日期<input type="date" id="e-date"></label>
+    <label>時間（可空白）<input type="text" id="e-time" placeholder="例：19:30 或 全天"></label>
+    <label>活動名稱<input type="text" id="e-title" placeholder="例：中元法會"></label>
+    <label>備註（可空白）<textarea id="e-note"></textarea></label>
+    <div class="row">
+      <button id="e-del" class="danger-btn">刪除</button>
+      <button onclick="closeModal('ev-modal')">取消</button>
+      <button class="primary" id="e-submit">確定</button>
+    </div>
+  </div>
 </div>
 
 <!-- 本機工具說明 -->
@@ -554,7 +635,11 @@ function makeCard(item, zoneKey, ci, ii){
                     <span class="desc">${esc(item.desc)}</span>
                     <span class="foot"><span class="kind">${item.url ? "線上系統" : "連結待設定"}</span><span class="go"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></span>`;
     if(!item.url) el.classList.add("is-empty");
-    if(editing) el.addEventListener("click", e=> e.preventDefault());
+    el.addEventListener("click", e=>{
+      if(editing){ e.preventDefault(); return; }
+      if(!item.url){ e.preventDefault(); alert("這個系統的連結還沒設定"); return; }
+      if(canEmbed(item.url)){ e.preventDefault(); openViewer(item); }
+    });
   }else{
     const isNote = item.type === "note";
     el = document.createElement("div");
@@ -685,7 +770,106 @@ function renderBoard(zoneKey){
     wrap.appendChild(row);
   });
 }
-function renderAll(){ ensureAnn(); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); }
+
+/* ---------- 內嵌系統視窗 ---------- */
+const NO_EMBED = /(^|\.)(lin\.ee|line\.me|liff\.line\.me|facebook\.com|instagram\.com|youtube\.com|youtu\.be)$/i;
+function canEmbed(url){
+  try{ const u = new URL(url, location.href); return /^https?:$/.test(u.protocol) && !NO_EMBED.test(u.hostname); }catch(e){ return false; }
+}
+function openViewer(item){
+  $("#viewer-title").textContent = item.name || "";
+  $("#viewer-ext").href = item.url;
+  $("#viewer-load").style.display = "block";
+  const f = $("#viewer-frame");
+  f.onload = ()=> $("#viewer-load").style.display = "none";
+  f.src = item.url;
+  $("#viewer").classList.add("show"); $("#viewer").setAttribute("aria-hidden","false");
+  document.body.classList.add("viewing");
+  try{ history.pushState({viewer:1}, ""); }catch(e){}
+}
+function closeViewer(fromPop){
+  if(!$("#viewer").classList.contains("show")) return;
+  $("#viewer").classList.remove("show"); $("#viewer").setAttribute("aria-hidden","true");
+  document.body.classList.remove("viewing");
+  $("#viewer-frame").src = "about:blank";
+  if(!fromPop){ try{ if(history.state && history.state.viewer) history.back(); }catch(e){} }
+}
+$("#viewer-close").addEventListener("click", ()=> closeViewer(false));
+window.addEventListener("popstate", ()=> closeViewer(true));
+
+/* ---------- 行事曆（三區各自一份） ---------- */
+const WD = ["日","一","二","三","四","五","六"];
+const pad = n => String(n).padStart(2,"0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const calView = {};   // 各區目前看的月份與選取日
+function ensureCal(){ if(!state.cal) state.cal = {}; ["admin","teacher","student"].forEach(z=> state.cal[z] ||= []); }
+function renderCal(zoneKey){
+  ensureCal();
+  const wrap = document.querySelector(`[data-cal="${zoneKey}"]`);
+  const today = new Date();
+  const v = calView[zoneKey] ||= { y: today.getFullYear(), m: today.getMonth(), sel: ymd(today) };
+  const events = state.cal[zoneKey];
+  const byDay = {};
+  events.forEach(e=> (byDay[e.date] ||= []).push(e));
+  const first = new Date(v.y, v.m, 1);
+  const start = new Date(v.y, v.m, 1 - first.getDay());
+  let cells = WD.map(w=>`<div class="cal-wd">${w}</div>`).join("");
+  for(let i=0;i<42;i++){
+    const d = new Date(start); d.setDate(start.getDate()+i);
+    if(i>=35 && d.getMonth()!==v.m) break;
+    const k = ymd(d), n = (byDay[k]||[]).length;
+    const cls = ["cal-day", d.getMonth()!==v.m?"out":"", k===ymd(today)?"today":"", k===v.sel?"sel":""].join(" ");
+    cells += `<button type="button" class="${cls}" data-d="${k}">${d.getDate()}<span class="dots">${"<i></i>".repeat(Math.min(n,3))}</span></button>`;
+  }
+  // 清單：選取日有活動就列那天，否則列本月全部
+  const monthKey = `${v.y}-${pad(v.m+1)}`;
+  let list = (byDay[v.sel]||[]);
+  let listTitle = `${Number(v.sel.slice(5,7))}月${Number(v.sel.slice(8))}日`;
+  if(!list.length){ list = events.filter(e=> (e.date||"").startsWith(monthKey)); listTitle = `${v.m+1}月全部活動`; }
+  list = list.slice().sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
+  const items = list.map(e=>{
+    const idx = events.indexOf(e); const dd = new Date(e.date+"T00:00");
+    return `<div class="ev" data-i="${idx}"><span class="ev-date"><b>${dd.getDate()}</b><small>週${WD[dd.getDay()]}</small></span>
+      <span class="ev-body"><span class="ev-title">${esc(e.title)}</span>${(e.time||e.note)?`<div class="ev-meta">${esc([e.time,e.note].filter(Boolean).join("・"))}</div>`:""}</span></div>`;
+  }).join("") || `<div class="cal-empty">這段時間沒有活動</div>`;
+  wrap.innerHTML = `<div class="cal-head"><span class="cal-title"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>行事曆</span>
+      <button class="mini edit-only" data-a="add"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增</button>
+      <span class="cal-month"><button class="cal-nav" data-a="prev" aria-label="上個月"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><b>${v.y} 年 ${v.m+1} 月</b><button class="cal-nav" data-a="next" aria-label="下個月"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></span></div>
+    <div class="cal-grid">${cells}</div>
+    <div class="cal-list"><div class="cal-list-h">${listTitle}</div>${items}</div>`;
+  wrap.onclick = e=>{
+    const t = e.target.closest("[data-a],[data-d],.ev"); if(!t) return;
+    if(t.dataset.a==="prev"){ v.m--; if(v.m<0){v.m=11;v.y--;} v.sel=`${v.y}-${pad(v.m+1)}-01`; }
+    else if(t.dataset.a==="next"){ v.m++; if(v.m>11){v.m=0;v.y++;} v.sel=`${v.y}-${pad(v.m+1)}-01`; }
+    else if(t.dataset.a==="add"){ openEvModal(zoneKey, null); return; }
+    else if(t.dataset.d){ v.sel = t.dataset.d; if(editing && !(byDay[v.sel]||[]).length){ openEvModal(zoneKey, null); } }
+    else if(t.classList.contains("ev")){ if(editing) openEvModal(zoneKey, Number(t.dataset.i)); return; }
+    renderCal(zoneKey);
+  };
+}
+let evTarget = null;
+function openEvModal(zoneKey, idx){
+  evTarget = {zoneKey, idx};
+  const isAdd = idx === null;
+  const e = isAdd ? {date:(calView[zoneKey]||{}).sel || ymd(new Date()), time:"", title:"", note:""} : state.cal[zoneKey][idx];
+  $("#ev-modal-title").textContent = isAdd ? "新增活動" : "編輯活動";
+  $("#e-date").value = e.date||""; $("#e-time").value = e.time||""; $("#e-title").value = e.title||""; $("#e-note").value = e.note||"";
+  $("#e-del").style.display = isAdd ? "none" : "";
+  $("#ev-modal").classList.add("show");
+}
+$("#e-submit").addEventListener("click", ()=>{
+  const {zoneKey, idx} = evTarget;
+  const e = { date:$("#e-date").value, time:$("#e-time").value.trim(), title:$("#e-title").value.trim(), note:$("#e-note").value.trim() };
+  if(!e.date || !e.title){ alert("日期和活動名稱要填"); return; }
+  if(idx===null) state.cal[zoneKey].push(e); else state.cal[zoneKey][idx] = e;
+  const v = calView[zoneKey]; if(v){ const d=new Date(e.date+"T00:00"); v.y=d.getFullYear(); v.m=d.getMonth(); v.sel=e.date; }
+  closeModal("ev-modal"); renderAll();
+});
+$("#e-del").addEventListener("click", ()=>{
+  const {zoneKey, idx} = evTarget;
+  if(idx!==null && confirm("刪除這個活動？")){ state.cal[zoneKey].splice(idx,1); closeModal("ev-modal"); renderAll(); }
+});
+function renderAll(){ ensureAnn(); renderCal("admin"); renderCal("teacher"); renderCal("student"); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); }
 
 /* ============================================================
    ⑤ 系統編輯表單
