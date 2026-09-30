@@ -3,198 +3,301 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#f6f2ea">
 <title>神奇學苑 × 靈應壇｜系統入口</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   主題變數：深色（預設）／淺色／大字模式
-   ============================================================ */
+/* ==================================================================
+   主題：深色（預設）／淺色／大字模式
+   ================================================================== */
 :root{
-  color-scheme:dark; /* 告訴瀏覽器：目前是深色，別自動反轉 */
-  --violet:#a58bb8;
-  --violet-dim:#75648a;
-  --bg:#1c1a17;
-  --bg-card:#26231f;
-  --bg-card-hover:#2e2a25;
-  --text:#f2efe9;
-  --text-dim:#b8b0a4;
-  --gold:#c9a45c;
-  --gold-dim:#8a7344;
-  --green:#8fae9b;
-  --green-dim:#5d7a6a;
-  --line:#3a352e;
-  --local-badge:#5a5348;
-  --danger:#c46a5a;
-  --fs-body:15px;
-  --fs-card-title:17px;
-  --fs-cat:20px;
-  --fs-h1:30px;
-  --fs-bigmenu:34px;
-}
-html[data-theme="light"]{
-  color-scheme:light;
-  --violet:#7d5f96;
-  --violet-dim:#b7a6c9;
-  --bg:#f5f2ec;
+  color-scheme:light only;
+  --bg:#f6f2ea;
+  --bg-2:#efe9de;
   --bg-card:#ffffff;
-  --bg-card-hover:#faf6ee;
-  --text:#2a2620;
-  --text-dim:#7a7263;
-  --gold:#a07f38;
-  --gold-dim:#c9b98f;
-  --green:#5d8570;
-  --green-dim:#9db8a9;
-  --line:#e2dcd0;
-  --local-badge:#cfc7b8;
-  --danger:#b0503f;
+  --bg-card-hover:#fffcf6;
+  --text:#27221b;
+  --text-dim:#7a705f;
+  --text-faint:#a9a08f;
+  --gold:#9c7630;
+  --gold-soft:rgba(156,118,48,.10);
+  --gold-line:rgba(156,118,48,.35);
+  --green:#4f7c63;
+  --green-soft:rgba(79,124,99,.10);
+  --violet:#7a5a94;
+  --violet-soft:rgba(122,90,148,.10);
+  --line:rgba(60,45,20,.10);
+  --line-strong:rgba(60,45,20,.18);
+  --danger:#b24c3a;
+  --shadow:0 1px 2px rgba(60,45,20,.06),0 8px 24px rgba(60,45,20,.08);
+  --shadow-hover:0 2px 4px rgba(60,45,20,.08),0 16px 36px rgba(60,45,20,.14);
+  --accent:var(--gold);
+  --accent-soft:var(--gold-soft);
+  --fs-body:15px;--fs-card-title:17px;--fs-cat:15px;--fs-h1:30px;--fs-bigmenu:32px;
+  --radius:16px;
 }
-html[data-size="large"]{
-  --fs-body:18px;--fs-card-title:21px;--fs-cat:24px;--fs-h1:36px;--fs-bigmenu:40px;
-}
+@media (prefers-color-scheme:dark){:root,html,body{color-scheme:light only;background:#f6f2ea;color:#27221b;}}
+
+html[data-size="large"]{--fs-body:18px;--fs-card-title:20px;--fs-cat:18px;--fs-h1:36px;--fs-bigmenu:38px;}
 *{margin:0;padding:0;box-sizing:border-box;}
-html{background:var(--bg);} /* html 也鎖背景，避免 WebView 填自己的底色 */
+html{background:var(--bg);}
 body{
   background:var(--bg);color:var(--text);
-  font-family:'Noto Sans TC',sans-serif;
-  font-size:var(--fs-body);min-height:100vh;
-  transition:background .3s,color .3s;
+  background-image:radial-gradient(1200px 500px at 50% -200px,var(--gold-soft),transparent 70%);
+  background-repeat:no-repeat;
+  font-family:'Noto Sans TC',sans-serif;font-size:var(--fs-body);min-height:100vh;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+  transition:background-color .3s,color .3s;
 }
-.wrap{max-width:860px;margin:0 auto;padding:28px 18px 90px;}
-button{font-family:inherit;}
+.wrap{max-width:880px;margin:0 auto;padding:28px 16px 110px;}
+button{font-family:inherit;color:inherit;}
+svg.i{pointer-events:none;width:18px;height:18px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+:is(button,a,.card):focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
 
 /* ---------- 頁首 ---------- */
-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
-h1{font-family:'Noto Serif TC',serif;font-size:var(--fs-h1);font-weight:900;letter-spacing:.06em;line-height:1.3;}
-h1 .sub{display:block;font-size:.48em;font-weight:500;color:var(--text-dim);letter-spacing:.28em;margin-top:6px;}
-.toggles{display:flex;gap:8px;flex-shrink:0;padding-top:6px;}
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+h1{font-family:'Noto Serif TC',serif;font-size:var(--fs-h1);font-weight:900;letter-spacing:.08em;line-height:1.25;}
+h1 .sub{display:flex;align-items:center;gap:10px;font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:500;color:var(--text-dim);letter-spacing:.3em;margin-top:8px;}
+h1 .sub::before{content:"";width:18px;height:1px;background:var(--gold);}
+.toggles{display:flex;flex-shrink:0;background:var(--bg-card);border:1px solid var(--line);border-radius:999px;padding:4px;box-shadow:var(--shadow);}
 .toggles button{
-  background:var(--bg-card);border:1px solid var(--line);color:var(--text);
-  border-radius:8px;padding:8px 12px;font-size:14px;cursor:pointer;transition:border-color .2s;
+  display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:999px;background:transparent;
+  color:var(--text-dim);cursor:pointer;transition:background .2s,color .2s;
 }
-.toggles button:hover{border-color:var(--gold);}
-:is(button,a):focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.toggles button:hover{background:var(--bg-card-hover);color:var(--text);}
+#btn-size[aria-pressed="true"]{background:var(--gold-soft);color:var(--gold);}
+#btn-size span{font-size:14px;font-weight:700;letter-spacing:-.02em;}
+#btn-size sup{font-size:10px;}
 
 /* ---------- 首頁大選單 ---------- */
-.big-menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:44px;min-height:56vh;}
+.big-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px;}
 .big-menu button{
-  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;
-  background:var(--bg-card);border:1px solid var(--line);border-radius:16px;
-  color:var(--text);padding:40px 20px;cursor:pointer;
-  transition:background .2s,border-color .2s,transform .15s;
+  --c:var(--gold);--cs:var(--gold-soft);
+  position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:8px;
+  min-height:300px;padding:26px 24px 24px;text-align:left;cursor:pointer;
+  background:linear-gradient(180deg,var(--cs),transparent 55%),var(--bg-card);
+  border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s;
 }
-.big-menu button:hover{background:var(--bg-card-hover);transform:translateY(-2px);}
-.big-menu .zone-name{font-family:'Noto Serif TC',serif;font-weight:900;font-size:var(--fs-bigmenu);letter-spacing:.2em;}
-.big-menu .zone-desc{color:var(--text-dim);letter-spacing:.08em;}
-.big-menu .n{font-size:.85em;color:var(--text-dim);}
-#menu-admin{border-top:4px solid var(--gold);}
-#menu-admin .zone-name{color:var(--gold);}
-#menu-teacher{border-top:4px solid var(--green);}
-#menu-teacher .zone-name{color:var(--green);}
-#menu-student{border-top:4px solid var(--violet);}
-#menu-student .zone-name{color:var(--violet);}
+.big-menu button::before{ /* 頂部色條 */
+  content:"";position:absolute;left:24px;right:24px;top:0;height:3px;border-radius:0 0 3px 3px;background:var(--c);
+}
+.big-menu button::after{ /* 浮水印大字 */
+  content:attr(data-mark);position:absolute;right:-10px;top:-18px;
+  font-family:'Noto Serif TC',serif;font-weight:900;font-size:150px;line-height:1;color:var(--c);opacity:.07;pointer-events:none;
+}
+.big-menu button:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--c);}
+.big-menu button:active{transform:translateY(-1px);}
+#menu-teacher{--c:var(--green);--cs:var(--green-soft);}
+#menu-student{--c:var(--violet);--cs:var(--violet-soft);}
+.big-menu .zone-tag{
+  position:absolute;top:22px;left:24px;display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;letter-spacing:.2em;color:var(--c);
+}
+.big-menu .zone-tag svg.i{width:13px;height:13px;}
+.big-menu .zone-name{font-family:'Noto Serif TC',serif;font-weight:900;font-size:var(--fs-bigmenu);letter-spacing:.14em;color:var(--c);}
+.big-menu .zone-desc{color:var(--text-dim);font-size:.9em;letter-spacing:.06em;}
+.big-menu .zone-go{
+  margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 16px;border-radius:999px;
+  border:1px solid var(--line-strong);font-size:13px;letter-spacing:.12em;color:var(--text);transition:background .25s,border-color .25s,gap .25s;
+}
+.big-menu button:hover .zone-go{background:var(--c);border-color:var(--c);color:#fff;gap:12px;}
 
 /* ---------- 分區內頁 ---------- */
-.zone{display:none;}
+.zone{display:none;animation:rise .35s cubic-bezier(.2,.8,.2,1);}
 .zone.active{display:block;}
-.zone-head{display:flex;align-items:center;gap:14px;margin:30px 0 6px;flex-wrap:wrap;}
+#zone-admin{--accent:var(--gold);--accent-soft:var(--gold-soft);}
+#zone-teacher{--accent:var(--green);--accent-soft:var(--green-soft);}
+#zone-student{--accent:var(--violet);--accent-soft:var(--violet-soft);}
+@keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.zone-top{display:flex;align-items:center;gap:12px;margin-top:26px;}
+.crumb{font-size:13px;color:var(--text-faint);letter-spacing:.12em;}
+.crumb i{font-style:normal;margin:0 8px;opacity:.6;}
+.crumb b{color:var(--text-dim);font-weight:500;}
 .back{
-  background:var(--bg-card);border:1px solid var(--line);color:var(--text);
-  border-radius:8px;padding:8px 14px;font-size:14px;cursor:pointer;
+  display:grid;place-items:center;width:40px;height:40px;flex-shrink:0;border-radius:999px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line);box-shadow:var(--shadow);color:var(--text-dim);
+  transition:color .2s,border-color .2s,transform .2s;
 }
-.back:hover{border-color:var(--gold);}
-.zone-title{font-family:'Noto Serif TC',serif;font-weight:900;font-size:var(--fs-h1);letter-spacing:.15em;}
-#zone-admin .zone-title{color:var(--gold);}
-#zone-teacher .zone-title{color:var(--green);}
-#zone-student .zone-title{color:var(--violet);}
+.back:hover{color:var(--accent);border-color:var(--accent);transform:translateX(-2px);}
+#zone-admin{--hero-a:#c49a52;--hero-b:#8c6a2c;}
+#zone-teacher{--hero-a:#6f9c83;--hero-b:#3f6a52;}
+#zone-student{--hero-a:#9a7ab4;--hero-b:#5f4579;}
+.zone-hero{
+  position:relative;overflow:hidden;margin-top:16px;padding:26px 24px 24px;border-radius:24px;color:#fff;
+  background:radial-gradient(120% 140% at 0% 0%,rgba(255,255,255,.22),transparent 55%),linear-gradient(135deg,var(--hero-a),var(--hero-b));
+  box-shadow:0 14px 34px -12px var(--hero-b);
+}
+.zone-hero::after{
+  content:attr(data-mark);position:absolute;right:-6px;bottom:-34px;font-family:'Noto Serif TC',serif;font-weight:900;
+  font-size:170px;line-height:1;color:#fff;opacity:.13;pointer-events:none;
+}
+.zone-hero::before{ /* 細框線裝飾 */
+  content:"";position:absolute;inset:8px;border:1px solid rgba(255,255,255,.22);border-radius:18px;pointer-events:none;
+}
+.hero-tag{
+  position:relative;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
+  background:rgba(255,255,255,.18);font-size:12px;letter-spacing:.14em;
+}
+.hero-tag svg.i{width:13px;height:13px;}
+.zone-title{position:relative;display:block;margin-top:14px;font-family:'Noto Serif TC',serif;font-weight:900;font-size:34px;letter-spacing:.16em;line-height:1.2;color:#fff;}
+.hero-desc{position:relative;margin-top:6px;font-size:14px;letter-spacing:.14em;opacity:.88;}
 
-.cat{margin-top:28px;}
-.cat-head{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:14px;flex-wrap:wrap;}
-.cat-head .cat-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:var(--fs-cat);letter-spacing:.1em;}
-.cat-head .count{color:var(--text-dim);font-size:.82em;}
+.cat{margin-top:30px;}
+.cat-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.cat-head .cat-name{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Noto Sans TC',sans-serif;font-weight:700;font-size:var(--fs-cat);letter-spacing:.2em;color:var(--text);
+}
+.cat-head .cat-name::before{content:"";width:4px;height:16px;border-radius:4px;background:var(--accent);}
+.cat-head::after{content:"";flex:1;min-width:40px;height:1px;background:linear-gradient(90deg,var(--line-strong),transparent);order:10;}
+.cat-head .count{display:none;}
 
-/* ---------- 卡片 ---------- */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+/* ---------- 系統圖塊 ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;}
 .card{
-  position:relative;display:flex;flex-direction:column;gap:6px;
-  background:var(--bg-card);border:1px solid var(--line);border-left:3px solid var(--gold-dim);
-  border-radius:10px;padding:16px 16px 14px;text-decoration:none;color:var(--text);
-  transition:background .2s,border-color .2s,transform .15s;min-height:86px;
+  position:relative;display:flex;flex-direction:column;gap:4px;min-height:178px;
+  padding:18px 16px 14px;text-decoration:none;color:var(--text);cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
+  transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s,border-color .2s;
 }
-#zone-teacher .card{border-left-color:var(--green-dim);}
-#zone-student .card{border-left-color:var(--violet-dim);}
-.card:hover{background:var(--bg-card-hover);border-color:var(--gold);transform:translateY(-1px);}
-.card .name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:var(--fs-card-title);letter-spacing:.04em;}
-.card .desc{color:var(--text-dim);font-size:.88em;line-height:1.5;}
-.card .badge{align-self:flex-start;margin-top:auto;font-size:.75em;letter-spacing:.1em;background:var(--local-badge);color:var(--text);border-radius:4px;padding:2px 8px;}
-.card.is-local{cursor:pointer;opacity:.82;}
-.card .go{margin-top:auto;align-self:flex-end;color:var(--gold);font-size:.85em;letter-spacing:.06em;}
-#zone-teacher .card .go{color:var(--green);}
-#zone-student .card .go{color:var(--violet);}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:var(--accent);}
+.card:active{transform:scale(.98);}
+.card .seal{
+  display:grid;place-items:center;width:48px;height:48px;margin-bottom:12px;border-radius:15px;
+  font-family:'Noto Serif TC',serif;font-weight:900;font-size:23px;color:var(--accent);
+  background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent-soft),inset 0 0 0 4px var(--bg-card),inset 0 0 0 5px var(--accent-soft);
+  transition:background .2s,color .2s;
+}
+.card:hover .seal{background:var(--accent);color:#fff;box-shadow:none;}
+.card .name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:var(--fs-card-title);letter-spacing:.04em;line-height:1.4;}
+.card .desc{color:var(--text-dim);font-size:.82em;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card .foot{margin-top:auto;padding-top:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.card .kind{font-size:11px;letter-spacing:.12em;color:var(--text-faint);}
+.card .go{
+  display:grid;place-items:center;width:30px;height:30px;border-radius:999px;flex-shrink:0;
+  background:var(--accent-soft);color:var(--accent);transition:background .2s,color .2s,transform .2s;
+}
+.card .go svg.i{width:15px;height:15px;}
+.card:hover .go{background:var(--accent);color:#fff;transform:rotate(-8deg) scale(1.05);}
+.card.is-local .seal{background:var(--bg-2);color:var(--text-dim);box-shadow:inset 0 0 0 1px var(--line-strong);}
+.card.is-local .go{background:transparent;border:1px dashed var(--line-strong);color:var(--text-dim);}
+.card.is-empty{opacity:.6;}
+.card.is-empty .kind{color:var(--danger);}
+.empty{
+  grid-column:1/-1;padding:22px;text-align:center;border:1.5px dashed var(--line-strong);border-radius:20px;
+  color:var(--text-faint);font-size:13px;letter-spacing:.16em;
+}
 
 /* ---------- 編輯模式 ---------- */
-.edit-only{display:none;}
+body:not(.editing) .edit-only{display:none!important;}
 body.editing .edit-only{display:inline-flex;}
-body.editing .card{padding-top:40px;}
+body.editing .card{padding-top:52px;}
 .mini{
-  border:1px solid var(--line);background:var(--bg-card);color:var(--text);
-  border-radius:6px;padding:4px 9px;font-size:13px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:4px;height:30px;min-width:30px;justify-content:center;padding:0 10px;
+  border:1px solid var(--line-strong);background:var(--bg-2);color:var(--text-dim);
+  border-radius:999px;font-size:12.5px;cursor:pointer;transition:color .2s,border-color .2s,background .2s;
 }
-.mini:hover{border-color:var(--gold);}
-.mini.danger{color:var(--danger);}
-.card .card-tools{position:absolute;top:8px;right:8px;display:none;gap:6px;}
+.mini:hover{color:var(--accent);border-color:var(--accent);}
+.mini.danger:hover{color:var(--danger);border-color:var(--danger);}
+.card .card-tools{position:absolute;top:10px;left:10px;right:10px;display:none;gap:4px;}
+.card .card-tools .mini{padding:0;width:28px;height:28px;min-width:28px;}
+.card .card-tools .mini.danger{margin-left:auto;}
 body.editing .card .card-tools{display:flex;}
-.add-cat{margin-top:24px;width:100%;padding:12px;border:1px dashed var(--line);background:none;color:var(--text-dim);border-radius:10px;cursor:pointer;font-size:1em;}
-.add-cat:hover{border-color:var(--gold);color:var(--gold);}
+
+.add-cat{
+  margin-top:28px;width:100%;padding:16px;align-items:center;justify-content:center;gap:8px;
+  border:1.5px dashed var(--line-strong);background:transparent;color:var(--text-dim);
+  border-radius:var(--radius);cursor:pointer;font-size:.95em;letter-spacing:.12em;transition:color .2s,border-color .2s,background .2s;
+}
+.add-cat:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
 #editbar{
-  position:fixed;left:0;right:0;bottom:0;z-index:9;display:none;
-  background:var(--bg-card);border-top:1px solid var(--line);
-  padding:10px 16px;justify-content:center;gap:10px;flex-wrap:wrap;align-items:center;
+  position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:9;display:none;
+  width:calc(100% - 32px);max-width:560px;flex-wrap:wrap;align-items:center;gap:10px;
+  padding:10px;background:var(--bg-card);border:1px solid var(--line-strong);border-radius:20px;
+  box-shadow:0 16px 40px rgba(60,45,20,.18);
 }
 body.editing #editbar{display:flex;}
-#editbar button{padding:10px 20px;border-radius:8px;border:1px solid var(--line);cursor:pointer;font-size:15px;}
-#btn-save{background:var(--gold);color:#1c1a17;border-color:var(--gold);font-weight:700;}
-#btn-exit{background:var(--bg);color:var(--text);}
-#save-status{font-size:.85em;color:var(--text-dim);width:100%;text-align:center;}
-
-/* ---------- 彈窗（本機說明＋編輯表單共用外框） ---------- */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:10;}
-.modal.show{display:flex;}
-.modal .box{background:var(--bg-card);border:1px solid var(--line);border-radius:12px;width:100%;max-width:440px;padding:24px;line-height:1.7;max-height:88vh;overflow:auto;}
-.modal .box b{color:var(--gold);}
-.modal label{display:block;margin-top:12px;font-size:.88em;color:var(--text-dim);}
-.modal input[type=text],.modal textarea,.modal select{
-  width:100%;margin-top:4px;padding:10px;border-radius:8px;
-  border:1px solid var(--line);background:var(--bg);color:var(--text);
-  font-family:inherit;font-size:15px;
+#editbar button{
+  flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;
+  border-radius:14px;border:1px solid var(--line-strong);cursor:pointer;font-size:15px;letter-spacing:.08em;transition:filter .2s,background .2s;
 }
-.modal textarea{min-height:64px;resize:vertical;}
-.modal .row{display:flex;gap:10px;margin-top:18px;}
-.modal .row button{flex:1;padding:11px;border-radius:8px;border:1px solid var(--line);cursor:pointer;font-size:15px;background:var(--bg);color:var(--text);}
-.modal .row .primary{background:var(--gold);color:#1c1a17;border-color:var(--gold);font-weight:700;}
+#btn-save{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;flex:1.6;}
+#btn-save:hover{filter:brightness(1.08);}
+#btn-exit{background:transparent;color:var(--text);}
+#btn-exit:hover{background:var(--bg-card-hover);}
+#save-status{font-size:.82em;color:var(--text-dim);width:100%;text-align:center;}
+#save-status:empty{display:none;}
+
+/* ---------- 彈窗 ---------- */
+.modal{position:fixed;inset:0;background:rgba(40,30,15,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;z-index:10;}
+.modal.show{display:flex;animation:fade .2s;}
+@keyframes fade{from{opacity:0;}to{opacity:1;}}
+.modal .box{
+  background:var(--bg-card);border:1px solid var(--line-strong);border-radius:22px;width:100%;max-width:440px;
+  padding:26px 24px 22px;line-height:1.75;max-height:88vh;overflow:auto;box-shadow:0 24px 60px rgba(60,45,20,.22);
+  animation:pop .25s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:none;}}
+.modal .box > b:first-child,#local-tip-text b{display:block;font-family:'Noto Serif TC',serif;font-size:1.2em;color:var(--gold);letter-spacing:.08em;margin-bottom:4px;}
+.modal label{display:block;margin-top:14px;font-size:.82em;letter-spacing:.1em;color:var(--text-dim);}
+.modal input[type=text],.modal textarea,.modal select{
+  width:100%;margin-top:6px;padding:12px 14px;border-radius:12px;
+  border:1px solid var(--line-strong);background:var(--bg);color:var(--text);
+  font-family:inherit;font-size:15px;letter-spacing:0;transition:border-color .2s,box-shadow .2s;
+}
+.modal input:focus,.modal textarea:focus,.modal select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft);}
+.modal textarea{min-height:70px;resize:vertical;line-height:1.6;}
+.modal .row{display:flex;gap:10px;margin-top:22px;}
+.modal .row button{flex:1;height:46px;border-radius:14px;border:1px solid var(--line-strong);cursor:pointer;font-size:15px;letter-spacing:.1em;background:transparent;color:var(--text);transition:background .2s,filter .2s;}
+.modal .row button:hover{background:var(--bg-card-hover);}
+.modal .row .primary{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;}
+.modal .row .primary:hover{background:var(--gold);filter:brightness(1.08);}
 
 /* ---------- 公告區 ---------- */
-.board{margin-top:20px;background:var(--bg-card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 16px;}
-#zone-teacher .board{border-left-color:var(--green);}
-#zone-student .board{border-left-color:var(--violet);}
+.board{
+  margin-top:16px;position:relative;overflow:hidden;
+  background:var(--bg-card);
+  border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);
+}
 .board-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.board-head .board-title{font-family:'Noto Serif TC',serif;font-weight:700;letter-spacing:.12em;}
-.ann-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line);line-height:1.6;}
-.ann-item:first-of-type{border-top:none;margin-top:8px;}
-.ann-date{flex-shrink:0;color:var(--text-dim);font-size:.82em;padding-top:2px;}
-.ann-new{flex-shrink:0;font-size:.7em;background:var(--danger);color:#fff;border-radius:4px;padding:2px 6px;letter-spacing:.08em;margin-top:2px;}
-.ann-text{white-space:pre-wrap;word-break:break-word;flex:1;}
+.board-head .board-title{display:inline-flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.2em;font-size:.92em;color:var(--accent);}
+.ann-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line);line-height:1.7;flex-wrap:wrap;}
+.ann-item:first-of-type{border-top:none;margin-top:6px;}
+.ann-date{flex-shrink:0;color:var(--text-faint);font-size:.8em;padding-top:3px;font-variant-numeric:tabular-nums;letter-spacing:.04em;}
+.ann-new{flex-shrink:0;font-size:10px;font-weight:700;background:var(--danger);color:#fff;border-radius:999px;padding:2px 8px;letter-spacing:.12em;margin-top:4px;}
+.ann-text{white-space:pre-wrap;word-break:break-word;flex:1;min-width:180px;}
 .ann-tools{display:none;gap:6px;flex-shrink:0;}
 body.editing .ann-tools{display:flex;}
-footer{margin-top:48px;text-align:center;color:var(--text-dim);font-size:.8em;letter-spacing:.1em;}
-#site-link{display:inline-block;color:var(--gold);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:10px 18px;font-size:1.15em;letter-spacing:.08em;transition:border-color .2s;}
-#site-link:hover{border-color:var(--gold);}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
-@media (max-width:560px){
-  header{flex-direction:column;}
-  .big-menu{grid-template-columns:1fr;min-height:auto;}
-  .big-menu button{padding:34px 20px;}
-  .grid{grid-template-columns:1fr;}
+
+/* ---------- 頁尾 ---------- */
+footer{margin-top:60px;text-align:center;color:var(--text-faint);font-size:11px;letter-spacing:.3em;}
+#site-link{
+  display:inline-flex;align-items:center;gap:10px;color:var(--gold);text-decoration:none;
+  border:1px solid var(--gold-line);border-radius:999px;padding:12px 22px;font-size:14px;letter-spacing:.1em;
+  background:var(--gold-soft);transition:background .2s,color .2s,transform .2s;
+}
+#site-link:hover{background:var(--gold);color:#fff;transform:translateY(-1px);}
+footer .foot-note{margin-top:16px;}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;}}
+@media (max-width:640px){
+  .wrap{padding-top:22px;}
+  header{align-items:center;}
+  h1{font-size:26px;}
+  h1 .sub{font-size:11px;letter-spacing:.22em;}
+  .toggles button{width:34px;height:34px;}
+  .big-menu{grid-template-columns:1fr;gap:12px;margin-top:28px;}
+  .big-menu button{min-height:160px;padding:56px 22px 20px;flex-direction:row;flex-wrap:wrap;align-items:flex-end;}
+  .big-menu .zone-name{font-size:28px;width:100%;}
+  .big-menu .zone-desc{flex:1;}
+  .big-menu .zone-go{margin-top:0;padding:0;width:38px;height:38px;justify-content:center;}
+  .big-menu .zone-go span{display:none;}
+  .big-menu button::after{font-size:120px;}
+  .grid{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .card{min-height:170px;padding:16px 14px 12px;}
+  .zone-title{font-size:30px;}
 }
 </style>
 </head>
@@ -203,66 +306,86 @@ footer{margin-top:48px;text-align:center;color:var(--text-dim);font-size:.8em;le
   <header>
     <h1>系統入口<span class="sub">神奇身心靈學苑 × 靈應壇</span></h1>
     <div class="toggles">
-      <button id="btn-theme" title="深/淺色切換">🌗</button>
-      <button id="btn-size" title="大字模式">Ａ⁺</button>
-      <button id="btn-edit" title="編輯模式">⚙</button>
+      <button id="btn-size" title="大字模式" aria-label="大字模式"><span>A<sup>+</sup></span></button>
+      <button id="btn-edit" title="編輯模式" aria-label="編輯模式"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     </div>
   </header>
 
   <nav class="big-menu" id="home">
-    <button type="button" data-zone="admin" id="menu-admin">
+    <button type="button" data-zone="admin" id="menu-admin" data-mark="政">
+      <span class="zone-tag"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>ADMIN</span>
       <span class="zone-name">行政區</span>
       <span class="zone-desc">財務・法會・管理系統</span>
+      <span class="zone-go"><span>進入</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </button>
-    <button type="button" data-zone="teacher" id="menu-teacher">
+    <button type="button" data-zone="teacher" id="menu-teacher" data-mark="師">
+      <span class="zone-tag"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>TEACHER</span>
       <span class="zone-name">老師區</span>
       <span class="zone-desc">填單・積點・教學資源</span>
+      <span class="zone-go"><span>進入</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </button>
-    <button type="button" data-zone="student" id="menu-student">
+    <button type="button" data-zone="student" id="menu-student" data-mark="學">
+      <span class="zone-tag"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg>STUDENT</span>
       <span class="zone-name">學員區</span>
       <span class="zone-desc">積點・課程・官方 LINE</span>
+      <span class="zone-go"><span>進入</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </button>
   </nav>
 
   <div class="zone" id="zone-admin">
-    <div class="zone-head">
-      <button type="button" class="back">← 回首頁</button>
-      <span class="zone-title">行政區</span>
+    <div class="zone-top">
+      <button type="button" class="back" aria-label="回首頁" title="回首頁"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <span class="crumb">系統入口<i>/</i><b>行政區</b></span>
+    </div>
+    <div class="zone-hero" data-mark="政">
+      <span class="hero-tag"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>行政人員專用</span>
+      <h2 class="zone-title">行政區</h2>
+      <p class="hero-desc">財務・法會・管理系統</p>
     </div>
     <div class="board" data-board="admin"></div>
     <div class="cats"></div>
-    <button class="add-cat edit-only" data-zone="admin">＋ 新增分類</button>
+    <button class="add-cat edit-only" data-zone="admin"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
 
   <div class="zone" id="zone-teacher">
-    <div class="zone-head">
-      <button type="button" class="back">← 回首頁</button>
-      <span class="zone-title">老師區</span>
+    <div class="zone-top">
+      <button type="button" class="back" aria-label="回首頁" title="回首頁"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <span class="crumb">系統入口<i>/</i><b>老師區</b></span>
+    </div>
+    <div class="zone-hero" data-mark="師">
+      <span class="hero-tag"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>老師專用</span>
+      <h2 class="zone-title">老師區</h2>
+      <p class="hero-desc">填單・積點・教學資源</p>
     </div>
     <div class="board" data-board="teacher"></div>
     <div class="cats"></div>
-    <button class="add-cat edit-only" data-zone="teacher">＋ 新增分類</button>
+    <button class="add-cat edit-only" data-zone="teacher"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
 
   <div class="zone" id="zone-student">
-    <div class="zone-head">
-      <button type="button" class="back">← 回首頁</button>
-      <span class="zone-title">學員區</span>
+    <div class="zone-top">
+      <button type="button" class="back" aria-label="回首頁" title="回首頁"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <span class="crumb">系統入口<i>/</i><b>學員區</b></span>
+    </div>
+    <div class="zone-hero" data-mark="學">
+      <span class="hero-tag"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg>學員開放</span>
+      <h2 class="zone-title">學員區</h2>
+      <p class="hero-desc">積點・課程・官方 LINE</p>
     </div>
     <div class="board" data-board="student"></div>
     <div class="cats"></div>
-    <button class="add-cat edit-only" data-zone="student">＋ 新增分類</button>
+    <button class="add-cat edit-only" data-zone="student"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
 
   <footer>
-    <a href="https://www.miiragic913514.com/" target="_blank" rel="noopener" id="site-link">🌐 神奇官網 miiragic913514.com</a>
-    <div style="margin-top:10px;">MIIRAGIC INTERNAL PORTAL</div>
+    <a href="https://www.miiragic913514.com/" target="_blank" rel="noopener" id="site-link"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>神奇官網 miiragic913514.com</a>
+    <div class="foot-note">MIIRAGIC INTERNAL PORTAL</div>
   </footer>
 </div>
 
 <div id="editbar">
   <span id="save-status"></span>
-  <button id="btn-save">💾 儲存變更</button>
+  <button id="btn-save"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>儲存變更</button>
   <button id="btn-exit">離開編輯</button>
 </div>
 
@@ -426,17 +549,21 @@ function makeCard(item, zoneKey, ci, ii){
   if(item.type === "web"){
     el = document.createElement("a");
     el.href = item.url || "#"; el.target = "_blank"; el.rel = "noopener";
-    el.innerHTML = `<span class="name">${esc(item.name)}</span>
+    el.innerHTML = `<span class="seal">${esc(Array.from(item.name||"・")[0])}</span>
+                    <span class="name">${esc(item.name)}</span>
                     <span class="desc">${esc(item.desc)}</span>
-                    <span class="go">前往 →</span>`;
+                    <span class="foot"><span class="kind">${item.url ? "線上系統" : "連結待設定"}</span><span class="go"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></span>`;
+    if(!item.url) el.classList.add("is-empty");
     if(editing) el.addEventListener("click", e=> e.preventDefault());
   }else{
     const isNote = item.type === "note";
     el = document.createElement("div");
     el.className = "is-local"; el.tabIndex = 0;
-    el.innerHTML = `<span class="name">${esc(item.name)}</span>
+    el.innerHTML = `<span class="seal">${esc(Array.from(item.name||"・")[0])}</span>
+                    <span class="name">${esc(item.name)}</span>
                     <span class="desc">${esc(item.desc)}</span>
-                    <span class="badge">${isNote ? "查看內容 ▾" : "本機工具"}</span>`;
+                    <span class="foot"><span class="kind">${isNote ? "說明・點開看" : "電腦本機工具"}</span><span class="go">${isNote ? `<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>` : `<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>`}</span></span>`;
+    if(isNote) el.classList.add("is-note");
     const showTip = ()=>{
       if(editing) return;
       $("#local-tip-text").innerHTML =
@@ -449,10 +576,7 @@ function makeCard(item, zoneKey, ci, ii){
   el.classList.add("card");
   const tools = document.createElement("span");
   tools.className = "card-tools";
-  tools.innerHTML = `<button class="mini" data-a="up">↑</button>
-                     <button class="mini" data-a="down">↓</button>
-                     <button class="mini" data-a="edit">✎</button>
-                     <button class="mini danger" data-a="del">✕</button>`;
+  tools.innerHTML = `<button class="mini" data-a="up" title="上移"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button><button class="mini" data-a="down" title="下移"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><button class="mini" data-a="edit" title="編輯"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></button><button class="mini danger" data-a="del" title="刪除"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`;
   tools.addEventListener("click", e=>{
     e.preventDefault(); e.stopPropagation();
     const a = e.target.dataset.a; if(!a) return;
@@ -476,11 +600,11 @@ function renderZone(zoneKey, sectionId){
     const head = document.createElement("div");
     head.className = "cat-head";
     head.innerHTML = `<span class="cat-name">${esc(cat.category)}</span>
-      <button class="mini edit-only" data-a="rename">✎ 改名</button>
-      <button class="mini edit-only" data-a="up">↑</button>
-      <button class="mini edit-only" data-a="down">↓</button>
-      <button class="mini edit-only" data-a="add">＋ 新增系統</button>
-      <button class="mini danger edit-only" data-a="delcat">✕ 刪分類</button>`;
+      <button class="mini edit-only" data-a="rename"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>改名</button>
+      <button class="mini edit-only" data-a="up" title="上移"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
+      <button class="mini edit-only" data-a="down" title="下移"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="mini edit-only" data-a="add"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增系統</button>
+      <button class="mini danger edit-only" data-a="delcat"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>刪分類</button>`;
     head.addEventListener("click", e=>{
       const a = e.target.dataset.a; if(!a) return;
       const cats = state[zoneKey];
@@ -499,6 +623,7 @@ function renderZone(zoneKey, sectionId){
     const grid = document.createElement("div");
     grid.className = "grid";
     cat.items.forEach((item, ii)=> grid.appendChild(makeCard(item, zoneKey, ci, ii)));
+    if(!cat.items.length && !editing){ grid.innerHTML = '<div class="empty">內容整理中，即將開放</div>'; }
     sec.appendChild(grid);
     catsWrap.appendChild(sec);
   });
@@ -537,8 +662,8 @@ function renderBoard(zoneKey){
   wrap.style.display = "block";
   const head = document.createElement("div");
   head.className = "board-head";
-  head.innerHTML = `<span class="board-title">📢 公告</span>
-    <button class="mini edit-only" data-a="add">＋ 新增公告</button>`;
+  head.innerHTML = `<span class="board-title"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg>公告</span>
+    <button class="mini edit-only" data-a="add"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增公告</button>`;
   head.addEventListener("click", e=>{
     if(e.target.dataset.a==="add") openAnnModal(zoneKey, null);
   });
@@ -550,8 +675,7 @@ function renderBoard(zoneKey){
       ${isNew(a.date) ? '<span class="ann-new">NEW</span>' : ''}
       <span class="ann-text">${esc(a.text)}</span>
       <span class="ann-tools">
-        <button class="mini" data-a="edit">✎</button>
-        <button class="mini danger" data-a="del">✕</button>
+        <button class="mini" data-a="edit" title="編輯"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></button><button class="mini danger" data-a="del" title="刪除"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </span>`;
     row.addEventListener("click", e=>{
       const act = e.target.dataset.a; if(!act) return;
@@ -663,21 +787,21 @@ if(startZone) enterZone(startZone);
    ⑧ 主題與字級（記住選擇；首次跟隨手機系統）
    ============================================================ */
 const root = document.documentElement;
-const savedTheme = localStorage.getItem("portal-theme");
-if(savedTheme==="light"){ root.dataset.theme="light"; }
-else if(!savedTheme && window.matchMedia("(prefers-color-scheme: light)").matches){ root.dataset.theme="light"; }
+root.removeAttribute("data-theme");
+root.style.colorScheme="light";
+try{localStorage.removeItem("portal-theme");}catch(e){}
 if(localStorage.getItem("portal-size")==="large") root.dataset.size="large";
-$("#btn-theme").onclick = ()=>{
-  const next = root.dataset.theme==="light" ? "" : "light";
-  root.dataset.theme = next;
-  localStorage.setItem("portal-theme", next||"dark");
-};
 $("#btn-size").onclick = ()=>{
   const next = root.dataset.size==="large" ? "" : "large";
   root.dataset.size = next;
   localStorage.setItem("portal-size", next||"normal");
 };
 
+function syncToggles(){
+  $("#btn-size").setAttribute("aria-pressed", root.dataset.size==="large" ? "true":"false");
+}
+["#btn-size"].forEach(id=> $(id).addEventListener("click", ()=> setTimeout(syncToggles)));
+syncToggles();
 loadConfig();
 </script>
 </body>
