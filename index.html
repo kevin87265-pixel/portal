@@ -772,17 +772,32 @@ function renderBoard(zoneKey){
 }
 
 /* ---------- 內嵌系統視窗 ---------- */
-const NO_EMBED = /(^|\.)(lin\.ee|line\.me|liff\.line\.me|facebook\.com|instagram\.com|youtube\.com|youtu\.be)$/i;
-function canEmbed(url){
-  try{ const u = new URL(url, location.href); return /^https?:$/.test(u.protocol) && !NO_EMBED.test(u.hostname); }catch(e){ return false; }
+// 能在入口頁裡面開的網址：自己的系統 + Google 雲端（轉成可預覽格式）；其他一律開新分頁
+function embedUrl(url){
+  let u; try{ u = new URL(url, location.href); }catch(e){ return null; }
+  if(!/^https?:$/.test(u.protocol)) return null;
+  if(u.hostname === "kevin87265-pixel.github.io") return u.href;
+  if(u.hostname === "drive.google.com"){
+    let m = u.pathname.match(/\/file\/d\/([^/]+)/);
+    if(m) return `https://drive.google.com/file/d/${m[1]}/preview`;
+    m = u.pathname.match(/\/folders\/([^/]+)/);
+    if(m) return `https://drive.google.com/embeddedfolderview?id=${m[1]}#grid`;
+    const id = u.searchParams.get("id"); if(id) return `https://drive.google.com/file/d/${id}/preview`;
+  }
+  if(u.hostname === "docs.google.com"){
+    const m = u.pathname.match(/^\/(document|presentation)\/d\/([^/]+)/);
+    if(m) return `https://docs.google.com/${m[1]}/d/${m[2]}/preview`;
+  }
+  return null;
 }
+function canEmbed(url){ return !!embedUrl(url); }
 function openViewer(item){
   $("#viewer-title").textContent = item.name || "";
   $("#viewer-ext").href = item.url;
   $("#viewer-load").style.display = "block";
   const f = $("#viewer-frame");
   f.onload = ()=> $("#viewer-load").style.display = "none";
-  f.src = item.url;
+  f.src = embedUrl(item.url) || item.url;
   $("#viewer").classList.add("show"); $("#viewer").setAttribute("aria-hidden","false");
   document.body.classList.add("viewing");
   try{ history.pushState({viewer:1}, ""); }catch(e){}
