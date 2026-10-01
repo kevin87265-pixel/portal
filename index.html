@@ -6,7 +6,13 @@
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#f6f2ea">
 <title>神奇學苑 × 靈應壇｜系統入口</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://plgrsxtlaznajzqgcuqr.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://drive.google.com">
+<!-- 字型不擋畫面：先用手機內建字顯示，字型下載好再換上 -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
 <style>
 /* ==================================================================
    主題：深色（預設）／淺色／大字模式
@@ -280,20 +286,23 @@ body.editing .ann-tools{display:flex;}
 .cal-nav{display:grid;place-items:center;width:32px;height:32px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;color:var(--text-dim);}
 .cal-nav:hover{color:var(--accent);border-color:var(--accent);}
 .cal-nav svg.i{width:15px;height:15px;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:12px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;margin-top:12px;}
 .cal-wd{text-align:center;font-size:11px;color:var(--text-faint);padding:2px 0 4px;letter-spacing:.1em;}
 .cal-day{
-  position:relative;aspect-ratio:1/1;max-height:54px;border:0;border-radius:12px;background:transparent;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:14px;color:var(--text);
+  position:relative;min-height:66px;border:0;border-radius:10px;background:transparent;cursor:pointer;padding:4px 2px 5px;min-width:0;
+  display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:2px;font-size:14px;color:var(--text);
   font-variant-numeric:tabular-nums;transition:background .15s;
 }
 .cal-day:hover{background:var(--bg-2);}
 .cal-day.out{color:var(--text-faint);opacity:.45;}
-.cal-day.today{box-shadow:inset 0 0 0 1.5px var(--accent);font-weight:700;}
-.cal-day.sel{background:var(--accent);color:#fff;}
-.cal-day .dots{display:flex;gap:2px;height:5px;}
-.cal-day .dots i{width:5px;height:5px;border-radius:50%;background:var(--accent);}
-.cal-day.sel .dots i{background:#fff;}
+.cal-day.today .dnum{background:var(--accent);color:#fff;font-weight:700;}
+.cal-day.sel{background:var(--accent-soft);box-shadow:inset 0 0 0 1.5px var(--accent);}
+.cal-day .dnum{display:grid;place-items:center;width:22px;height:22px;border-radius:999px;font-size:13px;line-height:1;margin:0 auto 1px;}
+.cal-day .chip{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;width:100%;font-size:10px;line-height:1.3;font-weight:700;
+  letter-spacing:0;padding:1px 2px;border-radius:4px;word-break:break-all;text-align:center;}
+@media (max-width:639px){ #cal-panel{padding:14px 8px 12px;} .calview-body{padding:4px 10px 48px;} .cal-day{padding:3px 1px 4px;} .cal-grid{gap:2px;} #cal-panel .cal-head{padding:0 6px;} }
+.cal-day .more{display:block;font-size:10px;color:var(--text-faint);line-height:1.2;}
+@media (min-width:640px){ .cal-day{min-height:84px;padding:6px 4px;} .cal-day .chip{font-size:12px;padding:2px 5px;} }
 .cal-list{margin-top:12px;border-top:1px solid var(--line);padding-top:10px;}
 .cal-list-h{font-size:12px;letter-spacing:.14em;color:var(--text-faint);margin-bottom:6px;}
 .ev{display:flex;gap:12px;align-items:flex-start;padding:10px 10px;border-radius:12px;cursor:default;}
@@ -514,6 +523,7 @@ footer .foot-note{margin-top:16px;}
     <label>日期<input type="date" id="e-date"></label>
     <label>結束日期（一天的活動不用填）<input type="date" id="e-end"></label>
     <label>時間（可空白）<input type="text" id="e-time" placeholder="例：17:00 截止、19:30、全天"></label>
+    <label id="e-course-wrap">課程種類（可以選，也可以自己打新的）<input type="text" id="e-course" list="course-list" placeholder="例：八字初階"><datalist id="course-list"></datalist></label>
     <label>活動名稱<input type="text" id="e-title" placeholder="例：十月法會"></label>
     <label>備註（可空白）<textarea id="e-note"></textarea></label>
     <div class="chk-row" id="e-to-wrap">
@@ -647,20 +657,46 @@ const sbHeaders = ()=>({ "apikey":SUPABASE_KEY, "Authorization":"Bearer "+SUPABA
 const sbReady = ()=> SUPABASE_URL && SUPABASE_KEY;
 
 async function loadConfig(){
+  // 先用這台裝置上次存的資料馬上畫出來（不用等網路），雲端資料回來後再更新
+  let cached = null;
+  try{ cached = JSON.parse(localStorage.getItem("portal-config") || "null"); }catch(e){}
+  if(cached && cached.admin){ state = cached; renderAll(); }
   if(sbReady()){
     try{
       const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${ROW_ID}&select=data`,{headers:sbHeaders()});
       if(r.ok){
         const rows = await r.json();
         if(rows.length && rows[0].data && rows[0].data.admin){
-          state = rows[0].data; renderAll(); return;
+          if(editing) return;                       // 編輯中不要蓋掉正在改的內容
+          state = rows[0].data;
+          try{ localStorage.setItem("portal-config", JSON.stringify(state)); }catch(e){}
+          renderAll(); prefetchZone(currentZone); return;
         }
       }
     }catch(e){ console.warn("Supabase 讀取失敗，改用本機資料", e); }
   }
-  const cached = localStorage.getItem("portal-config");
-  state = cached ? JSON.parse(cached) : structuredClone(DEFAULT_CONFIG);
-  renderAll();
+  if(!state){ state = structuredClone(DEFAULT_CONFIG); renderAll(); }
+}
+// 進到某一區時，先在背景把那一區的系統暖身，點下去開得比較快
+const prefetched = new Set();
+let currentZone = null;
+function prefetchZone(zone){
+  if(!zone || !state || !state[zone]) return;
+  const add = (rel, href, extra) => {
+    if(prefetched.has(rel+href)) return; prefetched.add(rel+href);
+    const l = document.createElement("link"); l.rel = rel; l.href = href; if(extra) Object.assign(l, extra);
+    document.head.appendChild(l);
+  };
+  state[zone].forEach(cat=> cat.items.forEach(it=>{
+    if(it.type !== "web" || !it.url) return;
+    let u; try{ u = new URL(it.url); }catch(e){ return; }
+    if(u.hostname === "kevin87265-pixel.github.io") add("prefetch", u.href);          // 自己的系統：先抓好頁面
+    else add("preconnect", u.origin, {crossOrigin:"anonymous"});                      // 外部：先把連線接好
+    if(u.hostname === "drive.google.com" || u.hostname === "docs.google.com"){
+      add("preconnect", "https://drive.google.com"); add("preconnect", "https://docs.google.com");
+      add("preconnect", "https://www.gstatic.com", {crossOrigin:"anonymous"});
+    }
+  }));
 }
 
 async function saveConfig(){
@@ -692,7 +728,7 @@ function makeCard(item, zoneKey, ci, ii){
     el = document.createElement("div");
     el.className = "is-cal"; el.tabIndex = 0;
     const nx = upcoming(zoneKey, 60)[0];
-    const sub = nx ? `下一個：<b>${dateLabel(nx).replace(/（.）/g,"")}</b> ${esc(evType(nx).label)}` : esc(item.desc || "出單・法會・課程時間");
+    const sub = nx ? `下一個：<b>${dateLabel(nx).replace(/（.）/g,"")}</b> ${esc(evLook(nx).label)}` : esc(item.desc || "出單・法會・課程時間");
     el.innerHTML = `<span class="seal">曆</span>
                     <span class="name">${esc(item.name || "行事曆")}</span>
                     <span class="desc">${sub}</span>
@@ -828,7 +864,7 @@ function renderBoard(zoneKey){
   });
   wrap.appendChild(head);
   auto.forEach(e=>{
-    const t = evType(e); const row = document.createElement("div");
+    const t = evLook(e); const row = document.createElement("div");
     row.className = "ann-item auto";
     row.innerHTML = `<span class="ann-date">${dateLabel(e)}</span>
       <span class="ann-text"><span class="ev-tag" style="background:${t.color}">${t.label}</span>${esc(e.title)}${e.time?`・${esc(e.time)}`:""}${e.note?`<br><span style="color:var(--text-dim);font-size:.92em;white-space:pre-wrap">${esc(e.note)}</span>`:""}</span>`;
@@ -907,6 +943,24 @@ const EV_TYPES = {
   internal:{ label:"內部",     color:"#8d8579", to:{teacher:false, student:false} },
 };
 const evType = e => EV_TYPES[e.type] || EV_TYPES.other;
+// 課程有很多種：每一種課自動配一個顏色，格子和清單直接寫課名
+const COURSE_PRESETS = ["八字","塔羅","紫微斗數","六爻","神奇培訓班"];
+const COURSE_COLORS = ["#2f7d5b","#2e6fa3","#8a4fb0","#b0457a","#3b8c8c","#6b7d2a","#4a5fc0","#a8642a"];
+function courseColor(name){
+  const i = COURSE_PRESETS.findIndex(p=> name.startsWith(p));
+  if(i>=0) return COURSE_COLORS[i];
+  let h = 0; for(const ch of name) h = (h*31 + ch.codePointAt(0)) >>> 0;
+  return COURSE_COLORS[5 + (h % 3)];
+}
+function evLook(e){
+  if(e.type === "course" && e.course) return { label:e.course, color:courseColor(e.course) };
+  return evType(e);
+}
+function chipText(e){
+  if(e.type === "order") return "出單截止";
+  if(e.type === "course") return e.course || e.title;
+  return e.title;
+}
 const calView = {};                         // 各區目前看的月份與選取日
 const calOpen = { admin:true, teacher:false, student:false };  // 老師/學員區預設收起來
 const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
@@ -957,8 +1011,9 @@ function renderCal(zoneKey){
     if(i>=35 && d.getMonth()!==v.m) break;
     const k = ymd(d), evs = (byDay[k]||[]);
     const cls = ["cal-day", d.getMonth()!==v.m?"out":"", k===ymd(today)?"today":"", k===v.sel?"sel":""].join(" ");
-    const dots = evs.slice(0,3).map(e=>`<i style="background:${evType(e).color}"></i>`).join("");
-    cells += `<button type="button" class="${cls}" data-d="${k}">${d.getDate()}<span class="dots">${dots}</span></button>`;
+    const chips = evs.slice(0,3).map(e=>{ const c = evLook(e).color; return `<span class="chip" style="background:${c}1c;color:${c}">${esc(chipText(e))}</span>`; }).join("")
+                + (evs.length>3 ? `<span class="more">+${evs.length-3}</span>` : "");
+    cells += `<button type="button" class="${cls}" data-d="${k}"><span class="dnum">${d.getDate()}</span>${chips}</button>`;
   }
   // 清單：選取日有活動就列那天，否則列本月全部
   const monthKey = `${v.y}-${pad(v.m+1)}`;
@@ -967,16 +1022,18 @@ function renderCal(zoneKey){
   if(!list.length){ list = events.filter(e=> (e.date||"").slice(0,7) <= monthKey && ((e.end&&e.end>e.date?e.end:e.date)||"").slice(0,7) >= monthKey); listTitle = `${v.m+1}月全部活動`; }
   list = list.slice().sort((a,b)=> (a.date+(a.time||"")).localeCompare(b.date+(b.time||"")));
   const items = list.map(e=>{
-    const t = evType(e); const dd = new Date(e.date+"T00:00");
+    const t = evLook(e); const dd = new Date(e.date+"T00:00");
     const who = isAdmin ? (e.type==="internal" ? "只有行政" : [e.to?.teacher?"老師":"", e.to?.student?"學員":""].filter(Boolean).join("、") || "只有行政") : "";
     return `<div class="ev${isAdmin?" can-edit":""}" data-id="${esc(e.id)}"><span class="ev-date" style="background:${t.color}1f;color:${t.color}"><b>${dd.getDate()}</b><small>週${WD[dd.getDay()]}</small></span>
       <span class="ev-body"><span class="ev-title"><span class="ev-tag" style="background:${t.color}">${t.label}</span>${esc(e.title)}</span>
       <div class="ev-meta">${esc([e.end&&e.end>e.date?dateLabel(e):"", e.time, e.note].filter(Boolean).join("・"))}${who?`<span class="ev-lock">（${who}看得到）</span>`:""}</div></span></div>`;
   }).join("") || `<div class="cal-empty">這段時間沒有活動</div>`;
   const next = upcoming(zoneKey, 60)[0];
-  const nextHtml = next ? `接下來：<b>${dateLabel(next)}</b> ${evType(next).label}・${esc(next.title)}${next.time?`（${esc(next.time)}）`:""}` : "近期沒有排定的活動";
-  const legend = Object.entries(EV_TYPES).filter(([k])=> isAdmin || k!=="internal")
-    .map(([k,t])=>`<span><i style="background:${t.color}"></i>${t.label}</span>`).join("");
+  const nextHtml = next ? `接下來：<b>${dateLabel(next)}</b> ${esc(evLook(next).label)}・${esc(next.title)}${next.time?`（${esc(next.time)}）`:""}` : "近期沒有排定的活動";
+  const monthCourses = [...new Set(events.filter(e=> e.type==="course" && e.course && (e.date||"").slice(0,7)===monthKey).map(e=> e.course))];
+  const legend = Object.entries(EV_TYPES).filter(([k])=> (isAdmin || k!=="internal") && !(k==="course" && monthCourses.length))
+    .map(([k,t])=>`<span><i style="background:${t.color}"></i>${t.label}</span>`).join("")
+    + monthCourses.map(n=>`<span><i style="background:${courseColor(n)}"></i>${esc(n)}</span>`).join("");
   const open = true;
   wrap.classList.toggle("collapsed", !open);
   wrap.innerHTML = `<div class="cal-head"><span class="cal-title"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>行事曆</span>
@@ -1025,6 +1082,7 @@ let evTargetId = null;
 function syncEvTo(){
   const internal = $("#e-type").value === "internal";
   $("#e-to-wrap").style.display = internal ? "none" : "flex";
+  $("#e-course-wrap").style.display = $("#e-type").value === "course" ? "block" : "none";
   $("#e-to-note").style.display = internal ? "block" : "none";
 }
 $("#e-type").addEventListener("change", ()=>{
@@ -1042,6 +1100,9 @@ function openEvModal(id){
   $("#e-type").value = EV_TYPES[e.type] ? e.type : "other";
   $("#e-date").value = e.date||""; $("#e-end").value = e.end||""; $("#e-time").value = e.time||""; $("#e-title").value = e.title||""; $("#e-note").value = e.note||"";
   $("#e-to-teacher").checked = !!e.to?.teacher; $("#e-to-student").checked = !!e.to?.student;
+  $("#e-course").value = e.course || "";
+  const used = [...new Set([...COURSE_PRESETS, ...state.events.filter(x=> x.course).map(x=> x.course)])];
+  $("#course-list").innerHTML = used.map(n=>`<option value="${esc(n)}">`).join("");
   syncEvTo();
   $("#e-del").style.display = isAdd ? "none" : "";
   $("#ev-modal").classList.add("show");
@@ -1081,7 +1142,9 @@ $("#e-submit").addEventListener("click", async ()=>{
   const type = $("#e-type").value;
   const e = { id: evTargetId || newId(), type, date:$("#e-date").value, end:$("#e-end").value, time:$("#e-time").value.trim(),
               title:$("#e-title").value.trim(), note:$("#e-note").value.trim(),
+              course: type==="course" ? $("#e-course").value.trim() : "",
               to: type==="internal" ? {teacher:false,student:false} : {teacher:$("#e-to-teacher").checked, student:$("#e-to-student").checked} };
+  if(!e.title && e.course) e.title = e.course;
   if(!e.date || !e.title){ alert("日期和活動名稱要填"); return; }
   if(e.end && e.end < e.date){ alert("結束日期不能比開始日期早"); return; }
   if(e.end === e.date) e.end = "";
@@ -1169,6 +1232,7 @@ $("#btn-save").addEventListener("click", saveConfig);
    ============================================================ */
 const ZONES = ["admin","teacher","student"];
 function show(zone){
+  currentZone = ZONES.includes(zone) ? zone : null; setTimeout(()=> prefetchZone(currentZone), 50);
   $("#home").style.display = ZONES.includes(zone) ? "none" : "grid";
   ZONES.forEach(z=> document.getElementById("zone-"+z).classList.toggle("active", zone===z));
   window.scrollTo(0,0);
