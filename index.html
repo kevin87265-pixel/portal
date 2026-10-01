@@ -280,9 +280,35 @@ body.editing #editbar{display:flex;}
 .modal .row .primary{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;}
 .modal .row .primary:hover{background:var(--gold);filter:brightness(1.08);}
 
-/* ---------- 法會公告 ---------- */
+/* ---------- 首頁法會卡 ---------- */
 .rite-slot:empty{display:none;}
 .rite-slot{margin-top:18px;}
+.r2{position:relative;overflow:hidden;border-radius:22px;background:#fffaf1;border:1px solid #d9b77a;box-shadow:0 1px 2px rgba(120,40,20,.08),0 14px 34px rgba(120,40,20,.14);}
+.r2-top{position:relative;padding:18px 20px 16px;color:#fff6e0;text-align:center;
+  background:radial-gradient(120% 160% at 50% -20%,#c2392f 0%,#9b2320 55%,#7d1a17 100%);}
+.r2-top::before,.r2-top::after{content:"";position:absolute;top:50%;width:46px;height:1px;background:linear-gradient(90deg,transparent,#e9c77e);}
+.r2-top::before{left:18px;}.r2-top::after{right:18px;transform:scaleX(-1);}
+.r2-org{display:block;font-size:12.5px;letter-spacing:.42em;text-indent:.42em;color:#f0d395;}
+.r2-title{display:block;margin-top:2px;font-family:'Noto Serif TC',serif;font-weight:900;font-size:27px;letter-spacing:.2em;text-indent:.2em;color:#fff3d6;}
+.r2-count{display:inline-block;margin-top:8px;padding:2px 12px;border-radius:999px;border:1px solid rgba(240,211,149,.7);color:#f6dfa6;font-size:12.5px;letter-spacing:.12em;}
+.r2-body{padding:16px 16px 14px;}
+.r2-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.r2-d{border:1px solid #e3c88f;border-radius:14px;background:#fff;text-align:center;padding:10px 6px 9px;}
+.r2-d i{display:block;font-style:normal;font-size:12px;letter-spacing:.2em;text-indent:.2em;color:#9b2320;font-weight:700;}
+.r2-d b{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:2px;font-family:'Noto Serif TC',serif;font-weight:900;font-size:28px;line-height:1.2;color:#3a1d14;white-space:nowrap;}
+.r2-d b em{font-style:normal;width:1px;height:22px;background:#d9b77a;}
+.r2-d span{display:block;font-size:12px;color:#8a6f52;letter-spacing:.1em;margin-top:1px;}
+.r2-hl{list-style:none;margin:14px 0 0;padding:0;}
+.r2-hl li{display:block;padding:9px 4px;border-top:1px dashed #e6d2a8;text-align:center;}
+.r2-hl li:first-child{border-top:none;}
+.r2-hl time{display:block;font-size:13px;color:#9b2320;font-weight:700;letter-spacing:.02em;font-variant-numeric:tabular-nums;}
+.r2-hl span{display:block;margin-top:2px;font-size:16px;color:#2c2216;letter-spacing:.06em;font-weight:600;}
+.r2-note{margin-top:10px;font-size:13.5px;color:#6d5a44;text-align:center;letter-spacing:.06em;}
+.r2-place{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;padding:9px 10px;border-radius:12px;background:#f8eedb;color:#5b3a1c;font-size:13px;letter-spacing:.04em;text-decoration:none;text-align:center;}
+.r2-place svg{flex:0 0 auto;width:15px;height:15px;stroke:#9b2320;fill:none;stroke-width:2;}
+@media (max-width:380px){.r2-d b{font-size:24px;gap:7px;}.r2-title{font-size:24px;}}
+
+/* ---------- 法會公告 ---------- */
 .rite{position:relative;overflow:hidden;display:flex;align-items:stretch;border-radius:22px;
   background:radial-gradient(120% 140% at 100% 0%,#fff6dd 0%,#fffdf7 55%,#fbf3e2 100%);
   border:1px solid rgba(156,118,48,.38);box-shadow:0 1px 2px rgba(120,85,20,.08),0 14px 34px rgba(120,85,20,.14);}
@@ -694,6 +720,10 @@ footer .foot-note{margin-top:16px;}
     <label id="e-course-wrap">課程種類（可以選，也可以自己打新的）<input type="text" id="e-course" list="course-list" placeholder="例：八字初階"><datalist id="course-list"></datalist></label>
     <label>活動名稱<input type="text" id="e-title" placeholder="例：十月法會"></label>
     <label>備註（可空白）<textarea id="e-note"></textarea></label>
+    <div id="e-rite-wrap">
+      <label>重點時段（首頁法會卡會顯示，一行一個，可空白）<textarea id="e-hl" placeholder="10/21 14:00-16:30｜開財庫城・消災補運補庫&#10;10/22 14:00-15:30｜五行姻緣科儀"></textarea></label>
+      <label>地點（可空白）<input type="text" id="e-place" placeholder="台中靈應壇｜彰化縣芬園鄉彰南路五段616號"></label>
+    </div>
     <div class="chk-row" id="e-to-wrap">
       <span>誰看得到</span>
       <label class="chk"><input type="checkbox" id="e-to-teacher">老師區</label>
@@ -862,9 +892,11 @@ const DEFAULT_CONFIG = {
    "end": "2026-10-22",
    "date": "2026-10-21",
    "note": "本場有 還陰債，無貴人．小人",
-   "time": "",
+   "time": "10/21 09:00 開始・10/22 17:30 圓滿",
    "type": "ritual",
-   "title": "十月法會"
+   "title": "十月法會",
+   "hl": "10/21（三）14:00–16:30｜開財庫城・消災補運補庫\n10/22（四）14:00–15:30｜五行姻緣科儀",
+   "place": "台中靈應壇｜彰化縣芬園鄉彰南路五段616號"
   },
   {
    "id": "course-202610-1",
@@ -1074,13 +1106,13 @@ const DEFAULT_CONFIG = {
      "type": "web"
     },
     {
+     "pw": "888",
      "tag": "每月5號填",
      "url": "https://reurl.cc/aEz649",
      "desc": "每個月5號，麻煩請填上個月的 IG／官方LINE 數據",
      "hint": "",
      "name": "老師流量體檢",
-     "type": "web",
-     "pw": "888"
+     "type": "web"
     },
     {
      "url": "https://lin.ee/n2N8qhh",
@@ -1448,7 +1480,51 @@ function nextRituals(zoneKey){
     .filter(e=> (e.end && e.end > e.date ? e.end : e.date) >= today)
     .sort((a,b)=> a.date.localeCompare(b.date));
 }
+const CN_NUM = ["","一","二","三","四","五","六","七","八","九","十"];
+function cnDay(n){ return n<=10 ? (n===10?"初十":"初"+CN_NUM[n]) : n<20 ? "十"+CN_NUM[n-10] : n===20 ? "二十" : n<30 ? "廿"+CN_NUM[n-20] : "三十"; }
+function lunarOf(d){        // 用瀏覽器內建農曆換算，不用手動填
+  try{
+    const parts = new Intl.DateTimeFormat("zh-TW-u-ca-chinese",{month:"numeric",day:"numeric"}).formatToParts(d);
+    const m = parts.find(p=>p.type==="month"), dd = parts.find(p=>p.type==="day");
+    const mon = parseInt(m.value,10), leap = /閏/.test(m.value), day = parseInt(dd.value,10);
+    if(!mon || !day) return null;
+    return { mon:(leap?"閏":"")+(mon===1?"正":mon===11?"十一":mon===12?"十二":CN_NUM[mon])+"月", day:cnDay(day) };
+  }catch(e){ return null; }
+}
 function renderRite(zoneKey){
+  const slot = document.querySelector(`[data-rite="${zoneKey}"]`); if(!slot) return;
+  const e = nextRituals(zoneKey)[0];
+  if(!e){ slot.innerHTML = ""; return; }
+  const s = new Date(e.date+"T00:00"), multi = e.end && e.end > e.date, t = multi ? new Date(e.end+"T00:00") : s;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const diff = Math.round((s - now)/86400000);
+  const count = diff > 1 ? `還有 ${diff} 天` : diff === 1 ? "明天開始" : (now <= t ? "法會進行中" : "");
+  const days = [];
+  for(let d=new Date(s), n=0; d<=t && n<3; d.setDate(d.getDate()+1), n++) days.push(new Date(d));
+  const solar = days.map(d=> d.getDate()).join("<em></em>");
+  const wd = days.map(d=> "週"+WD[d.getDay()]).join("・");
+  const lu = days.map(lunarOf);
+  const lunarBox = lu.every(x=>x) ? `<div class="r2-d"><i>農曆・${lu[0].mon}</i><b>${lu.map(x=>x.day).join("<em></em>")}</b><span>${wd}</span></div>` : "";
+  const hl = (e.hl||"").split(/\n+/).map(x=>x.trim()).filter(Boolean).slice(0,4).map(line=>{
+    const m = line.split(/[｜|]/);
+    return m.length > 1 ? `<li><time>${esc(m[0].trim())}</time><span>${esc(m.slice(1).join(" ").trim())}</span></li>` : `<li><span>${esc(line)}</span></li>`;
+  }).join("");
+  const place = e.place || "";
+  const placeName = place.split(/[｜|]/).pop().trim();
+  slot.innerHTML = `<div class="r2">
+    <div class="r2-top"><span class="r2-org">台中靈應壇</span><b class="r2-title">${esc(e.title)}</b>${count?`<span class="r2-count">${count}</span>`:""}</div>
+    <div class="r2-body">
+      <div class="r2-dates" style="${lunarBox?"":"grid-template-columns:1fr"}">
+        <div class="r2-d"><i>國曆・${CN_MON[s.getMonth()]}月</i><b>${solar}</b><span>${wd}</span></div>${lunarBox}
+      </div>
+      ${e.time ? `<div class="r2-note">${esc(e.time)}</div>` : ""}
+      ${hl ? `<ul class="r2-hl">${hl}</ul>` : ""}
+      ${e.note ? `<div class="r2-note">${esc(e.note)}</div>` : ""}
+      ${place ? `<a class="r2-place" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(placeName)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>${esc(place.replace(/[｜|]/," ・ "))}</a>` : ""}
+    </div></div>`;
+}
+
+function renderRiteZone(zoneKey){   // 各區：金色法會卡
   const slot = document.querySelector(`[data-rite="${zoneKey}"]`); if(!slot) return;
   const list = nextRituals(zoneKey);
   if(!list.length){ slot.innerHTML = ""; return; }
@@ -1491,9 +1567,9 @@ function renderBoard(zoneKey){
   const list = state.ann[zoneKey];
   const wk = new Date(); wk.setDate(wk.getDate()+7); const wkK = ymd(wk);
   const rank = { ritual:0, order:1, other:2, course:3 };
+  const topRite = nextRituals(zoneKey)[0];
   let auto = zoneKey === "admin" ? [] : upcoming(zoneKey, 30)        // 行政排進行事曆的，近 30 天自動變公告
     .filter(e=> e.type !== "course" || e.date <= wkK);               // 課程只提醒 7 天內的
-  const topRite = nextRituals(zoneKey)[0];
   if(topRite) auto = auto.filter(e=> e.id !== topRite.id);          // 最近一場法會已經放在最上面
   auto.sort((x,y)=> (rank[x.type]??2) - (rank[y.type]??2) || x.date.localeCompare(y.date));
   const foldCourses = zoneKey === "teacher";                         // 老師區：法會是重點，課程收起來
@@ -1881,6 +1957,7 @@ function syncEvTo(){
   const internal = $("#e-type").value === "internal";
   $("#e-to-wrap").style.display = internal ? "none" : "flex";
   $("#e-course-wrap").style.display = $("#e-type").value === "course" ? "block" : "none";
+  $("#e-rite-wrap").style.display = $("#e-type").value === "ritual" ? "block" : "none";
   $("#e-to-note").style.display = internal ? "block" : "none";
 }
 $("#e-type").addEventListener("change", ()=>{
@@ -1899,6 +1976,7 @@ function openEvModal(id){
   $("#e-date").value = e.date||""; $("#e-end").value = e.end||""; $("#e-time").value = e.time||""; $("#e-title").value = e.title||""; $("#e-note").value = e.note||"";
   $("#e-to-teacher").checked = !!e.to?.teacher; $("#e-to-student").checked = !!e.to?.student;
   $("#e-course").value = e.course || "";
+  $("#e-hl").value = e.hl || ""; $("#e-place").value = e.place || "";
   const used = [...new Set([...COURSE_PRESETS, ...state.events.filter(x=> x.course).map(x=> x.course)])];
   $("#course-list").innerHTML = used.map(n=>`<option value="${esc(n)}">`).join("");
   syncEvTo();
@@ -1941,6 +2019,7 @@ $("#e-submit").addEventListener("click", async ()=>{
   const e = { id: evTargetId || newId(), type, date:$("#e-date").value, end:$("#e-end").value, time:$("#e-time").value.trim(),
               title:$("#e-title").value.trim(), note:$("#e-note").value.trim(),
               course: type==="course" ? $("#e-course").value.trim() : "",
+              hl: type==="ritual" ? $("#e-hl").value.trim() : "", place: type==="ritual" ? $("#e-place").value.trim() : "",
               to: type==="internal" ? {teacher:false,student:false} : {teacher:$("#e-to-teacher").checked, student:$("#e-to-student").checked} };
   if(!e.title && e.course) e.title = e.course;
   if(!e.date || !e.title){ alert("日期和活動名稱要填"); return; }
@@ -1981,7 +2060,7 @@ function renderDaily(){
     <div class="daily-src">— ${esc(it.s)}</div>
     ${it.n ? `<div class="daily-note"><b>白話</b>${esc(it.n)}</div>` : ""}`;
 }
-function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); ["home","admin","teacher","student"].forEach(renderRite); }
+function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); renderRite("home"); ["admin","teacher","student"].forEach(renderRiteZone); }
 
 /* ============================================================
    ⑤ 系統編輯表單
