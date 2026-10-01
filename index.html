@@ -10,6 +10,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="dns-prefetch" href="https://drive.google.com">
+<link rel="preconnect" href="https://lh3.googleusercontent.com">
+<script>
+// 一打開就先去雲端抓資料，跟畫面同時進行，不用等整頁讀完
+window.__cfgP = (function(){ try{
+  var k="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZ3JzeHRsYXpuYWp6cWdjdXFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5Njg1MDIsImV4cCI6MjA5MDU0NDUwMn0.XyZ0wQbZQ-CInglRpv-MHMuMvkviRovm-o-On_FeyGs";
+  return fetch("https://plgrsxtlaznajzqgcuqr.supabase.co/rest/v1/game_data?id=eq.portal_config_main&select=data",{headers:{apikey:k,Authorization:"Bearer "+k}})
+    .then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+}catch(e){ return null; } })();
+</script>
 <!-- 字型不擋畫面：先用手機內建字顯示，字型下載好再換上 -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
@@ -351,6 +360,38 @@ body.calviewing{overflow:hidden;}
 .card.is-cal .desc b{color:var(--text);font-weight:700;}
 .ann-auto-h{margin-top:10px;font-size:11px;letter-spacing:.16em;color:var(--text-faint);}
 
+/* ---------- 圖片集 ---------- */
+#gallery{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;background:var(--bg);animation:slidein .28s cubic-bezier(.2,.8,.2,1);}
+#gallery.show{display:flex;}
+.gal-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 12px 48px;width:100%;max-width:820px;margin:0 auto;}
+.gal-nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.gal-nav button{border:1px solid var(--line-strong);background:var(--bg-card);border-radius:999px;padding:6px 12px;font-size:13px;letter-spacing:.04em;color:var(--text);cursor:pointer;}
+.gal-item{margin-bottom:18px;background:var(--bg-card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);scroll-margin-top:10px;}
+.gal-item h3{font-family:'Noto Serif TC',serif;font-size:15px;letter-spacing:.06em;padding:10px 14px;border-bottom:1px solid var(--line);font-weight:700;}
+.gal-item img{display:block;width:100%;height:auto;min-height:120px;background:var(--bg-2);cursor:zoom-in;}
+.gal-tip{text-align:center;font-size:12px;color:var(--text-faint);letter-spacing:.08em;margin:2px 0 12px;}
+#zoom{position:fixed;inset:0;z-index:30;display:none;background:#14110c;overflow:auto;}
+#zoom.show{display:block;}
+#zoom.show:not(.big){display:flex;align-items:center;}
+#zoom.show:not(.big) img{flex-shrink:0;}
+#zoom img{display:block;width:100%;height:auto;margin:auto;}
+#zoom.big img{width:240%;max-width:none;}
+#zoom-close{position:fixed;top:max(12px,env(safe-area-inset-top));right:12px;z-index:31;width:44px;height:44px;border-radius:999px;border:0;background:rgba(255,255,255,.92);font-size:22px;cursor:pointer;}
+#zoom-hint{position:fixed;bottom:16px;left:0;right:0;text-align:center;color:rgba(255,255,255,.75);font-size:12px;letter-spacing:.1em;pointer-events:none;}
+.card.is-gal .seal{background:var(--accent-soft);}
+.card .kind.tag{color:#fff;background:var(--danger,#b5523d);padding:3px 9px;border-radius:999px;letter-spacing:.06em;font-weight:700;}
+/* ---------- 官方LINE ---------- */
+.card.is-line .seal{background:#06c755;color:#fff;box-shadow:none;}
+.line-id{margin-top:12px;padding:14px;border-radius:14px;background:#e9f9ef;border:1px solid #bfe9cf;text-align:center;}
+.line-id small{display:block;font-size:12px;color:var(--text-dim);letter-spacing:.1em;}
+.line-id b{display:block;margin-top:4px;font-size:24px;letter-spacing:.04em;color:#05a649;user-select:all;}
+.line-url{margin-top:10px;font-size:13px;word-break:break-all;color:var(--text-dim);text-align:center;user-select:all;}
+.line-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.line-btns button,.line-btns a{height:46px;border-radius:14px;border:1px solid var(--line-strong);background:var(--bg-card);font-size:14.5px;letter-spacing:.06em;color:var(--text);cursor:pointer;display:grid;place-items:center;text-decoration:none;}
+.line-btns .lg{background:#06c755;border-color:#06c755;color:#fff;font-weight:700;}
+.line-btns .full{grid-column:1/-1;}
+.cal-add-day{margin:0 0 8px;}
+
 /* ---------- 內嵌系統視窗 ---------- */
 #viewer{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;background:var(--bg);animation:slidein .28s cubic-bezier(.2,.8,.2,1);}
 #viewer.show{display:flex;}
@@ -494,6 +535,34 @@ footer .foot-note{margin-top:16px;}
   <iframe id="viewer-frame" title="系統畫面" allow="clipboard-write; fullscreen"></iframe>
 </div>
 
+<!-- 圖片集 -->
+<div id="gallery" aria-hidden="true">
+  <div class="viewer-bar">
+    <button type="button" class="viewer-back" id="gallery-close" aria-label="返回"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>返回</span></button>
+    <b id="gallery-title"></b>
+    <span style="width:72px;flex-shrink:0"></span>
+  </div>
+  <div class="gal-body" id="gallery-body"></div>
+</div>
+<div id="zoom" aria-hidden="true"><img id="zoom-img" alt=""><button type="button" id="zoom-close" aria-label="關閉">✕</button><div id="zoom-hint">點圖片放大／縮小・可以上下左右拖</div></div>
+
+<!-- 官方LINE -->
+<div id="line-modal" class="modal" role="dialog" aria-modal="true">
+  <div class="box">
+    <b id="line-title">學苑官方 LINE</b>
+    <div class="line-id"><small>LINE ID</small><b id="line-id"></b></div>
+    <div class="line-url" id="line-url"></div>
+    <div class="line-btns">
+      <button type="button" id="line-copy-url">複製連結</button>
+      <button type="button" id="line-copy-id">複製 ID</button>
+      <a class="lg full" id="line-share" target="_blank" rel="noopener">傳給 LINE 好友</a>
+      <button type="button" class="full" id="line-copy-all">複製整段介紹（貼到任何地方）</button>
+      <a class="full" id="line-open" target="_blank" rel="noopener">打開官方帳號</a>
+    </div>
+    <div class="row"><button onclick="closeModal('line-modal')">關閉</button></div>
+  </div>
+</div>
+
 <!-- 行事曆全頁 -->
 <div id="calview" aria-hidden="true">
   <div class="viewer-bar">
@@ -573,10 +642,13 @@ footer .foot-note{margin-top:16px;}
         <option value="local">本機工具（顯示說明）</option>
         <option value="calendar">行事曆（點進去看行事曆）</option>
         <option value="note">問答／說明（點卡片看內容）</option>
+        <option value="gallery">圖片集（雲端圖片直接在這裡看）</option>
+        <option value="line">官方LINE（複製連結和ID分享）</option>
       </select>
     </label>
-    <label id="f-url-wrap">網址<textarea id="f-url" placeholder="https://..."></textarea></label>
+    <label id="f-url-wrap"><span id="f-url-label">網址</span><textarea id="f-url" placeholder="https://..."></textarea></label>
     <label id="f-hint-wrap"><span id="f-hint-label">開啟說明</span><textarea id="f-hint" placeholder="例：開啟電腦上的 XXX.html"></textarea></label>
+    <label>醒目小字（可空白，會用紅底顯示在卡片上）<input type="text" id="f-tag" placeholder="例：每月5號填"></label>
     <div class="row">
       <button onclick="closeModal('item-modal')">取消</button>
       <button class="primary" id="f-submit">確定</button>
@@ -599,51 +671,303 @@ const ROW_ID = "portal_config_main";
    ② 預設內容（第一次使用或讀不到雲端時顯示）
    ============================================================ */
 const DEFAULT_CONFIG = {
-  admin: [
-    { category:"法會文件", items:[
-      { name:"疏文批次產生器", desc:"線上批次產生疏文", type:"web",
-        url:"https://kevin87265-pixel.github.io/statistics.html/%E7%96%8F%E6%96%87%E6%89%B9%E6%AC%A1%E7%94%A2%E7%94%9F%E5%99%A8_2.html" },
-      { name:"香量總表", desc:"各位老師的香量表（Google Sheet）", type:"web",
-        url:"https://docs.google.com/spreadsheets/d/1EJsLHTamRMZCfA4EvIkF-G0Js6nA2uX2fgVTGBT_KKY/edit?gid=901576554#gid=901576554" },
-    ]},
-    { category:"財務業績", items:[
-      { name:"月度獎金計算系統", desc:"全組織 PV 與獎金計算", type:"web",
-        url:"https://kevin87265-pixel.github.io/statistics.html/%E7%8D%8E%E9%87%91%E8%A8%88%E7%AE%97%E7%B3%BB%E7%B5%B1.html" },
-      { name:"業績驗算", desc:"月度業績交叉核對", type:"local",
-        hint:"本機工具：開啟電腦上的「業績驗算」HTML 檔。" },
-      { name:"財務儀表板", desc:"營運財務健檢報表", type:"local",
-        hint:"本機工具：開啟電腦上的「財務儀表板」HTML 檔。" },
-    ]},
-    { category:"管理系統", items:[
-      { name:"積點管理系統", desc:"客戶積點查詢與管理", type:"web",
-        url:"https://kevin87265-pixel.github.io/miiragic-points/" },
-      { name:"斗燈包年管理", desc:"斗燈席位與平面圖管理", type:"local",
-        hint:"本機工具：開啟電腦上的「斗燈包年管理系統」HTML 檔（v3+）。" },
-    ]},
-  ],
-  teacher: [
-    { category:"日常工具", items:[
-      { name:"香量填單系統", desc:"神奇老師香量線上填單", type:"web",
-        url:"https://kevin87265-pixel.github.io/statistics.html/" },
-      { name:"積點管理系統", desc:"客戶積點查詢與登錄", type:"web",
-        url:"https://kevin87265-pixel.github.io/miiragic-points/" },
-      { name:"下單付款", desc:"訂單與付款連結（待設定）", type:"web", url:"" },
-    ]},
-    { category:"課程資料區", items:[] },
-    { category:"法會資料區", items:[] },
-    { category:"資料問題統整", items:[] },
-    { category:"教學影片", items:[] },
-  ],
-  student: [
-    { category:"學員專區", items:[
-      { name:"積點查詢", desc:"MIIRAGIC Magic Halo 積點系統", type:"web",
-        url:"https://kevin87265-pixel.github.io/miiragic-points/" },
-      { name:"每月課程", desc:"本月課程資訊（待設定連結）", type:"web", url:"" },
-      { name:"課程資料", desc:"課程講義與資料（待設定連結）", type:"web", url:"" },
-      { name:"學苑官方 LINE", desc:"加入官方帳號聯繫我們", type:"web",
-        url:"https://lin.ee/n2N8qhh" },
-    ]},
+ "ann": {
+  "admin": [],
+  "student": [],
+  "teacher": [
+   {
+    "date": "2026-09-01",
+    "text": "九月出疏文時間：\n\n9/11：17:00截止\n9/21：17:00截止\n9/25：18:00截止\n9/30：17:00截止"
+   }
   ]
+ },
+ "admin": [
+  {
+   "items": [
+    {
+     "url": "https://kevin87265-pixel.github.io/statistics.html/%E7%96%8F%E6%96%87%E6%89%B9%E6%AC%A1%E7%94%A2%E7%94%9F%E5%99%A8_2.html",
+     "desc": "線上批次產生疏文",
+     "name": "疏文批次產生器",
+     "type": "web"
+    },
+    {
+     "url": "https://docs.google.com/spreadsheets/d/1EJsLHTamRMZCfA4EvIkF-G0Js6nA2uX2fgVTGBT_KKY/edit?gid=901576554#gid=901576554",
+     "desc": "各位老師的香量表（Google Sheet）",
+     "name": "香量總表",
+     "type": "web"
+    },
+    {
+     "url": "https://kevin87265-pixel.github.io/statistics.html/",
+     "desc": "設定項目開關",
+     "hint": "",
+     "name": "香量填單網站",
+     "type": "web"
+    },
+    {
+     "desc": "出單・法會・課程時間",
+     "name": "行事曆",
+     "type": "calendar"
+    }
+   ],
+   "category": "法會文件"
+  },
+  {
+   "items": [
+    {
+     "url": "https://kevin87265-pixel.github.io/statistics.html/%E7%8D%8E%E9%87%91%E8%A8%88%E7%AE%97%E7%B3%BB%E7%B5%B1.html",
+     "desc": "全組織 PV 與獎金計算",
+     "name": "月度獎金計算系統",
+     "type": "web"
+    },
+    {
+     "desc": "月度業績交叉核對",
+     "hint": "本機工具：開啟電腦上的「業績驗算」HTML 檔。",
+     "name": "業績驗算",
+     "type": "local"
+    },
+    {
+     "desc": "營運財務健檢報表",
+     "hint": "本機工具：開啟電腦上的「財務儀表板」HTML 檔。",
+     "name": "財務儀表板",
+     "type": "local"
+    }
+   ],
+   "category": "財務業績"
+  },
+  {
+   "items": [
+    {
+     "url": "https://kevin87265-pixel.github.io/miiragic-points/",
+     "desc": "客戶積點查詢與管理",
+     "name": "積點管理系統",
+     "type": "web"
+    },
+    {
+     "desc": "斗燈席位與平面圖管理",
+     "hint": "本機工具：開啟電腦上的「斗燈包年管理系統」HTML 檔（v3+）。",
+     "name": "斗燈包年管理",
+     "type": "local"
+    }
+   ],
+   "category": "管理系統"
+  }
+ ],
+ "events": [
+  {
+   "id": "ritual-2026-10",
+   "to": {
+    "student": true,
+    "teacher": true
+   },
+   "end": "2026-10-22",
+   "date": "2026-10-21",
+   "note": "本場有 還陰債，無貴人．小人",
+   "time": "",
+   "type": "ritual",
+   "title": "十月法會"
+  }
+ ],
+ "student": [
+  {
+   "items": [
+    {
+     "url": "https://kevin87265-pixel.github.io/miiragic-points/",
+     "desc": "MIIRAGIC Magic Halo 積點系統",
+     "name": "積點查詢",
+     "type": "web"
+    },
+    {
+     "desc": "出單・法會・課程時間",
+     "name": "行事曆",
+     "type": "calendar"
+    },
+    {
+     "url": "",
+     "desc": "本月課程資訊（待設定連結）",
+     "name": "每月課程",
+     "type": "web"
+    },
+    {
+     "url": "",
+     "desc": "課程講義與資料（待設定連結）",
+     "name": "課程資料",
+     "type": "web"
+    },
+    {
+     "url": "https://lin.ee/n2N8qhh",
+     "desc": "加入官方帳號聯繫我們",
+     "name": "學苑官方 LINE",
+     "type": "web"
+    }
+   ],
+   "category": "學員專區"
+  }
+ ],
+ "teacher": [
+  {
+   "items": [
+    {
+     "url": "https://kevin87265-pixel.github.io/statistics.html/",
+     "desc": "神奇老師香量線上填單",
+     "name": "香量填單系統",
+     "type": "web"
+    },
+    {
+     "desc": "出單・法會・課程時間",
+     "name": "行事曆",
+     "type": "calendar"
+    },
+    {
+     "url": "https://kevin87265-pixel.github.io/miiragic-points/",
+     "desc": "客戶積點查詢與登錄",
+     "name": "積點管理系統",
+     "type": "web"
+    },
+    {
+     "url": "https://reurl.cc/aEz649",
+     "desc": "每個月5號，麻煩請填上個月的 IG／官方LINE 數據",
+     "hint": "",
+     "name": "老師流量體檢",
+     "type": "web",
+     "tag": "每月5號填"
+    },
+    {
+     "name": "學苑官方 LINE",
+     "desc": "複製學苑官方LINE的連結和ID，分享給客人",
+     "type": "line",
+     "url": "https://lin.ee/n2N8qhh",
+     "lineId": "@792edykw",
+     "hint": ""
+    },
+    {
+     "url": "",
+     "desc": "訂單與付款連結（待設定）",
+     "name": "下單付款",
+     "type": "web"
+    }
+   ],
+   "category": "日常工具"
+  },
+  {
+   "items": [
+    {
+     "url": "https://drive.google.com/file/d/1xa7QWHkl8fOX5tySx1--pZfEokffTgtA/view?usp=sharing",
+     "desc": "法會各階項目PV表",
+     "hint": "",
+     "name": "各項目PV表",
+     "type": "gallery",
+     "images": [
+      {
+       "title": "法會各項目PV表",
+       "id": "1xa7QWHkl8fOX5tySx1--pZfEokffTgtA"
+      }
+     ]
+    },
+    {
+     "url": "https://drive.google.com/file/d/1dSBHafmCtJ_wG0bPSotJDZIo_pe7_Eaa/view?usp=sharing",
+     "desc": "教學影片",
+     "hint": "",
+     "name": "香量填表教學",
+     "type": "web"
+    }
+   ],
+   "category": "法會資料區"
+  },
+  {
+   "items": [
+    {
+     "url": "https://drive.google.com/drive/folders/1YcG8gzxnH26yPV2zRQLwI82Gdm79bEX2?usp=sharing",
+     "desc": "課程課表/價格/分潤/規則等",
+     "hint": "",
+     "name": "課程資料",
+     "type": "gallery",
+     "images": [
+      {
+       "title": "2026年10月課表",
+       "id": "14zxjc-uXY6Mv4QStF-TKBe7FCNm_Q3kO"
+      },
+      {
+       "title": "2026年9月課表",
+       "id": "10qsLm28Mx4BkCdiVnQjW-gSKN70qKhFz"
+      },
+      {
+       "title": "課程價格",
+       "id": "19_x2WaNi5k-j_SPpwEGBormC2d8SogpR"
+      },
+      {
+       "title": "2026課程分潤",
+       "id": "10mu8vtZHElgAv8DGuoJmieCRz66vNaAf"
+      },
+      {
+       "title": "課程分潤規則",
+       "id": "1RykEPLX2EPVFoX0xMsb7lcFpQBhIQC5x"
+      },
+      {
+       "title": "八字刷卡QR扣",
+       "id": "1fBpPfRiuXxjLpsE74BFAoiNiUw4NmYZB"
+      },
+      {
+       "title": "塔羅刷卡QR扣",
+       "id": "1jDUO87n-JrWUGZG2HdQLgTSyXPs7TEZu"
+      }
+     ]
+    },
+    {
+     "url": "https://drive.google.com/file/d/1VjVNW-lSDpmYNDWTgR0pvtXFxXQ5KrCp/view?usp=sharing",
+     "desc": "法會獎金/旅遊點數",
+     "hint": "",
+     "name": "正式老師獎金規則",
+     "type": "gallery",
+     "images": [
+      {
+       "title": "正式老師獎金規則",
+       "id": "1VjVNW-lSDpmYNDWTgR0pvtXFxXQ5KrCp"
+      }
+     ]
+    }
+   ],
+   "category": "課程資料區"
+  },
+  {
+   "items": [
+    {
+     "url": "https://drive.google.com/drive/folders/1a10brWHLb4P-i-8eIpzjxrd8GtSPB5Z6?usp=sharing",
+     "desc": "50點項目與規則/晉升累積/培訓班",
+     "hint": "",
+     "name": "學苑學員規則",
+     "type": "gallery",
+     "images": [
+      {
+       "title": "學員50點項目",
+       "id": "1b3XyLDltOoszcqGWXvmA3SAvBp_Cy4bJ"
+      },
+      {
+       "title": "學員晉升累積規則",
+       "id": "1mU6hZBktYamcetOZuUyVcJ_YJmUu02FV"
+      },
+      {
+       "title": "培訓班積分",
+       "id": "1QAs3aUhPEfhxPEIS9B00vHgfqB_AKdAd"
+      }
+     ]
+    },
+    {
+     "url": "https://drive.google.com/file/d/1VjVNW-lSDpmYNDWTgR0pvtXFxXQ5KrCp/view?usp=sharing",
+     "desc": "法會獎金/旅遊點數",
+     "hint": "",
+     "name": "正式老師獎金規則",
+     "type": "gallery",
+     "images": [
+      {
+       "title": "正式老師獎金規則",
+       "id": "1VjVNW-lSDpmYNDWTgR0pvtXFxXQ5KrCp"
+      }
+     ]
+    }
+   ],
+   "category": "資料問題統整"
+  }
+ ]
 };
 
 /* ============================================================
@@ -660,12 +984,13 @@ async function loadConfig(){
   // 先用這台裝置上次存的資料馬上畫出來（不用等網路），雲端資料回來後再更新
   let cached = null;
   try{ cached = JSON.parse(localStorage.getItem("portal-config") || "null"); }catch(e){}
-  if(cached && cached.admin){ state = cached; renderAll(); }
+  state = (cached && cached.admin) ? cached : structuredClone(DEFAULT_CONFIG);   // 沒有存過就用內建的最新一份
+  renderAll();
   if(sbReady()){
     try{
-      const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${ROW_ID}&select=data`,{headers:sbHeaders()});
-      if(r.ok){
-        const rows = await r.json();
+      let rows = window.__cfgP ? await window.__cfgP : null; window.__cfgP = null;
+      if(!rows){ const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${ROW_ID}&select=data`,{headers:sbHeaders()}); rows = r.ok ? await r.json() : null; }
+      if(rows){
         if(rows.length && rows[0].data && rows[0].data.admin){
           if(editing) return;                       // 編輯中不要蓋掉正在改的內容
           state = rows[0].data;
@@ -688,6 +1013,11 @@ function prefetchZone(zone){
     document.head.appendChild(l);
   };
   state[zone].forEach(cat=> cat.items.forEach(it=>{
+    if(it.type === "gallery" && it.images && it.images[0]){     // 圖片：先把第一張抓好
+      add("preconnect", "https://lh3.googleusercontent.com");
+      add("prefetch", imgUrl(it.images[0].id, 1200), {as:"image"});
+      return;
+    }
     if(it.type !== "web" || !it.url) return;
     let u; try{ u = new URL(it.url); }catch(e){ return; }
     if(u.hostname === "kevin87265-pixel.github.io") add("prefetch", u.href);          // 自己的系統：先抓好頁面
@@ -736,13 +1066,35 @@ function makeCard(item, zoneKey, ci, ii){
     const go = ()=>{ if(!editing) openCal(zoneKey); };
     el.addEventListener("click", go);
     el.addEventListener("keydown", e=>{ if(e.key==="Enter") go(); });
+  }else if(item.type === "gallery"){
+    el = document.createElement("div");
+    el.className = "is-gal"; el.tabIndex = 0;
+    const n = (item.images||[]).length;
+    el.innerHTML = `<span class="seal">${esc(Array.from(item.name||"・")[0])}</span>
+                    <span class="name">${esc(item.name)}</span>
+                    <span class="desc">${esc(item.desc)}</span>
+                    <span class="foot">${item.tag ? `<span class="kind tag">${esc(item.tag)}</span>` : `<span class="kind">${n>1 ? n+" 張圖・點開看" : "點開看圖"}</span>`}<span class="go"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg></span></span>`;
+    const go = ()=>{ if(!editing) openGallery(item); };
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", e=>{ if(e.key==="Enter") go(); });
+  }else if(item.type === "line"){
+    el = document.createElement("div");
+    el.className = "is-line"; el.tabIndex = 0;
+    el.innerHTML = `<span class="seal">LINE</span>
+                    <span class="name">${esc(item.name)}</span>
+                    <span class="desc">${esc(item.desc)}</span>
+                    <span class="foot">${item.tag ? `<span class="kind tag">${esc(item.tag)}</span>` : `<span class="kind">點開複製・分享</span>`}<span class="go"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg></span></span>`;
+    el.querySelector(".seal").style.fontSize = "13px";
+    const go = ()=>{ if(!editing) openLine(item); };
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", e=>{ if(e.key==="Enter") go(); });
   }else if(item.type === "web"){
     el = document.createElement("a");
     el.href = item.url || "#"; el.target = "_blank"; el.rel = "noopener";
     el.innerHTML = `<span class="seal">${esc(Array.from(item.name||"・")[0])}</span>
                     <span class="name">${esc(item.name)}</span>
                     <span class="desc">${esc(item.desc)}</span>
-                    <span class="foot"><span class="kind">${item.url ? "線上系統" : "連結待設定"}</span><span class="go"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></span>`;
+                    <span class="foot">${item.tag ? `<span class="kind tag">${esc(item.tag)}</span>` : `<span class="kind">${item.url ? "線上系統" : "連結待設定"}</span>`}<span class="go"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></span>`;
     if(!item.url) el.classList.add("is-empty");
     el.addEventListener("click", e=>{
       if(editing){ e.preventDefault(); return; }
@@ -929,6 +1281,75 @@ function closeViewer(fromPop){
 $("#viewer-close").addEventListener("click", ()=> closeViewer(false));
 window.addEventListener("popstate", ()=> closeViewer(true));
 
+/* ---------- 圖片集：雲端圖片直接顯示，不跳到 Google 雲端 ---------- */
+function driveId(link){
+  const m = String(link).match(/\/d\/([\w-]{20,})/) || String(link).match(/[?&]id=([\w-]{20,})/) || String(link).match(/^([\w-]{25,})$/);
+  return m ? m[1] : null;
+}
+const imgUrl = (id, w) => `https://lh3.googleusercontent.com/d/${id}=w${w}`;
+function openGallery(item){
+  const imgs = item.images || [];
+  $("#gallery-title").textContent = item.name || "";
+  const nav = imgs.length > 2 ? `<div class="gal-nav">${imgs.map((m,i)=>`<button type="button" data-j="${i}">${esc(m.title||("第"+(i+1)+"張"))}</button>`).join("")}</div>` : "";
+  $("#gallery-body").innerHTML = nav + `<p class="gal-tip">點圖片可以放大看</p>` + imgs.map((m,i)=>`
+    <div class="gal-item" id="gal-${i}">${m.title ? `<h3>${esc(m.title)}</h3>` : ""}
+      <img src="${imgUrl(m.id,1200)}" data-id="${esc(m.id)}" alt="${esc(m.title||"")}" ${i>1?'loading="lazy"':''} decoding="async"
+        onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='https://drive.google.com/thumbnail?id=${esc(m.id)}&sz=w1200';}"></div>`).join("");
+  $("#gallery-body").scrollTop = 0;
+  $("#gallery").classList.add("show"); $("#gallery").setAttribute("aria-hidden","false");
+  document.body.classList.add("viewing");
+  try{ history.pushState({gallery:1}, ""); }catch(e){}
+}
+$("#gallery-body").addEventListener("click", e=>{
+  const b = e.target.closest("[data-j]");
+  if(b){ document.getElementById("gal-"+b.dataset.j).scrollIntoView({behavior:"smooth"}); return; }
+  const img = e.target.closest("img[data-id]");
+  if(img){
+    const z = $("#zoom"); z.classList.remove("big");
+    $("#zoom-img").src = img.currentSrc || img.src;                 // 先用已經載好的，再換高畫質
+    const hi = new Image(); hi.onload = ()=>{ if(z.classList.contains("show")) $("#zoom-img").src = hi.src; }; hi.src = imgUrl(img.dataset.id, 2400);
+    z.classList.add("show"); z.scrollTo(0,0);
+    try{ history.pushState({zoom:1}, ""); }catch(e){}
+  }
+});
+$("#zoom-img").addEventListener("click", e=>{ e.stopPropagation(); $("#zoom").classList.toggle("big"); });
+function closeZoom(fromPop){
+  if(!$("#zoom").classList.contains("show")) return false;
+  $("#zoom").classList.remove("show","big");
+  if(!fromPop){ try{ if(history.state && history.state.zoom) history.back(); }catch(e){} }
+  return true;
+}
+$("#zoom-close").addEventListener("click", ()=> closeZoom(false));
+function closeGallery(fromPop){
+  if(!$("#gallery").classList.contains("show")) return;
+  $("#gallery").classList.remove("show"); $("#gallery").setAttribute("aria-hidden","true");
+  document.body.classList.remove("viewing");
+  if(!fromPop){ try{ if(history.state && history.state.gallery) history.back(); }catch(e){} }
+}
+$("#gallery-close").addEventListener("click", ()=> closeGallery(false));
+window.addEventListener("popstate", ()=>{ if(closeZoom(true)) return; closeGallery(true); });
+
+/* ---------- 官方LINE：複製連結／ID、傳給好友 ---------- */
+let lineItem = null;
+function lineText(it){ return `${it.name || "官方 LINE"}\n加好友連結：${it.url}${it.lineId ? `\nLINE ID：${it.lineId}` : ""}`; }
+function openLine(item){
+  lineItem = item;
+  $("#line-title").textContent = item.name || "官方 LINE";
+  $("#line-id").textContent = item.lineId || "（未設定）";
+  $("#line-url").textContent = item.url || "";
+  $("#line-share").href = "https://line.me/R/msg/text/?" + encodeURIComponent(lineText(item));
+  $("#line-open").href = item.url || "#";
+  $("#line-modal").classList.add("show");
+}
+async function copyText(t, okMsg){
+  try{ await navigator.clipboard.writeText(t); }
+  catch(e){ const ta = document.createElement("textarea"); ta.value = t; ta.style.cssText="position:fixed;opacity:0"; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); }catch(_){} ta.remove(); }
+  toast(okMsg);
+}
+$("#line-copy-url").addEventListener("click", ()=> copyText(lineItem.url, "連結已複製，可以貼給別人"));
+$("#line-copy-id").addEventListener("click", ()=> copyText(lineItem.lineId||"", "LINE ID 已複製"));
+$("#line-copy-all").addEventListener("click", ()=> copyText(lineText(lineItem), "整段介紹已複製"));
+
 /* ---------- 行事曆（行政填一份，三區自動同步） ----------
    state.events = [{id,type,date,end,time,title,note,to:{teacher,student}}]
    行政區看全部；老師區/學員區只看勾選給他們的；「行政內部」只有行政看得到 */
@@ -1043,14 +1464,14 @@ function renderCal(zoneKey){
     <div class="cal-next">${nextHtml}</div>
     <div class="cal-grid">${cells}</div>
     <div class="cal-legend">${legend}</div>
-    <div class="cal-list"><div class="cal-list-h">${listTitle}</div>${items}</div>`;
+    <div class="cal-list"><div class="cal-list-h">${listTitle}</div>${isAdmin && (byDay[v.sel]||[]).length ? `<button class="mini cal-add-day" data-a="add"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>在 ${listTitle} 再新增一個</button>` : ""}${items}</div>`;
   wrap.onclick = e=>{
     const t = e.target.closest("[data-a],[data-d],.ev"); if(!t) return;
     if(t.dataset.a==="toggle"){ calOpen[zoneKey] = !calOpen[zoneKey]; }
     else if(t.dataset.a==="prev"){ v.m--; if(v.m<0){v.m=11;v.y--;} v.sel=`${v.y}-${pad(v.m+1)}-01`; }
     else if(t.dataset.a==="next"){ v.m++; if(v.m>11){v.m=0;v.y++;} v.sel=`${v.y}-${pad(v.m+1)}-01`; }
     else if(t.dataset.a==="add"){ openEvModal(null); return; }
-    else if(t.dataset.d){ v.sel = t.dataset.d; }
+    else if(t.dataset.d){ v.sel = t.dataset.d; if(isAdmin && !(byDay[v.sel]||[]).length){ renderCal(zoneKey); openEvModal(null); return; } }
     else if(t.classList.contains("ev")){ if(isAdmin) openEvModal(t.dataset.id); return; }
     renderCal(zoneKey);
   };
@@ -1062,7 +1483,7 @@ function openCal(zoneKey){
   $("#calview").dataset.zone = zoneKey;
   $("#calview-title").textContent = ZONE_NAME[zoneKey] + "行事曆";
   $("#calview-hint").textContent = zoneKey === "admin"
-    ? "按「新增」加活動；點清單裡的活動可以修改或刪除。勾給老師、學員的活動，會同步到他們的行事曆和公告。"
+    ? "點空白的日期就能直接新增；有活動的日期點下去，下面會出現那天的活動，點活動可以修改或刪除。勾給老師、學員的活動，會同步到他們的行事曆和公告。"
     : "行事曆由行政統一更新。";
   renderCal(zoneKey);
   $("#calview").classList.add("show"); $("#calview").setAttribute("aria-hidden","false");
@@ -1077,7 +1498,7 @@ function closeCal(fromPop){
   if(!fromPop){ try{ if(history.state && history.state.calview) history.back(); }catch(e){} }
 }
 $("#calview-close").addEventListener("click", ()=> closeCal(false));
-window.addEventListener("popstate", ()=>{ if($("#viewer").classList.contains("show")) return; closeCal(true); });
+window.addEventListener("popstate", ()=>{ if($("#viewer").classList.contains("show") || $("#gallery").classList.contains("show") || $("#zoom").classList.contains("show")) return; closeCal(true); });
 let evTargetId = null;
 function syncEvTo(){
   const internal = $("#e-type").value === "internal";
@@ -1173,26 +1594,42 @@ function openItemModal(zoneKey, ci, ii){
   $("#f-desc").value = item.desc||"";
   $("#f-type").value = item.type||"web";
   $("#f-url").value = item.url||"";
-  $("#f-hint").value = item.hint||"";
+  $("#f-hint").value = item.type==="gallery" ? (item.images||[]).map(m=>`${m.title||""}｜https://drive.google.com/file/d/${m.id}/view`).join("\n")
+                     : item.type==="line" ? (item.lineId||"") : (item.hint||"");
+  $("#f-tag").value = item.tag||"";
   syncTypeFields();
   $("#item-modal").classList.add("show");
 }
 function syncTypeFields(){
   const t = $("#f-type").value;
-  $("#f-url-wrap").style.display  = t==="web" ? "block":"none";
-  $("#f-hint-wrap").style.display = (t==="local"||t==="note") ? "block":"none";
-  $("#f-hint-label").textContent  = t==="note" ? "內容（答案／說明，可多行）" : "開啟說明";
+  $("#f-url-wrap").style.display  = (t==="web"||t==="gallery"||t==="line") ? "block":"none";
+  $("#f-url-label").textContent   = t==="gallery" ? "雲端資料夾連結（可空白，備用）" : t==="line" ? "加好友連結（例：https://lin.ee/...）" : "網址";
+  $("#f-hint-wrap").style.display = (t==="local"||t==="note"||t==="gallery"||t==="line") ? "block":"none";
+  $("#f-hint-label").textContent  = t==="note" ? "內容（答案／說明，可多行）"
+    : t==="gallery" ? "圖片（一行一張：名稱｜雲端圖片連結。新圖片在雲端按「共用→複製連結」貼過來）"
+    : t==="line" ? "LINE ID（例：@792edykw）" : "開啟說明";
 }
 $("#f-type").addEventListener("change", syncTypeFields);
 $("#f-submit").addEventListener("click", ()=>{
   const {zoneKey, ci, ii} = modalTarget;
+  const type = $("#f-type").value;
   const item = {
     name: $("#f-name").value.trim() || "未命名",
     desc: $("#f-desc").value.trim(),
-    type: $("#f-type").value,
+    type,
     url:  $("#f-url").value.trim(),
     hint: $("#f-hint").value.trim(),
   };
+  const tag = $("#f-tag").value.trim(); if(tag) item.tag = tag;
+  if(type==="gallery"){
+    item.images = item.hint.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{
+      const parts = l.split(/[｜|]/); const link = parts.pop().trim(); const id = driveId(link);
+      return id ? { title:(parts.join("｜").trim() || ""), id } : null;
+    }).filter(Boolean);
+    if(!item.images.length){ alert("圖片連結看不懂，請貼 Google 雲端的圖片連結（一行一張）"); return; }
+    item.hint = "";
+  }
+  if(type==="line"){ item.lineId = item.hint; item.hint = ""; }
   if(ii===null) state[zoneKey][ci].items.push(item);
   else state[zoneKey][ci].items[ii] = item;
   closeModal("item-modal");
