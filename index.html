@@ -582,6 +582,19 @@ footer .foot-note{margin-top:16px;}
 </div>
 <div id="zoom" aria-hidden="true"><img id="zoom-img" alt=""><button type="button" id="zoom-close" aria-label="關閉">✕</button><div id="zoom-hint">點圖片放大／縮小・可以上下左右拖</div></div>
 
+<!-- 單一系統密碼 -->
+<div id="pw-modal" class="modal" role="dialog" aria-modal="true">
+  <div class="box">
+    <b id="pw-title">請輸入密碼</b>
+    <label>密碼<input type="password" id="pw-input" inputmode="numeric" autocomplete="off"></label>
+    <div id="pw-err" style="display:none;margin-top:8px;color:var(--danger,#b5523d);font-size:13px">密碼不對，請再試一次</div>
+    <div class="row">
+      <button onclick="closeModal('pw-modal')">取消</button>
+      <button class="primary" id="pw-ok">進入</button>
+    </div>
+  </div>
+</div>
+
 <!-- 官方LINE -->
 <div id="line-modal" class="modal" role="dialog" aria-modal="true">
   <div class="box">
@@ -690,6 +703,7 @@ footer .foot-note{margin-top:16px;}
     <label id="f-url-wrap"><span id="f-url-label">網址</span><textarea id="f-url" placeholder="https://..."></textarea></label>
     <label id="f-hint-wrap"><span id="f-hint-label">開啟說明</span><textarea id="f-hint" placeholder="例：開啟電腦上的 XXX.html"></textarea></label>
     <label>醒目小字（可空白，會用紅底顯示在卡片上）<input type="text" id="f-tag" placeholder="例：每月5號填"></label>
+    <label>點開前要輸入的密碼（可空白＝不用密碼）<input type="text" id="f-pw" placeholder="例：888"></label>
     <div class="row">
       <button onclick="closeModal('item-modal')">取消</button>
       <button class="primary" id="f-submit">確定</button>
@@ -809,153 +823,153 @@ const DEFAULT_CONFIG = {
   },
   {
    "id": "course-202610-1",
-   "type": "course",
-   "course": "塔羅體驗班",
-   "title": "塔羅體驗班",
-   "date": "2026-10-01",
-   "end": "",
-   "time": "19:00-20:30",
-   "note": "陳彩綺 講師",
    "to": {
-    "teacher": true,
-    "student": true
+    "student": true,
+    "teacher": true
    },
-   "src": "2026年10月課表"
+   "end": "",
+   "src": "2026年10月課表",
+   "date": "2026-10-01",
+   "note": "陳彩綺 講師",
+   "time": "19:00-20:30",
+   "type": "course",
+   "title": "塔羅體驗班",
+   "course": "塔羅體驗班"
   },
   {
    "id": "course-202610-2",
-   "type": "course",
-   "course": "八字體驗班",
-   "title": "八字體驗班",
-   "date": "2026-10-02",
-   "end": "",
-   "time": "19:00-20:30",
-   "note": "羅文勳 院長・線上課",
    "to": {
-    "teacher": true,
-    "student": true
+    "student": true,
+    "teacher": true
    },
-   "src": "2026年10月課表"
+   "end": "",
+   "src": "2026年10月課表",
+   "date": "2026-10-02",
+   "note": "羅文勳 院長・線上課",
+   "time": "19:00-20:30",
+   "type": "course",
+   "title": "八字體驗班",
+   "course": "八字體驗班"
   },
   {
    "id": "course-202610-3",
-   "type": "course",
-   "course": "塔羅初階班",
-   "title": "塔羅初階班",
-   "date": "2026-10-03",
-   "end": "",
-   "time": "10:00-18:00",
-   "note": "陳彩綺 講師",
    "to": {
-    "teacher": true,
-    "student": true
+    "student": true,
+    "teacher": true
    },
-   "src": "2026年10月課表"
+   "end": "",
+   "src": "2026年10月課表",
+   "date": "2026-10-03",
+   "note": "陳彩綺 講師",
+   "time": "10:00-18:00",
+   "type": "course",
+   "title": "塔羅初階班",
+   "course": "塔羅初階班"
   },
   {
    "id": "course-202610-4",
-   "type": "course",
-   "course": "八字線上體驗班",
-   "title": "八字線上體驗班",
-   "date": "2026-10-04",
-   "end": "",
-   "time": "14:00-15:30",
-   "note": "線上課",
    "to": {
-    "teacher": true,
-    "student": true
+    "student": true,
+    "teacher": true
    },
-   "src": "2026年10月課表"
+   "end": "",
+   "src": "2026年10月課表",
+   "date": "2026-10-04",
+   "note": "線上課",
+   "time": "14:00-15:30",
+   "type": "course",
+   "title": "八字線上體驗班",
+   "course": "八字線上體驗班"
   },
   {
    "id": "course-202610-5",
-   "type": "course",
-   "course": "命盤解析課",
-   "title": "命盤解析課",
-   "date": "2026-10-04",
-   "end": "",
-   "time": "17:00-19:00",
-   "note": "學員免費開放",
    "to": {
-    "teacher": true,
-    "student": true
+    "student": true,
+    "teacher": true
    },
-   "src": "2026年10月課表"
+   "end": "",
+   "src": "2026年10月課表",
+   "date": "2026-10-04",
+   "note": "學員免費開放",
+   "time": "17:00-19:00",
+   "type": "course",
+   "title": "命盤解析課",
+   "course": "命盤解析課"
   },
   {
    "id": "course-202610-6",
-   "type": "course",
-   "course": "八字體驗班",
-   "title": "八字體驗班",
-   "date": "2026-10-16",
-   "end": "",
-   "time": "19:00-20:30",
-   "note": "羅文勳 院長・線上課",
    "to": {
-    "teacher": true,
-    "student": true
+    "student": true,
+    "teacher": true
    },
-   "src": "2026年10月課表"
+   "end": "",
+   "src": "2026年10月課表",
+   "date": "2026-10-16",
+   "note": "羅文勳 院長・線上課",
+   "time": "19:00-20:30",
+   "type": "course",
+   "title": "八字體驗班",
+   "course": "八字體驗班"
   },
   {
    "id": "course-202610-7",
-   "type": "course",
-   "course": "八字進階班",
-   "title": "八字進階班",
-   "date": "2026-10-17",
-   "end": "2026-10-18",
-   "time": "10:00-18:30",
-   "note": "羅文勳 院長",
    "to": {
-    "teacher": true,
-    "student": true
+    "student": true,
+    "teacher": true
    },
-   "src": "2026年10月課表"
+   "end": "2026-10-18",
+   "src": "2026年10月課表",
+   "date": "2026-10-17",
+   "note": "羅文勳 院長",
+   "time": "10:00-18:30",
+   "type": "course",
+   "title": "八字進階班",
+   "course": "八字進階班"
   },
   {
    "id": "course-202610-8",
-   "type": "course",
-   "course": "八字體驗班",
-   "title": "八字體驗班",
-   "date": "2026-10-23",
-   "end": "",
-   "time": "19:00-20:30",
-   "note": "羅文勳 院長・線上課",
    "to": {
-    "teacher": true,
-    "student": true
+    "student": true,
+    "teacher": true
    },
-   "src": "2026年10月課表"
+   "end": "",
+   "src": "2026年10月課表",
+   "date": "2026-10-23",
+   "note": "羅文勳 院長・線上課",
+   "time": "19:00-20:30",
+   "type": "course",
+   "title": "八字體驗班",
+   "course": "八字體驗班"
   },
   {
    "id": "course-202610-9",
-   "type": "course",
-   "course": "塔羅進階班",
-   "title": "塔羅進階班",
-   "date": "2026-10-24",
-   "end": "2026-10-25",
-   "time": "13:00-19:00",
-   "note": "陳彩綺 講師",
    "to": {
-    "teacher": true,
-    "student": true
+    "student": true,
+    "teacher": true
    },
-   "src": "2026年10月課表"
+   "end": "2026-10-25",
+   "src": "2026年10月課表",
+   "date": "2026-10-24",
+   "note": "陳彩綺 講師",
+   "time": "13:00-19:00",
+   "type": "course",
+   "title": "塔羅進階班",
+   "course": "塔羅進階班"
   },
   {
    "id": "course-202610-10",
-   "type": "course",
-   "course": "八字體驗班",
-   "title": "八字體驗班",
-   "date": "2026-10-30",
-   "end": "",
-   "time": "19:00-20:30",
-   "note": "羅文勳 院長・線上課",
    "to": {
-    "teacher": true,
-    "student": true
+    "student": true,
+    "teacher": true
    },
-   "src": "2026年10月課表"
+   "end": "",
+   "src": "2026年10月課表",
+   "date": "2026-10-30",
+   "note": "羅文勳 院長・線上課",
+   "time": "19:00-20:30",
+   "type": "course",
+   "title": "八字體驗班",
+   "course": "八字體驗班"
   }
  ],
  "student": [
@@ -1015,20 +1029,21 @@ const DEFAULT_CONFIG = {
      "type": "web"
     },
     {
+     "tag": "每月5號填",
      "url": "https://reurl.cc/aEz649",
      "desc": "每個月5號，麻煩請填上個月的 IG／官方LINE 數據",
      "hint": "",
      "name": "老師流量體檢",
      "type": "web",
-     "tag": "每月5號填"
+     "pw": "888"
     },
     {
-     "name": "學苑官方 LINE",
-     "desc": "複製學苑官方LINE的連結和ID，分享給客人",
-     "type": "line",
      "url": "https://lin.ee/n2N8qhh",
-     "lineId": "@792edykw",
-     "hint": ""
+     "desc": "複製學苑官方LINE的連結和ID，分享給客人",
+     "hint": "",
+     "name": "學苑官方 LINE",
+     "type": "line",
+     "lineId": "@792edykw"
     },
     {
      "url": "",
@@ -1049,8 +1064,8 @@ const DEFAULT_CONFIG = {
      "type": "gallery",
      "images": [
       {
-       "title": "法會各項目PV表",
-       "id": "1xa7QWHkl8fOX5tySx1--pZfEokffTgtA"
+       "id": "1xa7QWHkl8fOX5tySx1--pZfEokffTgtA",
+       "title": "法會各項目PV表"
       }
      ]
     },
@@ -1074,45 +1089,32 @@ const DEFAULT_CONFIG = {
      "type": "gallery",
      "images": [
       {
-       "title": "2026年10月課表",
-       "id": "14zxjc-uXY6Mv4QStF-TKBe7FCNm_Q3kO"
+       "id": "14zxjc-uXY6Mv4QStF-TKBe7FCNm_Q3kO",
+       "title": "2026年10月課表"
       },
       {
-       "title": "2026年9月課表",
-       "id": "10qsLm28Mx4BkCdiVnQjW-gSKN70qKhFz"
+       "id": "10qsLm28Mx4BkCdiVnQjW-gSKN70qKhFz",
+       "title": "2026年9月課表"
       },
       {
-       "title": "課程價格",
-       "id": "19_x2WaNi5k-j_SPpwEGBormC2d8SogpR"
+       "id": "19_x2WaNi5k-j_SPpwEGBormC2d8SogpR",
+       "title": "課程價格"
       },
       {
-       "title": "2026課程分潤",
-       "id": "10mu8vtZHElgAv8DGuoJmieCRz66vNaAf"
+       "id": "10mu8vtZHElgAv8DGuoJmieCRz66vNaAf",
+       "title": "2026課程分潤"
       },
       {
-       "title": "課程分潤規則",
-       "id": "1RykEPLX2EPVFoX0xMsb7lcFpQBhIQC5x"
+       "id": "1RykEPLX2EPVFoX0xMsb7lcFpQBhIQC5x",
+       "title": "課程分潤規則"
       },
       {
-       "title": "八字刷卡QR扣",
-       "id": "1fBpPfRiuXxjLpsE74BFAoiNiUw4NmYZB"
+       "id": "1fBpPfRiuXxjLpsE74BFAoiNiUw4NmYZB",
+       "title": "八字刷卡QR扣"
       },
       {
-       "title": "塔羅刷卡QR扣",
-       "id": "1jDUO87n-JrWUGZG2HdQLgTSyXPs7TEZu"
-      }
-     ]
-    },
-    {
-     "url": "https://drive.google.com/file/d/1VjVNW-lSDpmYNDWTgR0pvtXFxXQ5KrCp/view?usp=sharing",
-     "desc": "法會獎金/旅遊點數",
-     "hint": "",
-     "name": "正式老師獎金規則",
-     "type": "gallery",
-     "images": [
-      {
-       "title": "正式老師獎金規則",
-       "id": "1VjVNW-lSDpmYNDWTgR0pvtXFxXQ5KrCp"
+       "id": "1jDUO87n-JrWUGZG2HdQLgTSyXPs7TEZu",
+       "title": "塔羅刷卡QR扣"
       }
      ]
     }
@@ -1129,16 +1131,16 @@ const DEFAULT_CONFIG = {
      "type": "gallery",
      "images": [
       {
-       "title": "學員50點項目",
-       "id": "1b3XyLDltOoszcqGWXvmA3SAvBp_Cy4bJ"
+       "id": "1b3XyLDltOoszcqGWXvmA3SAvBp_Cy4bJ",
+       "title": "學員50點項目"
       },
       {
-       "title": "學員晉升累積規則",
-       "id": "1mU6hZBktYamcetOZuUyVcJ_YJmUu02FV"
+       "id": "1mU6hZBktYamcetOZuUyVcJ_YJmUu02FV",
+       "title": "學員晉升累積規則"
       },
       {
-       "title": "培訓班積分",
-       "id": "1QAs3aUhPEfhxPEIS9B00vHgfqB_AKdAd"
+       "id": "1QAs3aUhPEfhxPEIS9B00vHgfqB_AKdAd",
+       "title": "培訓班積分"
       }
      ]
     },
@@ -1150,8 +1152,8 @@ const DEFAULT_CONFIG = {
      "type": "gallery",
      "images": [
       {
-       "title": "正式老師獎金規則",
-       "id": "1VjVNW-lSDpmYNDWTgR0pvtXFxXQ5KrCp"
+       "id": "1VjVNW-lSDpmYNDWTgR0pvtXFxXQ5KrCp",
+       "title": "正式老師獎金規則"
       }
      ]
     }
@@ -1290,6 +1292,7 @@ function makeCard(item, zoneKey, ci, ii){
     el.addEventListener("click", e=>{
       if(editing){ e.preventDefault(); return; }
       if(!item.url){ e.preventDefault(); alert("這個系統的連結還沒設定"); return; }
+      if(item.pw && pwOk(item) !== true){ e.preventDefault(); askPw(item); return; }
       if(canEmbed(item.url)){ e.preventDefault(); openViewer(item); }
     });
   }else{
@@ -1536,6 +1539,26 @@ function closeGallery(fromPop){
 }
 $("#gallery-close").addEventListener("click", ()=> closeGallery(false));
 window.addEventListener("popstate", ()=>{ if(closeZoom(true)) return; closeGallery(true); });
+
+/* ---------- 單一系統密碼：輸入一次，這台裝置會記住 ---------- */
+const pwKey = item => "portal-pw-" + (item.name || "") + "|" + (item.url || "");
+function pwOk(item){ try{ return localStorage.getItem(pwKey(item)) === item.pw; }catch(e){ return false; } }
+let pwItem = null;
+function askPw(item){
+  pwItem = item;
+  $("#pw-title").textContent = `「${item.name}」請輸入密碼`;
+  $("#pw-input").value = ""; $("#pw-err").style.display = "none";
+  $("#pw-modal").classList.add("show"); setTimeout(()=> $("#pw-input").focus(), 50);
+}
+function pwSubmit(){
+  if(!pwItem) return;
+  if($("#pw-input").value.trim() !== pwItem.pw){ $("#pw-err").style.display = "block"; return; }
+  try{ localStorage.setItem(pwKey(pwItem), pwItem.pw); }catch(e){}
+  closeModal("pw-modal");
+  if(canEmbed(pwItem.url)) openViewer(pwItem); else window.open(pwItem.url, "_blank", "noopener");
+}
+$("#pw-ok").addEventListener("click", pwSubmit);
+$("#pw-input").addEventListener("keydown", e=>{ if(e.key==="Enter") pwSubmit(); });
 
 /* ---------- 官方LINE：複製連結／ID、傳給好友 ---------- */
 let lineItem = null;
@@ -1883,6 +1906,7 @@ function openItemModal(zoneKey, ci, ii){
   $("#f-hint").value = item.type==="gallery" ? (item.images||[]).map(m=>`${m.title||""}｜https://drive.google.com/file/d/${m.id}/view`).join("\n")
                      : item.type==="line" ? (item.lineId||"") : (item.hint||"");
   $("#f-tag").value = item.tag||"";
+  $("#f-pw").value = item.pw||"";
   syncTypeFields();
   $("#item-modal").classList.add("show");
 }
@@ -1907,6 +1931,7 @@ $("#f-submit").addEventListener("click", ()=>{
     hint: $("#f-hint").value.trim(),
   };
   const tag = $("#f-tag").value.trim(); if(tag) item.tag = tag;
+  const ipw = $("#f-pw").value.trim(); if(ipw) item.pw = ipw;
   if(type==="gallery"){
     item.images = item.hint.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{
       const parts = l.split(/[｜|]/); const link = parts.pop().trim(); const id = driveId(link);
