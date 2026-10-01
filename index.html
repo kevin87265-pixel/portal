@@ -266,6 +266,7 @@ body.editing #editbar{display:flex;}
 .modal textarea{min-height:70px;resize:vertical;line-height:1.6;}
 .modal .row{display:flex;gap:10px;margin-top:22px;}
 .modal .row button{flex:1;height:46px;border-radius:14px;border:1px solid var(--line-strong);cursor:pointer;font-size:15px;letter-spacing:.1em;background:transparent;color:var(--text);transition:background .2s,filter .2s;}
+#pw-modal{z-index:40;}
 .modal .pw-box{max-width:340px;text-align:center;padding:30px 24px 22px;}
 .pw-lock{width:58px;height:58px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);background:var(--gold-soft);border:1px solid var(--line-strong);}
 .modal .pw-box > b#pw-title{font-size:1.12em;margin-bottom:2px;}
@@ -469,6 +470,27 @@ body.calviewing{overflow:hidden;}
 .gal-item{margin-bottom:18px;background:var(--bg-card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);scroll-margin-top:10px;}
 .gal-item h3{font-family:'Noto Serif TC',serif;font-size:15px;letter-spacing:.06em;padding:10px 14px;border-bottom:1px solid var(--line);font-weight:700;}
 .gal-item img{display:block;width:100%;height:auto;min-height:120px;background:var(--bg-2);cursor:zoom-in;}
+.ann-time{font-size:.92em;color:var(--text-dim);font-weight:500;}
+.ann-time span{white-space:nowrap;}
+.gal-admin{margin:26px 0 8px;border-top:1px dashed var(--line-strong);padding-top:18px;text-align:center;}
+.gal-admin-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);background:var(--bg-card);color:var(--text-dim);border-radius:999px;padding:9px 18px;font-family:inherit;font-size:13.5px;letter-spacing:.08em;cursor:pointer;}
+.gal-admin-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;}
+.gal-ed{text-align:left;background:var(--bg-card);border:1px solid var(--gold-line);border-radius:18px;padding:16px 14px;box-shadow:var(--shadow);}
+.gal-ed h4{font-family:'Noto Serif TC',serif;font-size:16px;color:var(--gold);letter-spacing:.1em;margin-bottom:4px;}
+.gal-ed .sub{font-size:12.5px;color:var(--text-dim);margin-bottom:12px;line-height:1.6;}
+.gal-up{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;border:1.5px dashed var(--gold-line);border-radius:14px;background:var(--gold-soft);color:var(--gold);font-family:inherit;font-size:15px;font-weight:700;letter-spacing:.08em;cursor:pointer;}
+.gal-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);}
+.gal-row img{width:56px;height:56px;object-fit:cover;border-radius:10px;background:var(--bg-2);flex:0 0 auto;border:1px solid var(--line);}
+.gal-row input{flex:1;min-width:0;height:40px;border:1px solid var(--line-strong);border-radius:10px;padding:0 10px;font-family:inherit;font-size:14px;background:var(--bg);color:var(--text);}
+.gal-row .mv{display:flex;flex-direction:column;gap:4px;flex:0 0 auto;}
+.gal-row button{border:1px solid var(--line-strong);background:var(--bg-card);border-radius:8px;width:34px;height:26px;font-size:13px;cursor:pointer;color:var(--text);}
+.gal-row button.del{height:56px;color:#b24c3a;border-color:rgba(178,76,58,.35);font-size:12.5px;width:40px;}
+.gal-row button:disabled{opacity:.3;}
+.gal-row.new input{border-color:var(--gold-line);}
+.gal-ed .acts{display:flex;gap:10px;margin-top:14px;}
+.gal-ed .acts button{flex:1;height:46px;border-radius:14px;border:1px solid var(--line-strong);background:transparent;font-family:inherit;font-size:15px;letter-spacing:.1em;cursor:pointer;color:var(--text);}
+.gal-ed .acts .save{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:700;}
+.gal-ed .acts .save:disabled{opacity:.6;}
 .gal-tip{text-align:center;font-size:12px;color:var(--text-faint);letter-spacing:.08em;margin:2px 0 12px;}
 #zoom{position:fixed;inset:0;z-index:30;display:none;background:#14110c;overflow:auto;}
 #zoom.show{display:block;}
@@ -546,7 +568,6 @@ footer .foot-note{margin-top:16px;}
     </div>
   </header>
 
-  <div class="rite-slot" data-rite="home"></div>
   <nav class="big-menu" id="home">
     <button type="button" data-zone="admin" id="menu-admin" data-mark="政">
       <span class="zone-tag"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>ADMIN</span>
@@ -1341,7 +1362,7 @@ function makeCard(item, zoneKey, ci, ii){
                     <span class="name">${esc(item.name)}</span>
                     <span class="desc">${esc(item.desc)}</span>
                     <span class="foot">${item.tag ? `<span class="kind tag">${esc(item.tag)}</span>` : `<span class="kind">${n>1 ? n+" 張圖・點開看" : "點開看圖"}</span>`}<span class="go"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg></span></span>`;
-    const go = ()=>{ if(!editing) openGallery(item); };
+    const go = ()=>{ if(!editing) openGallery(item, { zone:zoneKey, ci, ii }); };
     el.addEventListener("click", go);
     el.addEventListener("keydown", e=>{ if(e.key==="Enter") go(); });
   }else if(item.type === "line"){
@@ -1586,7 +1607,7 @@ function renderBoard(zoneKey){
     const t = evLook(e); const row = document.createElement("div");
     row.className = "ann-item auto" + (e.type==="ritual" ? " is-ritual" : "");
     row.innerHTML = `<span class="ann-date">${dateLabel(e)}</span>
-      <span class="ann-text"><span class="ev-tag" style="background:${t.color}">${esc(tagLabel(e))}</span>${esc(e.title)}${e.time?`・${esc(e.time)}`:""}${e.note?`<br><span style="color:var(--text-dim);font-size:.92em;white-space:pre-wrap">${esc(e.note)}</span>`:""}</span>`;
+      <span class="ann-text"><span class="ev-tag" style="background:${t.color}">${esc(tagLabel(e))}</span>${esc(e.title)}${e.time?`<br><span class="ann-time">${e.time.split("・").map(x=>`<span>${esc(x)}</span>`).join("・")}</span>`:""}${e.note?`<br><span style="color:var(--text-dim);font-size:.92em;white-space:pre-wrap">${esc(e.note)}</span>`:""}</span>`;
     return row;
   };
   auto.forEach(e=> wrap.appendChild(evRow(e)));
@@ -1662,14 +1683,28 @@ function driveId(link){
   return m ? m[1] : null;
 }
 const imgUrl = (id, w) => `https://lh3.googleusercontent.com/d/${id}=w${w}`;
-function openGallery(item){
+let galItem = null, galPos = null, galDraft = null;
+function galSrc(m, w){ return m.sb ? (SB_IMG_CACHE[m.sb] || "") : imgUrl(m.id, w); }
+const SB_IMG_CACHE = {};
+async function loadSbImgs(root){
+  const els = [...root.querySelectorAll("img[data-sb]")];
+  for(const el of els){
+    const k = el.dataset.sb;
+    try{ if(!SB_IMG_CACHE[k]){ const d = await sbGetRow(k); if(d && d.image) SB_IMG_CACHE[k] = d.image; } if(SB_IMG_CACHE[k]) el.src = SB_IMG_CACHE[k]; }catch(e){ console.warn(e); }
+  }
+}
+function openGallery(item, pos){
+  galItem = item; if(pos) galPos = pos; galDraft = null;
   const imgs = item.images || [];
   $("#gallery-title").textContent = item.name || "";
   const nav = imgs.length > 2 ? `<div class="gal-nav">${imgs.map((m,i)=>`<button type="button" data-j="${i}">${esc(m.title||("第"+(i+1)+"張"))}</button>`).join("")}</div>` : "";
   $("#gallery-body").innerHTML = nav + `<p class="gal-tip">點圖片可以放大看</p>` + imgs.map((m,i)=>`
     <div class="gal-item" id="gal-${i}">${m.title ? `<h3>${esc(m.title)}</h3>` : ""}
-      <img src="${imgUrl(m.id,1200)}" data-id="${esc(m.id)}" alt="${esc(m.title||"")}" ${i>1?'loading="lazy"':''} decoding="async"
-        onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='https://drive.google.com/thumbnail?id=${esc(m.id)}&sz=w1200';}"></div>`).join("");
+      ${m.sb ? `<img data-sb="${esc(m.sb)}" data-id="" alt="${esc(m.title||"")}" decoding="async">` :
+      `<img src="${imgUrl(m.id,1200)}" data-id="${esc(m.id)}" alt="${esc(m.title||"")}" ${i>1?'loading="lazy"':''} decoding="async"
+        onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='https://drive.google.com/thumbnail?id=${esc(m.id)}&sz=w1200';}">`}</div>`).join("")
+    + `<div class="gal-admin" id="gal-admin"><button type="button" class="gal-admin-btn" id="gal-admin-btn"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>行政人員編輯</button></div>`;
+  loadSbImgs($("#gallery-body"));
   $("#gallery-body").scrollTop = 0;
   $("#gallery").classList.add("show"); $("#gallery").setAttribute("aria-hidden","false");
   document.body.classList.add("viewing");
@@ -1678,11 +1713,13 @@ function openGallery(item){
 $("#gallery-body").addEventListener("click", e=>{
   const b = e.target.closest("[data-j]");
   if(b){ document.getElementById("gal-"+b.dataset.j).scrollIntoView({behavior:"smooth"}); return; }
-  const img = e.target.closest("img[data-id]");
+  if(e.target.closest("#gal-admin-btn")){ galAdminOpen(); return; }
+  if(e.target.closest(".gal-ed")) return;
+  const img = e.target.closest("img[data-id],img[data-sb]");
   if(img){
     const z = $("#zoom"); z.classList.remove("big");
     $("#zoom-img").src = img.currentSrc || img.src;                 // 先用已經載好的，再換高畫質
-    const hi = new Image(); hi.onload = ()=>{ if(z.classList.contains("show")) $("#zoom-img").src = hi.src; }; hi.src = imgUrl(img.dataset.id, 2400);
+    const hi = new Image(); hi.onload = ()=>{ if(z.classList.contains("show")) $("#zoom-img").src = hi.src; }; hi.src = img.dataset.sb ? (img.currentSrc || img.src) : imgUrl(img.dataset.id, 2400);
     z.classList.add("show"); z.scrollTo(0,0);
     try{ history.pushState({zoom:1}, ""); }catch(e){}
   }
@@ -1717,12 +1754,87 @@ function askPw(item){
 function pwSubmit(){
   if(!pwItem) return;
   if($("#pw-input").value.trim() !== pwItem.pw){ const b=$(".pw-box"); b.classList.remove("bad"); void b.offsetWidth; b.classList.add("bad"); $("#pw-err").style.display = "block"; $("#pw-input").value=""; $("#pw-input").focus(); return; }
+  if(pwItem.onOk){ const f = pwItem.onOk; closeModal("pw-modal"); f(); return; }
   try{ localStorage.setItem(pwKey(pwItem), pwItem.pw); }catch(e){}
   closeModal("pw-modal");
   if(canEmbed(pwItem.url)) openViewer(pwItem); else window.open(pwItem.url, "_blank", "noopener");
 }
 $("#pw-ok").addEventListener("click", pwSubmit);
 $("#pw-input").addEventListener("keydown", e=>{ if(e.key==="Enter") pwSubmit(); });
+
+/* ---------- 圖片集：行政人員編輯（上傳、刪除、排順序、改標題） ---------- */
+function galAdminOpen(){
+  const ok = ()=>{ try{ sessionStorage.setItem("portal-gal-admin","1"); }catch(e){} galEdRender(); };
+  let unlocked = false; try{ unlocked = sessionStorage.getItem("portal-gal-admin")==="1"; }catch(e){}
+  if(unlocked) return ok();
+  askPw({ name:"行政人員編輯", pw:ZONE_PASSWORDS.admin, onOk:ok });
+}
+function galEdRender(){
+  if(!galDraft) galDraft = (galItem.images||[]).map(m=>({...m}));
+  const box = $("#gal-admin");
+  const n = galDraft.length;
+  box.innerHTML = `<div class="gal-ed">
+    <h4>行政人員編輯・${esc(galItem.name||"")}</h4>
+    <div class="sub">新圖會排在最上面；可以改標題、用 ↑↓ 排順序、刪除。改完按「儲存」，老師那邊就會更新。</div>
+    <label class="gal-up"><input type="file" accept="image/*" multiple id="gal-file" hidden>＋ 上傳最新圖片</label>
+    <div id="gal-rows">${galDraft.map((m,i)=>`<div class="gal-row${m._new?" new":""}" data-i="${i}">
+      ${m.sb||m._data ? `<img ${m._data?`src="${m._data}"`:`data-sb="${esc(m.sb)}"`} alt="">` : `<img src="${imgUrl(m.id,200)}" alt="">`}
+      <input type="text" value="${esc(m.title||"")}" placeholder="標題" data-t="${i}">
+      <span class="mv"><button type="button" data-up="${i}" ${i===0?"disabled":""}>↑</button><button type="button" data-dn="${i}" ${i===n-1?"disabled":""}>↓</button></span>
+      <button type="button" class="del" data-del="${i}">刪除</button></div>`).join("") || `<div class="sub" style="text-align:center;padding:14px 0">目前沒有圖片</div>`}</div>
+    <div class="acts"><button type="button" id="gal-cancel">取消</button><button type="button" class="save" id="gal-save">儲存</button></div>
+  </div>`;
+  loadSbImgs(box);
+  box.querySelectorAll("[data-t]").forEach(el=> el.addEventListener("input", ()=>{ galDraft[+el.dataset.t].title = el.value; }));
+  box.querySelectorAll("[data-up]").forEach(el=> el.addEventListener("click", ()=>{ const i=+el.dataset.up; [galDraft[i-1],galDraft[i]]=[galDraft[i],galDraft[i-1]]; galEdRender(); }));
+  box.querySelectorAll("[data-dn]").forEach(el=> el.addEventListener("click", ()=>{ const i=+el.dataset.dn; [galDraft[i+1],galDraft[i]]=[galDraft[i],galDraft[i+1]]; galEdRender(); }));
+  box.querySelectorAll("[data-del]").forEach(el=> el.addEventListener("click", ()=>{ const i=+el.dataset.del; if(confirm(`刪除「${galDraft[i].title||"這張圖"}」？`)){ galDraft.splice(i,1); galEdRender(); } }));
+  $("#gal-cancel").addEventListener("click", ()=> openGallery(galItem));
+  $("#gal-file").addEventListener("change", async e=>{
+    const files = [...e.target.files]; e.target.value = "";
+    for(const f of files.reverse()){
+      try{ const data = await shrinkImage(f, 1800); galDraft.unshift({ _new:true, _data:data, title:f.name.replace(/\.[^.]+$/,"") }); }
+      catch(err){ alert(`「${f.name}」不是圖片`); }
+    }
+    galEdRender();
+  });
+  $("#gal-save").addEventListener("click", galSave);
+  box.scrollIntoView({behavior:"smooth", block:"start"});
+}
+async function galSave(){
+  if(!sbReady()){ alert("尚未連上雲端，無法儲存"); return; }
+  const btn = $("#gal-save"); btn.disabled = true; btn.textContent = "儲存中…";
+  try{
+    // 1. 新圖片先存雲端
+    for(const m of galDraft){
+      if(m._new && m._data){
+        const id = "gi" + Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+        await sbPutRow("portal_gallery_img_"+id, "portal_gallery", "img_"+id, { image:m._data });
+        m.sb = "portal_gallery_img_"+id; SB_IMG_CACHE[m.sb] = m._data;
+      }
+    }
+    const images = galDraft.map(m=>{ const o = { title:(m.title||"").trim() }; if(m.sb) o.sb = m.sb; else o.id = m.id; return o; });
+    // 2. 抓雲端最新設定，只改這一個圖片集，避免蓋掉別人的修改
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${ROW_ID}&select=data`,{headers:sbHeaders()});
+    if(!r.ok) throw new Error("read "+r.status);
+    const rows = await r.json(); const fresh = rows[0] && rows[0].data; if(!fresh || !fresh.admin) throw new Error("no data");
+    let target = null;
+    const p = galPos;
+    if(p && fresh[p.zone] && fresh[p.zone][p.ci] && fresh[p.zone][p.ci].items && fresh[p.zone][p.ci].items[p.ii] && fresh[p.zone][p.ci].items[p.ii].name === galItem.name) target = fresh[p.zone][p.ci].items[p.ii];
+    if(!target) ["admin","teacher","student"].forEach(z=> (fresh[z]||[]).forEach(c=> (c.items||[]).forEach(it=>{ if(!target && it.type==="gallery" && it.name===galItem.name) target = it; })));
+    if(!target) throw new Error("找不到這個圖片集");
+    target.images = images;
+    const w = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`,{ method:"POST",
+      headers:{...sbHeaders(), "Prefer":"return=minimal,resolution=merge-duplicates"},
+      body:JSON.stringify({ id:ROW_ID, table_name:"portal_config", row_key:"main", data:fresh, updated_at:new Date().toISOString() }) });
+    if(!w.ok) throw new Error("write "+w.status);
+    state = fresh; localStorage.setItem("portal-config", JSON.stringify(state));
+    galItem = target; renderAll(); openGallery(target); toast("已儲存，老師那邊也更新了");
+  }catch(err){
+    console.warn(err); alert("這次沒有存到，請再按一次儲存（"+err.message+"）");
+    btn.disabled = false; btn.textContent = "儲存";
+  }
+}
 
 /* ---------- 官方LINE：複製連結／ID、傳給好友 ---------- */
 let lineItem = null;
@@ -1952,7 +2064,7 @@ function syncEvTo(){
   const internal = $("#e-type").value === "internal";
   $("#e-to-wrap").style.display = internal ? "none" : "flex";
   $("#e-course-wrap").style.display = $("#e-type").value === "course" ? "block" : "none";
-  $("#e-rite-wrap").style.display = $("#e-type").value === "ritual" ? "block" : "none";
+  $("#e-rite-wrap").style.display = "none";   // 首頁法會卡已拿掉，這兩格先收起來
   $("#e-to-note").style.display = internal ? "block" : "none";
 }
 $("#e-type").addEventListener("change", ()=>{
@@ -2055,7 +2167,7 @@ function renderDaily(){
     <div class="daily-src">— ${esc(it.s)}</div>
     ${it.n ? `<div class="daily-note"><b>白話</b>${esc(it.n)}</div>` : ""}`;
 }
-function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); renderRite("home"); }
+function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); }
 
 /* ============================================================
    ⑤ 系統編輯表單
