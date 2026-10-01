@@ -266,9 +266,48 @@ body.editing #editbar{display:flex;}
 .modal textarea{min-height:70px;resize:vertical;line-height:1.6;}
 .modal .row{display:flex;gap:10px;margin-top:22px;}
 .modal .row button{flex:1;height:46px;border-radius:14px;border:1px solid var(--line-strong);cursor:pointer;font-size:15px;letter-spacing:.1em;background:transparent;color:var(--text);transition:background .2s,filter .2s;}
+.modal .pw-box{max-width:340px;text-align:center;padding:30px 24px 22px;}
+.pw-lock{width:58px;height:58px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);background:var(--gold-soft);border:1px solid var(--line-strong);}
+.modal .pw-box > b#pw-title{font-size:1.12em;margin-bottom:2px;}
+.pw-sub{font-size:13px;color:var(--text-dim);letter-spacing:.05em;}
+#pw-input{display:block;width:100%;margin:20px 0 0;height:58px;padding:0 14px;border-radius:16px;border:1.5px solid var(--line-strong);background:var(--bg);color:var(--text);font-family:inherit;font-size:26px;letter-spacing:.5em;text-indent:.5em;text-align:center;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none;}
+#pw-input::placeholder{color:var(--line-strong);letter-spacing:.5em;}
+#pw-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px var(--gold-soft);}
+#pw-err{display:none;margin-top:10px;color:#b5523d;font-size:13px;}
+.pw-box.bad #pw-input{border-color:#b5523d;box-shadow:0 0 0 4px rgba(181,82,61,.12);animation:pwshake .35s;}
+@keyframes pwshake{20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
 .modal .row button:hover{background:var(--bg-card-hover);}
 .modal .row .primary{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;}
 .modal .row .primary:hover{background:var(--gold);filter:brightness(1.08);}
+
+/* ---------- 法會公告 ---------- */
+.rite-slot:empty{display:none;}
+.rite-slot{margin-top:18px;}
+.rite{position:relative;overflow:hidden;display:flex;align-items:stretch;border-radius:22px;
+  background:radial-gradient(120% 140% at 100% 0%,#fff6dd 0%,#fffdf7 55%,#fbf3e2 100%);
+  border:1px solid rgba(156,118,48,.38);box-shadow:0 1px 2px rgba(120,85,20,.08),0 14px 34px rgba(120,85,20,.14);}
+.rite::before{content:"";position:absolute;inset:6px;border-radius:17px;border:1px solid rgba(156,118,48,.22);pointer-events:none;z-index:2;}
+.rite::after{content:"法";position:absolute;right:-6px;bottom:-34px;font-family:'Noto Serif TC',serif;font-weight:900;font-size:150px;line-height:1;color:#9c7630;opacity:.07;pointer-events:none;}
+.rite-date{flex:0 0 auto;min-width:118px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 14px;
+  background:linear-gradient(160deg,#b8893a 0%,#8f6524 100%);color:#fffaf0;text-align:center;position:relative;}
+.rite-mon{font-family:'Noto Serif TC',serif;font-size:15px;letter-spacing:.3em;text-indent:.3em;opacity:.92;}
+.rite-days{font-family:'Noto Serif TC',serif;font-weight:900;font-size:40px;line-height:1.1;letter-spacing:.02em;margin:4px 0 2px;white-space:nowrap;}
+.rite-days i{font-style:normal;font-size:.55em;opacity:.8;margin:0 2px;vertical-align:.25em;}
+.rite-wd{font-size:13px;letter-spacing:.12em;opacity:.95;white-space:nowrap;}
+.rite-body{flex:1;min-width:0;padding:18px 18px 16px 20px;position:relative;z-index:1;}
+.rite-kicker{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;letter-spacing:.14em;color:#8f6524;font-weight:700;}
+.rite-kicker .dot{width:7px;height:7px;border-radius:50%;background:#c4572f;animation:ritePulse 1.8s infinite;}
+@keyframes ritePulse{0%{box-shadow:0 0 0 0 rgba(196,87,47,.45);}70%{box-shadow:0 0 0 8px rgba(196,87,47,0);}100%{box-shadow:0 0 0 0 rgba(196,87,47,0);}}
+.rite-count{display:inline-block;margin-left:4px;padding:1px 9px;border-radius:999px;background:#c4572f;color:#fff;font-size:12px;letter-spacing:.06em;font-weight:700;}
+.rite-title{display:block;margin-top:6px;font-family:'Noto Serif TC',serif;font-weight:900;font-size:24px;letter-spacing:.12em;color:#2c2216;line-height:1.35;}
+.rite-lines{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+.rite-line{display:flex;align-items:flex-start;gap:8px;font-size:14.5px;color:#4a3f30;line-height:1.55;}
+.rite-line svg{flex:0 0 auto;width:17px;height:17px;margin-top:2px;stroke:#9c7630;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.rite-line.dim{color:var(--text-faint);}
+.rite-fix{margin-top:10px;border:1px dashed rgba(156,118,48,.6);background:#fffdf7;color:#8f6524;border-radius:10px;padding:6px 12px;font-family:inherit;font-size:13px;cursor:pointer;position:relative;z-index:3;}
+.rite-more{margin-top:10px;font-size:13px;color:var(--text-dim);}
+.rite-more b{color:#8f6524;font-weight:700;}
+@media (max-width:420px){.rite-date{min-width:96px;padding:16px 8px;}.rite-days{font-size:32px;}.rite-title{font-size:21px;}.rite-body{padding:16px 14px 14px 16px;}}
 
 /* ---------- 公告區 ---------- */
 .board{
@@ -481,6 +520,7 @@ footer .foot-note{margin-top:16px;}
     </div>
   </header>
 
+  <div class="rite-slot" data-rite="home"></div>
   <nav class="big-menu" id="home">
     <button type="button" data-zone="admin" id="menu-admin" data-mark="政">
       <span class="zone-tag"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>ADMIN</span>
@@ -512,6 +552,7 @@ footer .foot-note{margin-top:16px;}
       <h2 class="zone-title">行政區</h2>
       <p class="hero-desc">財務・法會・管理系統</p>
     </div>
+    <div class="rite-slot" data-rite="admin"></div>
     <div class="board" data-board="admin"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="admin"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
@@ -527,6 +568,7 @@ footer .foot-note{margin-top:16px;}
       <h2 class="zone-title">老師區</h2>
       <p class="hero-desc">填單・積點・教學資源</p>
     </div>
+    <div class="rite-slot" data-rite="teacher"></div>
     <div class="daily" id="daily-teacher"></div>
     <div class="board" data-board="teacher"></div>
     <div class="cats"></div>
@@ -543,6 +585,7 @@ footer .foot-note{margin-top:16px;}
       <h2 class="zone-title">學員區</h2>
       <p class="hero-desc">積點・課程・官方 LINE</p>
     </div>
+    <div class="rite-slot" data-rite="student"></div>
     <div class="board" data-board="student"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="student"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
@@ -584,10 +627,12 @@ footer .foot-note{margin-top:16px;}
 
 <!-- 單一系統密碼 -->
 <div id="pw-modal" class="modal" role="dialog" aria-modal="true">
-  <div class="box">
+  <div class="box pw-box">
+    <div class="pw-lock" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
     <b id="pw-title">請輸入密碼</b>
-    <label>密碼<input type="password" id="pw-input" inputmode="numeric" autocomplete="off"></label>
-    <div id="pw-err" style="display:none;margin-top:8px;color:var(--danger,#b5523d);font-size:13px">密碼不對，請再試一次</div>
+    <div class="pw-sub">這個項目需要密碼才能打開</div>
+    <input type="password" id="pw-input" inputmode="numeric" autocomplete="off" placeholder="••••" aria-label="密碼">
+    <div id="pw-err">密碼不對，請再試一次</div>
     <div class="row">
       <button onclick="closeModal('pw-modal')">取消</button>
       <button class="primary" id="pw-ok">進入</button>
@@ -1394,6 +1439,52 @@ $("#a-submit").addEventListener("click", ()=>{
   renderAll();
 });
 const boardFold = {};
+/* ---------- 每月法會公告（最上面） ---------- */
+const CN_MON = ["一","二","三","四","五","六","七","八","九","十","十一","十二"];
+function nextRituals(zoneKey){
+  ensureCal();
+  const today = ymd(new Date());
+  return state.events.filter(e=> e.type==="ritual" && (zoneKey==="home" ? !!(e.to && (e.to.teacher || e.to.student)) : visibleTo(e, zoneKey)))
+    .filter(e=> (e.end && e.end > e.date ? e.end : e.date) >= today)
+    .sort((a,b)=> a.date.localeCompare(b.date));
+}
+function renderRite(zoneKey){
+  const slot = document.querySelector(`[data-rite="${zoneKey}"]`); if(!slot) return;
+  const list = nextRituals(zoneKey);
+  if(!list.length){ slot.innerHTML = ""; return; }
+  const e = list[0];
+  const s = new Date(e.date+"T00:00"), multi = e.end && e.end > e.date, t = multi ? new Date(e.end+"T00:00") : s;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const diff = Math.round((s - now)/86400000);
+  const sameMon = s.getMonth()===now.getMonth() && s.getFullYear()===now.getFullYear();
+  let kick, count = "";
+  if(diff <= 0){ kick = "法會進行中"; count = diff===0 ? "就是今天" : ""; }
+  else { kick = sameMon ? "本月法會" : "下一場法會"; count = diff===1 ? "明天" : `還有 ${diff} 天`; }
+  const days = multi ? (t.getMonth()===s.getMonth() ? `${s.getDate()}<i>–</i>${t.getDate()}` : `${s.getMonth()+1}/${s.getDate()}<i>–</i>${t.getMonth()+1}/${t.getDate()}`) : `${s.getDate()}`;
+  const wd = [];
+  for(let d=new Date(s), n=0; d<=t && n<7; d.setDate(d.getDate()+1), n++) wd.push("週"+WD[d.getDay()]);
+  const ico = {
+    cal:'<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+    clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+    note:'<svg viewBox="0 0 24 24"><path d="M12 3c-3 4-6 6.5-6 10a6 6 0 0 0 12 0c0-3.5-3-6-6-10z"/></svg>'
+  };
+  const lines = [`<div class="rite-line">${ico.cal}<span>${esc(dateLabel(e))}</span></div>`];
+  if(e.time) lines.push(`<div class="rite-line">${ico.clock}<span>${esc(e.time)}</span></div>`);
+  else if(zoneKey!=="admin") lines.push(`<div class="rite-line dim">${ico.clock}<span>時間另行公告</span></div>`);
+  if(e.note) lines.push(`<div class="rite-line">${ico.note}<span style="white-space:pre-wrap;text-wrap:balance">${esc(e.note)}</span></div>`);
+  const more = list.slice(1,3).map(x=> `${esc(x.title)} ${esc(dateLabel(x))}`).join("　");
+  slot.innerHTML = `<div class="rite">
+    <div class="rite-date"><span class="rite-mon">${CN_MON[s.getMonth()]}月</span><span class="rite-days">${days}</span><span class="rite-wd">${wd.join("・")}</span></div>
+    <div class="rite-body">
+      <span class="rite-kicker"><span class="dot"></span>${kick}${count?`<span class="rite-count">${count}</span>`:""}</span>
+      <b class="rite-title">${esc(e.title)}</b>
+      <div class="rite-lines">${lines.join("")}</div>
+      ${zoneKey==="admin" && !e.time ? `<button type="button" class="rite-fix">＋ 補上法會時間</button>` : ""}
+      ${more ? `<div class="rite-more"><b>之後：</b>${more}</div>` : ""}
+    </div></div>`;
+  const fix = slot.querySelector(".rite-fix"); if(fix) fix.addEventListener("click", ()=> openEvModal(e.id));
+}
+
 function renderBoard(zoneKey){
   ensureAnn();
   const wrap = document.querySelector(`[data-board="${zoneKey}"]`);
@@ -1402,6 +1493,8 @@ function renderBoard(zoneKey){
   const rank = { ritual:0, order:1, other:2, course:3 };
   let auto = zoneKey === "admin" ? [] : upcoming(zoneKey, 30)        // 行政排進行事曆的，近 30 天自動變公告
     .filter(e=> e.type !== "course" || e.date <= wkK);               // 課程只提醒 7 天內的
+  const topRite = nextRituals(zoneKey)[0];
+  if(topRite) auto = auto.filter(e=> e.id !== topRite.id);          // 最近一場法會已經放在最上面
   auto.sort((x,y)=> (rank[x.type]??2) - (rank[y.type]??2) || x.date.localeCompare(y.date));
   const foldCourses = zoneKey === "teacher";                         // 老師區：法會是重點，課程收起來
   const courses = foldCourses ? auto.filter(e=> e.type === "course") : [];
@@ -1546,13 +1639,13 @@ function pwOk(item){ try{ return localStorage.getItem(pwKey(item)) === item.pw; 
 let pwItem = null;
 function askPw(item){
   pwItem = item;
-  $("#pw-title").textContent = `「${item.name}」請輸入密碼`;
-  $("#pw-input").value = ""; $("#pw-err").style.display = "none";
+  $("#pw-title").textContent = `「${item.name}」`;
+  $("#pw-input").value = ""; $("#pw-err").style.display = "none"; $(".pw-box").classList.remove("bad");
   $("#pw-modal").classList.add("show"); setTimeout(()=> $("#pw-input").focus(), 50);
 }
 function pwSubmit(){
   if(!pwItem) return;
-  if($("#pw-input").value.trim() !== pwItem.pw){ $("#pw-err").style.display = "block"; return; }
+  if($("#pw-input").value.trim() !== pwItem.pw){ const b=$(".pw-box"); b.classList.remove("bad"); void b.offsetWidth; b.classList.add("bad"); $("#pw-err").style.display = "block"; $("#pw-input").value=""; $("#pw-input").focus(); return; }
   try{ localStorage.setItem(pwKey(pwItem), pwItem.pw); }catch(e){}
   closeModal("pw-modal");
   if(canEmbed(pwItem.url)) openViewer(pwItem); else window.open(pwItem.url, "_blank", "noopener");
@@ -1888,7 +1981,7 @@ function renderDaily(){
     <div class="daily-src">— ${esc(it.s)}</div>
     ${it.n ? `<div class="daily-note"><b>白話</b>${esc(it.n)}</div>` : ""}`;
 }
-function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); }
+function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); ["home","admin","teacher","student"].forEach(renderRite); }
 
 /* ============================================================
    ⑤ 系統編輯表單
@@ -1982,6 +2075,7 @@ const ZONES = ["admin","teacher","student"];
 function show(zone){
   currentZone = ZONES.includes(zone) ? zone : null; setTimeout(()=> prefetchZone(currentZone), 50);
   $("#home").style.display = ZONES.includes(zone) ? "none" : "grid";
+  { const hr = document.querySelector('[data-rite="home"]'); if(hr) hr.style.display = ZONES.includes(zone) ? "none" : ""; }
   ZONES.forEach(z=> document.getElementById("zone-"+z).classList.toggle("active", zone===z));
   window.scrollTo(0,0);
 }
