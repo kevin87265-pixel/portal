@@ -297,8 +297,8 @@ body.editing .ann-tools{display:flex;}
 .cal-list{margin-top:12px;border-top:1px solid var(--line);padding-top:10px;}
 .cal-list-h{font-size:12px;letter-spacing:.14em;color:var(--text-faint);margin-bottom:6px;}
 .ev{display:flex;gap:12px;align-items:flex-start;padding:10px 10px;border-radius:12px;cursor:default;}
-body.editing .ev{cursor:pointer;}
-body.editing .ev:hover{background:var(--bg-2);}
+.ev.can-edit{cursor:pointer;}
+.ev.can-edit:hover{background:var(--bg-2);}
 .ev-date{flex-shrink:0;width:44px;text-align:center;border-radius:10px;background:var(--accent-soft);color:var(--accent);padding:4px 0;line-height:1.15;}
 .ev-date b{display:block;font-size:17px;font-variant-numeric:tabular-nums;}
 .ev-date small{font-size:10px;letter-spacing:.08em;}
@@ -307,6 +307,30 @@ body.editing .ev:hover{background:var(--bg-2);}
 .ev-meta{font-size:.82em;color:var(--text-dim);white-space:pre-wrap;word-break:break-word;}
 .cal-empty{font-size:13px;color:var(--text-faint);letter-spacing:.1em;padding:6px 10px;}
 .danger-btn{color:var(--danger)!important;}
+.chk-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:16px;font-size:.82em;letter-spacing:.1em;color:var(--text-dim);}
+.modal label.chk{display:inline-flex;align-items:center;gap:6px;margin:0;font-size:1em;color:var(--text);letter-spacing:.06em;cursor:pointer;}
+.chk input{width:18px;height:18px;accent-color:var(--gold);}
+.chk-note{display:none;margin-top:12px;font-size:.8em;color:var(--text-dim);background:var(--bg-2);border-radius:10px;padding:8px 12px;line-height:1.6;}
+.ev-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;color:#fff;border-radius:999px;padding:1px 8px;margin-right:6px;vertical-align:2px;}
+.ev-lock{font-size:11px;color:var(--text-faint);letter-spacing:.06em;margin-left:4px;}
+.cal-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:11px;color:var(--text-dim);letter-spacing:.06em;}
+.cal-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:0;}
+.cal-add{margin-left:4px;white-space:nowrap;padding:0 10px;}
+.cal-title{white-space:nowrap;}
+.cal-month b{min-width:0!important;white-space:nowrap;padding:0 4px;}
+.ann-item.auto .ann-date{white-space:nowrap;}
+.cal.collapsed{padding:12px 14px;}
+.cal.collapsed .cal-grid,.cal.collapsed .cal-list,.cal.collapsed .cal-month,.cal.collapsed .cal-legend{display:none;}
+.cal-toggle{margin-left:auto;display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line-strong);background:transparent;border-radius:999px;padding:5px 12px;font-size:12px;letter-spacing:.1em;color:var(--text-dim);cursor:pointer;}
+.cal-toggle:hover{color:var(--accent);border-color:var(--accent);}
+.cal-toggle svg.i{width:13px;height:13px;transition:transform .2s;}
+.cal:not(.collapsed) .cal-toggle svg.i{transform:rotate(180deg);}
+.cal:not(.collapsed) .cal-toggle{margin-left:8px;}
+.cal-next{display:none;margin-top:8px;font-size:13px;color:var(--text-dim);line-height:1.6;}
+.cal.collapsed .cal-next{display:block;}
+.cal-next b{color:var(--text);font-weight:700;}
+.ann-item.auto .ann-text{white-space:normal;}
+.ann-auto-h{margin-top:10px;font-size:11px;letter-spacing:.16em;color:var(--text-faint);}
 
 /* ---------- 內嵌系統視窗 ---------- */
 #viewer{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;background:var(--bg);animation:slidein .28s cubic-bezier(.2,.8,.2,1);}
@@ -393,8 +417,8 @@ footer .foot-note{margin-top:16px;}
       <h2 class="zone-title">行政區</h2>
       <p class="hero-desc">財務・法會・管理系統</p>
     </div>
-    <div class="board" data-board="admin"></div>
     <div class="cal" data-cal="admin"></div>
+    <div class="board" data-board="admin"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="admin"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
@@ -458,10 +482,26 @@ footer .foot-note{margin-top:16px;}
 <div id="ev-modal" class="modal" role="dialog" aria-modal="true">
   <div class="box">
     <b id="ev-modal-title">新增活動</b>
+    <label>類型
+      <select id="e-type">
+        <option value="order">出單截止</option>
+        <option value="ritual">法會</option>
+        <option value="course">課程</option>
+        <option value="other">其他活動</option>
+        <option value="internal">行政內部（只有行政看得到）</option>
+      </select>
+    </label>
     <label>日期<input type="date" id="e-date"></label>
-    <label>時間（可空白）<input type="text" id="e-time" placeholder="例：19:30 或 全天"></label>
-    <label>活動名稱<input type="text" id="e-title" placeholder="例：中元法會"></label>
+    <label>結束日期（一天的活動不用填）<input type="date" id="e-end"></label>
+    <label>時間（可空白）<input type="text" id="e-time" placeholder="例：17:00 截止、19:30、全天"></label>
+    <label>活動名稱<input type="text" id="e-title" placeholder="例：十月法會"></label>
     <label>備註（可空白）<textarea id="e-note"></textarea></label>
+    <div class="chk-row" id="e-to-wrap">
+      <span>誰看得到</span>
+      <label class="chk"><input type="checkbox" id="e-to-teacher">老師區</label>
+      <label class="chk"><input type="checkbox" id="e-to-student">學員區</label>
+    </div>
+    <div class="chk-note" id="e-to-note">行政內部的資料只會出現在行政區，老師和學員都看不到。</div>
     <div class="row">
       <button id="e-del" class="danger-btn">刪除</button>
       <button onclick="closeModal('ev-modal')">取消</button>
@@ -742,8 +782,9 @@ function renderBoard(zoneKey){
   ensureAnn();
   const wrap = document.querySelector(`[data-board="${zoneKey}"]`);
   const list = state.ann[zoneKey];
+  const auto = zoneKey === "admin" ? [] : upcoming(zoneKey, 30);   // 行政排進行事曆的，近 30 天自動變公告
   wrap.innerHTML = "";
-  if(!editing && list.length===0){ wrap.style.display="none"; return; }
+  if(!editing && list.length===0 && auto.length===0){ wrap.style.display="none"; return; }
   wrap.style.display = "block";
   const head = document.createElement("div");
   head.className = "board-head";
@@ -753,6 +794,13 @@ function renderBoard(zoneKey){
     if(e.target.dataset.a==="add") openAnnModal(zoneKey, null);
   });
   wrap.appendChild(head);
+  auto.forEach(e=>{
+    const t = evType(e); const row = document.createElement("div");
+    row.className = "ann-item auto";
+    row.innerHTML = `<span class="ann-date">${dateLabel(e)}</span>
+      <span class="ann-text"><span class="ev-tag" style="background:${t.color}">${t.label}</span>${esc(e.title)}${e.time?`・${esc(e.time)}`:""}${e.note?`<br><span style="color:var(--text-dim);font-size:.92em;white-space:pre-wrap">${esc(e.note)}</span>`:""}</span>`;
+    wrap.appendChild(row);
+  });
   list.forEach((a, idx)=>{
     const row = document.createElement("div");
     row.className = "ann-item";
@@ -812,79 +860,186 @@ function closeViewer(fromPop){
 $("#viewer-close").addEventListener("click", ()=> closeViewer(false));
 window.addEventListener("popstate", ()=> closeViewer(true));
 
-/* ---------- 行事曆（三區各自一份） ---------- */
+/* ---------- 行事曆（行政填一份，三區自動同步） ----------
+   state.events = [{id,type,date,end,time,title,note,to:{teacher,student}}]
+   行政區看全部；老師區/學員區只看勾選給他們的；「行政內部」只有行政看得到 */
 const WD = ["日","一","二","三","四","五","六"];
 const pad = n => String(n).padStart(2,"0");
 const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const calView = {};   // 各區目前看的月份與選取日
-function ensureCal(){ if(!state.cal) state.cal = {}; ["admin","teacher","student"].forEach(z=> state.cal[z] ||= []); }
+const EV_TYPES = {
+  order:   { label:"出單截止", color:"#c0892c", to:{teacher:true,  student:false} },
+  ritual:  { label:"法會",     color:"#b5523d", to:{teacher:true,  student:true } },
+  course:  { label:"課程",     color:"#4f8a6c", to:{teacher:true,  student:true } },
+  other:   { label:"活動",     color:"#7b62a0", to:{teacher:true,  student:true } },
+  internal:{ label:"內部",     color:"#8d8579", to:{teacher:false, student:false} },
+};
+const evType = e => EV_TYPES[e.type] || EV_TYPES.other;
+const calView = {};                         // 各區目前看的月份與選取日
+const calOpen = { admin:true, teacher:false, student:false };  // 老師/學員區預設收起來
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+function ensureCal(){
+  if(!Array.isArray(state.events)) state.events = [];
+  // 舊版三區各一份的資料 → 併進共用清單
+  if(state.cal){
+    const map = { admin:{teacher:false,student:false}, teacher:{teacher:true,student:false}, student:{teacher:false,student:true} };
+    Object.keys(map).forEach(z=> (state.cal[z]||[]).forEach(e=> state.events.push({ id:newId(), type: z==="admin"?"internal":"other", date:e.date, end:"", time:e.time||"", title:e.title, note:e.note||"", to:map[z] })));
+    delete state.cal;
+  }
+  state.events.forEach(e=>{ if(!e.id) e.id = newId(); if(!e.to) e.to = {...evType(e).to}; });
+}
+function visibleTo(e, zoneKey){
+  if(zoneKey === "admin") return true;
+  if(e.type === "internal") return false;
+  return !!(e.to && e.to[zoneKey]);
+}
+function zoneEvents(zoneKey){ ensureCal(); return state.events.filter(e=> visibleTo(e, zoneKey)); }
+function eachDay(e, fn){              // 多天活動：每一天都算
+  const s = new Date(e.date+"T00:00"); if(isNaN(s)) return;
+  let t = e.end && e.end > e.date ? new Date(e.end+"T00:00") : s;
+  for(let d = new Date(s), n=0; d <= t && n < 62; d.setDate(d.getDate()+1), n++) fn(ymd(d));
+}
+function dateLabel(e){
+  const f = k => { const d = new Date(k+"T00:00"); return `${d.getMonth()+1}/${d.getDate()}（${WD[d.getDay()]}）`; };
+  return e.end && e.end > e.date ? `${f(e.date)}～${f(e.end)}` : f(e.date);
+}
+function upcoming(zoneKey, days){
+  const today = ymd(new Date());
+  const lim = new Date(); lim.setDate(lim.getDate()+days); const limK = ymd(lim);
+  return zoneEvents(zoneKey).filter(e=> (e.end && e.end > e.date ? e.end : e.date) >= today && e.date <= limK)
+    .sort((a,b)=> (a.date+(a.time||"")).localeCompare(b.date+(b.time||"")));
+}
 function renderCal(zoneKey){
-  ensureCal();
   const wrap = document.querySelector(`[data-cal="${zoneKey}"]`);
+  const isAdmin = zoneKey === "admin";
+  const events = zoneEvents(zoneKey);
   const today = new Date();
   const v = calView[zoneKey] ||= { y: today.getFullYear(), m: today.getMonth(), sel: ymd(today) };
-  const events = state.cal[zoneKey];
   const byDay = {};
-  events.forEach(e=> (byDay[e.date] ||= []).push(e));
+  events.forEach(e=> eachDay(e, k=> (byDay[k] ||= []).push(e)));
   const first = new Date(v.y, v.m, 1);
   const start = new Date(v.y, v.m, 1 - first.getDay());
   let cells = WD.map(w=>`<div class="cal-wd">${w}</div>`).join("");
   for(let i=0;i<42;i++){
     const d = new Date(start); d.setDate(start.getDate()+i);
     if(i>=35 && d.getMonth()!==v.m) break;
-    const k = ymd(d), n = (byDay[k]||[]).length;
+    const k = ymd(d), evs = (byDay[k]||[]);
     const cls = ["cal-day", d.getMonth()!==v.m?"out":"", k===ymd(today)?"today":"", k===v.sel?"sel":""].join(" ");
-    cells += `<button type="button" class="${cls}" data-d="${k}">${d.getDate()}<span class="dots">${"<i></i>".repeat(Math.min(n,3))}</span></button>`;
+    const dots = evs.slice(0,3).map(e=>`<i style="background:${evType(e).color}"></i>`).join("");
+    cells += `<button type="button" class="${cls}" data-d="${k}">${d.getDate()}<span class="dots">${dots}</span></button>`;
   }
   // 清單：選取日有活動就列那天，否則列本月全部
   const monthKey = `${v.y}-${pad(v.m+1)}`;
   let list = (byDay[v.sel]||[]);
   let listTitle = `${Number(v.sel.slice(5,7))}月${Number(v.sel.slice(8))}日`;
-  if(!list.length){ list = events.filter(e=> (e.date||"").startsWith(monthKey)); listTitle = `${v.m+1}月全部活動`; }
-  list = list.slice().sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
+  if(!list.length){ list = events.filter(e=> (e.date||"").slice(0,7) <= monthKey && ((e.end&&e.end>e.date?e.end:e.date)||"").slice(0,7) >= monthKey); listTitle = `${v.m+1}月全部活動`; }
+  list = list.slice().sort((a,b)=> (a.date+(a.time||"")).localeCompare(b.date+(b.time||"")));
   const items = list.map(e=>{
-    const idx = events.indexOf(e); const dd = new Date(e.date+"T00:00");
-    return `<div class="ev" data-i="${idx}"><span class="ev-date"><b>${dd.getDate()}</b><small>週${WD[dd.getDay()]}</small></span>
-      <span class="ev-body"><span class="ev-title">${esc(e.title)}</span>${(e.time||e.note)?`<div class="ev-meta">${esc([e.time,e.note].filter(Boolean).join("・"))}</div>`:""}</span></div>`;
+    const t = evType(e); const dd = new Date(e.date+"T00:00");
+    const who = isAdmin ? (e.type==="internal" ? "只有行政" : [e.to?.teacher?"老師":"", e.to?.student?"學員":""].filter(Boolean).join("、") || "只有行政") : "";
+    return `<div class="ev${isAdmin?" can-edit":""}" data-id="${esc(e.id)}"><span class="ev-date" style="background:${t.color}1f;color:${t.color}"><b>${dd.getDate()}</b><small>週${WD[dd.getDay()]}</small></span>
+      <span class="ev-body"><span class="ev-title"><span class="ev-tag" style="background:${t.color}">${t.label}</span>${esc(e.title)}</span>
+      <div class="ev-meta">${esc([e.end&&e.end>e.date?dateLabel(e):"", e.time, e.note].filter(Boolean).join("・"))}${who?`<span class="ev-lock">（${who}看得到）</span>`:""}</div></span></div>`;
   }).join("") || `<div class="cal-empty">這段時間沒有活動</div>`;
+  const next = upcoming(zoneKey, 60)[0];
+  const nextHtml = next ? `接下來：<b>${dateLabel(next)}</b> ${evType(next).label}・${esc(next.title)}${next.time?`（${esc(next.time)}）`:""}` : "近期沒有排定的活動";
+  const legend = Object.entries(EV_TYPES).filter(([k])=> isAdmin || k!=="internal")
+    .map(([k,t])=>`<span><i style="background:${t.color}"></i>${t.label}</span>`).join("");
+  const open = isAdmin || calOpen[zoneKey];
+  wrap.classList.toggle("collapsed", !open);
   wrap.innerHTML = `<div class="cal-head"><span class="cal-title"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>行事曆</span>
-      <button class="mini edit-only" data-a="add"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增</button>
-      <span class="cal-month"><button class="cal-nav" data-a="prev" aria-label="上個月"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><b>${v.y} 年 ${v.m+1} 月</b><button class="cal-nav" data-a="next" aria-label="下個月"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></span></div>
+      ${isAdmin ? `<button class="mini cal-add" data-a="add"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增</button>` : ""}
+      <span class="cal-month"><button class="cal-nav" data-a="prev" aria-label="上個月"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><b>${v.y} 年 ${v.m+1} 月</b><button class="cal-nav" data-a="next" aria-label="下個月"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></span>
+      ${isAdmin ? "" : `<button class="cal-toggle" data-a="toggle">${open?"收起":"展開"}<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>`}</div>
+    <div class="cal-next">${nextHtml}</div>
     <div class="cal-grid">${cells}</div>
+    <div class="cal-legend">${legend}</div>
     <div class="cal-list"><div class="cal-list-h">${listTitle}</div>${items}</div>`;
   wrap.onclick = e=>{
     const t = e.target.closest("[data-a],[data-d],.ev"); if(!t) return;
-    if(t.dataset.a==="prev"){ v.m--; if(v.m<0){v.m=11;v.y--;} v.sel=`${v.y}-${pad(v.m+1)}-01`; }
+    if(t.dataset.a==="toggle"){ calOpen[zoneKey] = !calOpen[zoneKey]; }
+    else if(t.dataset.a==="prev"){ v.m--; if(v.m<0){v.m=11;v.y--;} v.sel=`${v.y}-${pad(v.m+1)}-01`; }
     else if(t.dataset.a==="next"){ v.m++; if(v.m>11){v.m=0;v.y++;} v.sel=`${v.y}-${pad(v.m+1)}-01`; }
-    else if(t.dataset.a==="add"){ openEvModal(zoneKey, null); return; }
-    else if(t.dataset.d){ v.sel = t.dataset.d; if(editing && !(byDay[v.sel]||[]).length){ openEvModal(zoneKey, null); } }
-    else if(t.classList.contains("ev")){ if(editing) openEvModal(zoneKey, Number(t.dataset.i)); return; }
+    else if(t.dataset.a==="add"){ openEvModal(null); return; }
+    else if(t.dataset.d){ v.sel = t.dataset.d; }
+    else if(t.classList.contains("ev")){ if(isAdmin) openEvModal(t.dataset.id); return; }
     renderCal(zoneKey);
   };
 }
-let evTarget = null;
-function openEvModal(zoneKey, idx){
-  evTarget = {zoneKey, idx};
-  const isAdd = idx === null;
-  const e = isAdd ? {date:(calView[zoneKey]||{}).sel || ymd(new Date()), time:"", title:"", note:""} : state.cal[zoneKey][idx];
+let evTargetId = null;
+function syncEvTo(){
+  const internal = $("#e-type").value === "internal";
+  $("#e-to-wrap").style.display = internal ? "none" : "flex";
+  $("#e-to-note").style.display = internal ? "block" : "none";
+}
+$("#e-type").addEventListener("change", ()=>{
+  const d = EV_TYPES[$("#e-type").value].to;            // 換類型 → 帶入預設給誰看
+  $("#e-to-teacher").checked = d.teacher; $("#e-to-student").checked = d.student; syncEvTo();
+});
+function openEvModal(id){
+  ensureCal();
+  evTargetId = id;
+  const isAdd = id === null;
+  const e = isAdd ? {type:"order", date:(calView.admin||{}).sel || ymd(new Date()), end:"", time:"", title:"", note:"", to:{...EV_TYPES.order.to}}
+                  : state.events.find(x=> x.id===id);
+  if(!e) return;
   $("#ev-modal-title").textContent = isAdd ? "新增活動" : "編輯活動";
-  $("#e-date").value = e.date||""; $("#e-time").value = e.time||""; $("#e-title").value = e.title||""; $("#e-note").value = e.note||"";
+  $("#e-type").value = EV_TYPES[e.type] ? e.type : "other";
+  $("#e-date").value = e.date||""; $("#e-end").value = e.end||""; $("#e-time").value = e.time||""; $("#e-title").value = e.title||""; $("#e-note").value = e.note||"";
+  $("#e-to-teacher").checked = !!e.to?.teacher; $("#e-to-student").checked = !!e.to?.student;
+  syncEvTo();
   $("#e-del").style.display = isAdd ? "none" : "";
   $("#ev-modal").classList.add("show");
 }
-$("#e-submit").addEventListener("click", ()=>{
-  const {zoneKey, idx} = evTarget;
-  const e = { date:$("#e-date").value, time:$("#e-time").value.trim(), title:$("#e-title").value.trim(), note:$("#e-note").value.trim() };
+// 行政改行事曆：先抓雲端最新版再改再存，避免蓋掉別人剛存的東西；編輯模式中則先改在畫面上，按「儲存」一起存
+async function commitEvents(mutate, okMsg){
+  if(editing){ ensureCal(); mutate(state.events); renderAll(); $("#save-status").textContent = "行事曆已改，記得按「儲存」"; return true; }
+  if(!sbReady()){ alert("尚未連上雲端，無法儲存"); return false; }
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${ROW_ID}&select=data`,{headers:sbHeaders()});
+    if(!r.ok) throw new Error("read "+r.status);
+    const rows = await r.json();
+    if(!rows.length || !rows[0].data || !rows[0].data.admin) throw new Error("no data");
+    state = rows[0].data; ensureCal(); ensureAnn();
+    mutate(state.events);
+    const w = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`,{
+      method:"POST",
+      headers:{...sbHeaders(), "Prefer":"return=minimal,resolution=merge-duplicates"},
+      body:JSON.stringify({ id:ROW_ID, table_name:"portal_config", row_key:"main", data:state, updated_at:new Date().toISOString() })
+    });
+    if(!w.ok) throw new Error("write "+w.status);
+    localStorage.setItem("portal-config", JSON.stringify(state));
+    renderAll(); toast(okMsg || "已儲存，老師區和學員區同步更新");
+    return true;
+  }catch(err){
+    console.warn(err); alert("網路不穩，這次沒有存到，請再按一次確定"); return false;
+  }
+}
+function toast(msg){
+  let t = document.getElementById("toast");
+  if(!t){ t = document.createElement("div"); t.id="toast";
+    t.style.cssText = "position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#2c2418;color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;letter-spacing:.06em;z-index:30;box-shadow:0 8px 24px rgba(0,0,0,.2);max-width:calc(100% - 32px);text-align:center;";
+    document.body.appendChild(t); }
+  t.textContent = msg; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(()=> t.style.display="none", 2600);
+}
+$("#e-submit").addEventListener("click", async ()=>{
+  const type = $("#e-type").value;
+  const e = { id: evTargetId || newId(), type, date:$("#e-date").value, end:$("#e-end").value, time:$("#e-time").value.trim(),
+              title:$("#e-title").value.trim(), note:$("#e-note").value.trim(),
+              to: type==="internal" ? {teacher:false,student:false} : {teacher:$("#e-to-teacher").checked, student:$("#e-to-student").checked} };
   if(!e.date || !e.title){ alert("日期和活動名稱要填"); return; }
-  if(idx===null) state.cal[zoneKey].push(e); else state.cal[zoneKey][idx] = e;
-  const v = calView[zoneKey]; if(v){ const d=new Date(e.date+"T00:00"); v.y=d.getFullYear(); v.m=d.getMonth(); v.sel=e.date; }
-  closeModal("ev-modal"); renderAll();
+  if(e.end && e.end < e.date){ alert("結束日期不能比開始日期早"); return; }
+  if(e.end === e.date) e.end = "";
+  const btn = $("#e-submit"); btn.disabled = true; btn.textContent = "儲存中…";
+  const ok = await commitEvents(list=>{ const i = list.findIndex(x=> x.id===e.id); if(i>=0) list[i] = e; else list.push(e); });
+  btn.disabled = false; btn.textContent = "確定";
+  if(ok){ const v = calView.admin; if(v){ const d=new Date(e.date+"T00:00"); v.y=d.getFullYear(); v.m=d.getMonth(); v.sel=e.date; } closeModal("ev-modal"); renderAll(); }
 });
-$("#e-del").addEventListener("click", ()=>{
-  const {zoneKey, idx} = evTarget;
-  if(idx!==null && confirm("刪除這個活動？")){ state.cal[zoneKey].splice(idx,1); closeModal("ev-modal"); renderAll(); }
+$("#e-del").addEventListener("click", async ()=>{
+  const id = evTargetId; if(id===null || !confirm("刪除這個活動？")) return;
+  const ok = await commitEvents(list=>{ const i = list.findIndex(x=> x.id===id); if(i>=0) list.splice(i,1); }, "已刪除");
+  if(ok) closeModal("ev-modal");
 });
-function renderAll(){ ensureAnn(); renderCal("admin"); renderCal("teacher"); renderCal("student"); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); }
+function renderAll(){ ensureAnn(); ensureCal(); renderCal("admin"); renderCal("teacher"); renderCal("student"); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); }
 
 /* ============================================================
    ⑤ 系統編輯表單
