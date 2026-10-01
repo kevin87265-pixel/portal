@@ -360,6 +360,19 @@ body.calviewing{overflow:hidden;}
 .card.is-cal .desc b{color:var(--text);font-weight:700;}
 .ann-auto-h{margin-top:10px;font-size:11px;letter-spacing:.16em;color:var(--text-faint);}
 
+/* ---------- 上傳課表 ---------- */
+.tt-box{margin-top:14px;padding:16px;border-radius:18px;background:var(--bg-card);border:1px dashed var(--line-strong);}
+.tt-h b{display:block;font-family:'Noto Serif TC',serif;font-size:16px;letter-spacing:.08em;}
+.tt-h span{display:block;margin-top:4px;font-size:12.5px;color:var(--text-dim);line-height:1.6;}
+.tt-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;height:48px;border-radius:14px;background:var(--accent);color:#fff;font-size:15px;letter-spacing:.1em;cursor:pointer;}
+.tt-btn.busy{opacity:.6;pointer-events:none;}
+.tt-item{display:flex;align-items:center;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:13px;}
+.tt-item .st{flex-shrink:0;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;}
+.tt-item .st.wait{background:#fff3d6;color:#9a6a00;}
+.tt-item .st.done{background:#e3f4ea;color:#2f7d5b;}
+.tt-item .st.err{background:#fbe5e1;color:#b5523d;}
+.tt-item .tx{flex:1;min-width:0;color:var(--text-dim);line-height:1.5;}
+
 /* ---------- 每日一句 ---------- */
 .daily{position:relative;margin-top:18px;padding:20px 20px 16px;border-radius:20px;background:var(--bg-card);border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;}
 .daily::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent);}
@@ -584,6 +597,11 @@ footer .foot-note{margin-top:16px;}
   </div>
   <div class="calview-body">
     <div class="cal" id="cal-panel"></div>
+    <div class="tt-box" id="tt-box" hidden>
+      <div class="tt-h"><b>上傳課表</b><span>上傳後，每天早上 9 點前自動把課程填進行事曆</span></div>
+      <label class="tt-btn"><input type="file" id="tt-file" accept="image/*" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg><span id="tt-btn-text">選擇課表圖片</span></label>
+      <div id="tt-list"></div>
+    </div>
     <p class="calview-hint" id="calview-hint"></p>
   </div>
 </div>
@@ -1652,10 +1670,61 @@ function openCal(zoneKey){
     ? "點空白的日期就能直接新增；有活動的日期點下去，下面會出現那天的活動，點活動可以修改或刪除。勾給老師、學員的活動，會同步到他們的行事曆和公告。"
     : "行事曆由行政統一更新。";
   renderCal(zoneKey);
+  $("#tt-box").hidden = zoneKey !== "admin"; if(zoneKey === "admin") loadTimetables();
   $("#calview").classList.add("show"); $("#calview").setAttribute("aria-hidden","false");
   document.body.classList.add("calviewing");
   try{ history.pushState({calview:1}, ""); }catch(e){}
 }
+/* ---------- 上傳課表：圖片先存雲端，每天早上由 Claude 讀圖、自動填進行事曆 ---------- */
+const TT_INBOX = "portal_timetable_inbox";
+async function sbGetRow(id){
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${id}&select=data`,{headers:sbHeaders()});
+  if(!r.ok) throw new Error("read "+r.status);
+  const rows = await r.json(); return rows.length ? rows[0].data : null;
+}
+async function sbPutRow(id, tableName, rowKey, data){
+  const w = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`,{ method:"POST",
+    headers:{...sbHeaders(), "Prefer":"return=minimal,resolution=merge-duplicates"},
+    body:JSON.stringify({ id, table_name:tableName, row_key:rowKey, data, updated_at:new Date().toISOString() }) });
+  if(!w.ok) throw new Error("write "+w.status);
+}
+async function loadTimetables(){
+  const box = $("#tt-list"); box.innerHTML = "";
+  try{
+    const inbox = await sbGetRow(TT_INBOX); const items = (inbox && inbox.items) || [];
+    box.innerHTML = items.slice().reverse().slice(0,5).map(it=>{
+      const st = it.status==="done" ? ["done","已填好"] : it.status==="error" ? ["err","讀不到"] : ["wait","等待中"];
+      const d = new Date(it.uploadedAt); const when = `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())} 上傳`;
+      return `<div class="tt-item"><span class="st ${st[0]}">${st[1]}</span><span class="tx">${esc(it.name||"課表")}・${when}${it.result ? `<br>${esc(it.result)}` : ""}</span></div>`;
+    }).join("");
+  }catch(e){ console.warn(e); }
+}
+function shrinkImage(file, maxW){
+  return new Promise((ok, bad)=>{
+    const img = new Image(); const url = URL.createObjectURL(file);
+    img.onload = ()=>{ const k = Math.min(1, maxW / img.width); const c = document.createElement("canvas");
+      c.width = Math.round(img.width*k); c.height = Math.round(img.height*k);
+      const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url); ok(c.toDataURL("image/jpeg", .88)); };
+    img.onerror = ()=>{ URL.revokeObjectURL(url); bad(new Error("不是圖片")); };
+    img.src = url;
+  });
+}
+$("#tt-file").addEventListener("change", async e=>{
+  const f = e.target.files[0]; e.target.value = ""; if(!f) return;
+  const btn = $(".tt-btn"); btn.classList.add("busy"); $("#tt-btn-text").textContent = "上傳中…";
+  try{
+    const dataUrl = await shrinkImage(f, 1800);
+    const id = "tt" + Date.now().toString(36);
+    await sbPutRow("portal_timetable_img_"+id, "portal_timetable", "img_"+id, { image:dataUrl, name:f.name });
+    const inbox = (await sbGetRow(TT_INBOX)) || { items:[] };
+    inbox.items = (inbox.items||[]).concat({ id, name:f.name, uploadedAt:new Date().toISOString(), status:"pending" }).slice(-20);
+    await sbPutRow(TT_INBOX, "portal_timetable", "inbox", inbox);
+    toast("課表已上傳，明天早上 9 點前會自動填進行事曆");
+    loadTimetables();
+  }catch(err){ console.warn(err); alert("上傳沒有成功，請再試一次"); }
+  btn.classList.remove("busy"); $("#tt-btn-text").textContent = "選擇課表圖片";
+});
 function closeCal(fromPop){
   if(!$("#calview").classList.contains("show")) return;
   $("#calview").classList.remove("show"); $("#calview").setAttribute("aria-hidden","true");
