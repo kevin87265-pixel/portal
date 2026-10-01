@@ -330,6 +330,16 @@ body.editing .ann-tools{display:flex;}
 .cal.collapsed .cal-next{display:block;}
 .cal-next b{color:var(--text);font-weight:700;}
 .ann-item.auto .ann-text{white-space:normal;}
+#calview{position:fixed;inset:0;z-index:8;display:none;flex-direction:column;background:var(--bg);animation:slidein .28s cubic-bezier(.2,.8,.2,1);}
+#calview.show{display:flex;}
+#calview[data-zone=admin]{--accent:var(--gold);--accent-soft:var(--gold-soft);}
+#calview[data-zone=teacher]{--accent:var(--green);--accent-soft:var(--green-soft);}
+#calview[data-zone=student]{--accent:var(--violet);--accent-soft:var(--violet-soft);}
+.calview-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 16px 48px;width:100%;max-width:720px;margin:0 auto;}
+.calview-hint{margin-top:14px;font-size:12.5px;color:var(--text-faint);letter-spacing:.06em;line-height:1.7;text-align:center;}
+body.calviewing{overflow:hidden;}
+.card.is-cal .seal{background:var(--accent);color:#fff;box-shadow:none;}
+.card.is-cal .desc b{color:var(--text);font-weight:700;}
 .ann-auto-h{margin-top:10px;font-size:11px;letter-spacing:.16em;color:var(--text-faint);}
 
 /* ---------- 內嵌系統視窗 ---------- */
@@ -417,7 +427,6 @@ footer .foot-note{margin-top:16px;}
       <h2 class="zone-title">行政區</h2>
       <p class="hero-desc">財務・法會・管理系統</p>
     </div>
-    <div class="cal" data-cal="admin"></div>
     <div class="board" data-board="admin"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="admin"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
@@ -434,7 +443,6 @@ footer .foot-note{margin-top:16px;}
       <p class="hero-desc">填單・積點・教學資源</p>
     </div>
     <div class="board" data-board="teacher"></div>
-    <div class="cal" data-cal="teacher"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="teacher"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
@@ -450,7 +458,6 @@ footer .foot-note{margin-top:16px;}
       <p class="hero-desc">積點・課程・官方 LINE</p>
     </div>
     <div class="board" data-board="student"></div>
-    <div class="cal" data-cal="student"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="student"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
@@ -476,6 +483,19 @@ footer .foot-note{margin-top:16px;}
   </div>
   <div class="viewer-load" id="viewer-load"><span></span>載入中…</div>
   <iframe id="viewer-frame" title="系統畫面" allow="clipboard-write; fullscreen"></iframe>
+</div>
+
+<!-- 行事曆全頁 -->
+<div id="calview" aria-hidden="true">
+  <div class="viewer-bar">
+    <button type="button" class="viewer-back" id="calview-close" aria-label="返回"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>返回</span></button>
+    <b id="calview-title">行事曆</b>
+    <span style="width:72px;flex-shrink:0"></span>
+  </div>
+  <div class="calview-body">
+    <div class="cal" id="cal-panel"></div>
+    <p class="calview-hint" id="calview-hint"></p>
+  </div>
 </div>
 
 <!-- 行事曆活動表單 -->
@@ -541,6 +561,7 @@ footer .foot-note{margin-top:16px;}
       <select id="f-type">
         <option value="web">連結（開新分頁）</option>
         <option value="local">本機工具（顯示說明）</option>
+        <option value="calendar">行事曆（點進去看行事曆）</option>
         <option value="note">問答／說明（點卡片看內容）</option>
       </select>
     </label>
@@ -667,7 +688,19 @@ async function saveConfig(){
    ============================================================ */
 function makeCard(item, zoneKey, ci, ii){
   let el;
-  if(item.type === "web"){
+  if(item.type === "calendar"){
+    el = document.createElement("div");
+    el.className = "is-cal"; el.tabIndex = 0;
+    const nx = upcoming(zoneKey, 60)[0];
+    const sub = nx ? `下一個：<b>${dateLabel(nx).replace(/（.）/g,"")}</b> ${esc(evType(nx).label)}` : esc(item.desc || "出單・法會・課程時間");
+    el.innerHTML = `<span class="seal">曆</span>
+                    <span class="name">${esc(item.name || "行事曆")}</span>
+                    <span class="desc">${sub}</span>
+                    <span class="foot"><span class="kind">${zoneKey==="admin" ? "點進去新增・修改" : "點開看行事曆"}</span><span class="go"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span></span>`;
+    const go = ()=>{ if(!editing) openCal(zoneKey); };
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", e=>{ if(e.key==="Enter") go(); });
+  }else if(item.type === "web"){
     el = document.createElement("a");
     el.href = item.url || "#"; el.target = "_blank"; el.rel = "noopener";
     el.innerHTML = `<span class="seal">${esc(Array.from(item.name||"・")[0])}</span>
@@ -909,7 +942,7 @@ function upcoming(zoneKey, days){
     .sort((a,b)=> (a.date+(a.time||"")).localeCompare(b.date+(b.time||"")));
 }
 function renderCal(zoneKey){
-  const wrap = document.querySelector(`[data-cal="${zoneKey}"]`);
+  const wrap = $("#cal-panel"); if(calZone !== zoneKey) return;
   const isAdmin = zoneKey === "admin";
   const events = zoneEvents(zoneKey);
   const today = new Date();
@@ -944,12 +977,12 @@ function renderCal(zoneKey){
   const nextHtml = next ? `接下來：<b>${dateLabel(next)}</b> ${evType(next).label}・${esc(next.title)}${next.time?`（${esc(next.time)}）`:""}` : "近期沒有排定的活動";
   const legend = Object.entries(EV_TYPES).filter(([k])=> isAdmin || k!=="internal")
     .map(([k,t])=>`<span><i style="background:${t.color}"></i>${t.label}</span>`).join("");
-  const open = isAdmin || calOpen[zoneKey];
+  const open = true;
   wrap.classList.toggle("collapsed", !open);
   wrap.innerHTML = `<div class="cal-head"><span class="cal-title"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>行事曆</span>
       ${isAdmin ? `<button class="mini cal-add" data-a="add"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增</button>` : ""}
       <span class="cal-month"><button class="cal-nav" data-a="prev" aria-label="上個月"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><b>${v.y} 年 ${v.m+1} 月</b><button class="cal-nav" data-a="next" aria-label="下個月"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></span>
-      ${isAdmin ? "" : `<button class="cal-toggle" data-a="toggle">${open?"收起":"展開"}<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>`}</div>
+</div>
     <div class="cal-next">${nextHtml}</div>
     <div class="cal-grid">${cells}</div>
     <div class="cal-legend">${legend}</div>
@@ -965,6 +998,29 @@ function renderCal(zoneKey){
     renderCal(zoneKey);
   };
 }
+let calZone = null;
+const ZONE_NAME = { admin:"行政區", teacher:"老師區", student:"學員區" };
+function openCal(zoneKey){
+  calZone = zoneKey;
+  $("#calview").dataset.zone = zoneKey;
+  $("#calview-title").textContent = ZONE_NAME[zoneKey] + "行事曆";
+  $("#calview-hint").textContent = zoneKey === "admin"
+    ? "按「新增」加活動；點清單裡的活動可以修改或刪除。勾給老師、學員的活動，會同步到他們的行事曆和公告。"
+    : "行事曆由行政統一更新。";
+  renderCal(zoneKey);
+  $("#calview").classList.add("show"); $("#calview").setAttribute("aria-hidden","false");
+  document.body.classList.add("calviewing");
+  try{ history.pushState({calview:1}, ""); }catch(e){}
+}
+function closeCal(fromPop){
+  if(!$("#calview").classList.contains("show")) return;
+  $("#calview").classList.remove("show"); $("#calview").setAttribute("aria-hidden","true");
+  document.body.classList.remove("calviewing");
+  calZone = null; renderAll();
+  if(!fromPop){ try{ if(history.state && history.state.calview) history.back(); }catch(e){} }
+}
+$("#calview-close").addEventListener("click", ()=> closeCal(false));
+window.addEventListener("popstate", ()=>{ if($("#viewer").classList.contains("show")) return; closeCal(true); });
 let evTargetId = null;
 function syncEvTo(){
   const internal = $("#e-type").value === "internal";
@@ -1039,7 +1095,7 @@ $("#e-del").addEventListener("click", async ()=>{
   const ok = await commitEvents(list=>{ const i = list.findIndex(x=> x.id===id); if(i>=0) list.splice(i,1); }, "已刪除");
   if(ok) closeModal("ev-modal");
 });
-function renderAll(){ ensureAnn(); ensureCal(); renderCal("admin"); renderCal("teacher"); renderCal("student"); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); }
+function renderAll(){ ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); }
 
 /* ============================================================
    ⑤ 系統編輯表單
@@ -1061,7 +1117,7 @@ function openItemModal(zoneKey, ci, ii){
 function syncTypeFields(){
   const t = $("#f-type").value;
   $("#f-url-wrap").style.display  = t==="web" ? "block":"none";
-  $("#f-hint-wrap").style.display = t==="web" ? "none":"block";
+  $("#f-hint-wrap").style.display = (t==="local"||t==="note") ? "block":"none";
   $("#f-hint-label").textContent  = t==="note" ? "內容（答案／說明，可多行）" : "開啟說明";
 }
 $("#f-type").addEventListener("change", syncTypeFields);
