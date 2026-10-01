@@ -470,6 +470,14 @@ body.calviewing{overflow:hidden;}
 .gal-item{margin-bottom:18px;background:var(--bg-card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);scroll-margin-top:10px;}
 .gal-item h3{font-family:'Noto Serif TC',serif;font-size:15px;letter-spacing:.06em;padding:10px 14px;border-bottom:1px solid var(--line);font-weight:700;}
 .gal-item img{display:block;width:100%;height:auto;min-height:120px;background:var(--bg-2);cursor:zoom-in;}
+.ann-rich{white-space:normal !important;}
+.ann-line{display:block;}
+@media (max-width:600px){.ann-rich{flex-basis:100%;}}
+.ann-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:6px 0 2px;}
+.ann-chip{display:block;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:5px 9px;font-size:.9em;font-weight:500;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ann-chip b{color:var(--gold);font-weight:700;margin-right:6px;font-variant-numeric:tabular-nums;}
+.is-ritual .ann-chip{background:rgba(255,255,255,.7);border-color:rgba(178,76,58,.18);}
+.is-ritual .ann-chip b{color:#b24c3a;}
 .ann-time{font-size:.92em;color:var(--text-dim);font-weight:500;}
 .ann-time span{white-space:nowrap;}
 .gal-admin{margin:26px 0 8px;border-top:1px dashed var(--line-strong);padding-top:18px;text-align:center;}
@@ -1579,6 +1587,27 @@ function renderRiteZone(zoneKey){   // 各區：金色法會卡
   const fix = slot.querySelector(".rite-fix"); if(fix) fix.addEventListener("click", ()=> openEvModal(e.id));
 }
 
+/* 公告排版：連續幾行短的日期/時間，排成兩欄小方塊，不用拉那麼長 */
+function chipHTML(line){
+  line = line.trim();
+  let m = line.match(/^([^\s：:]+)[：:]\s*(.+)$/) || line.match(/^(\d{1,2}\/\d{1,2}(?:[（(][^）)]*[）)])?)\s+(.+)$/);
+  return `<span class="ann-chip">${m ? `<b>${esc(m[1])}</b>${esc(m[2])}` : esc(line)}</span>`;
+}
+function annHTML(text){
+  const lines = String(text||"").split("\n");
+  const isItem = l => { const t = l.trim(); return t.length > 0 && t.length <= 22 && /\d/.test(t); };
+  let out = "", i = 0;
+  while(i < lines.length){
+    if(isItem(lines[i]) && isItem(lines[i+1]||"")){
+      let j = i; while(j < lines.length && isItem(lines[j])) j++;
+      out += `<span class="ann-grid">${lines.slice(i,j).map(chipHTML).join("")}</span>`; i = j; continue;
+    }
+    const t = lines[i].trim();
+    if(t){ out += `<span class="ann-line">${esc(t)}</span>`; }
+    i++;
+  }
+  return out;
+}
 function renderBoard(zoneKey){
   ensureAnn();
   const wrap = document.querySelector(`[data-board="${zoneKey}"]`);
@@ -1607,7 +1636,7 @@ function renderBoard(zoneKey){
     const t = evLook(e); const row = document.createElement("div");
     row.className = "ann-item auto" + (e.type==="ritual" ? " is-ritual" : "");
     row.innerHTML = `<span class="ann-date">${dateLabel(e)}</span>
-      <span class="ann-text"><span class="ev-tag" style="background:${t.color}">${esc(tagLabel(e))}</span>${esc(e.title)}${e.time?`<br><span class="ann-time">${e.time.split("・").map(x=>`<span>${esc(x)}</span>`).join("・")}</span>`:""}${e.note?`<br><span style="color:var(--text-dim);font-size:.92em;white-space:pre-wrap">${esc(e.note)}</span>`:""}</span>`;
+      <span class="ann-text"><span class="ev-tag" style="background:${t.color}">${esc(tagLabel(e))}</span>${esc(e.title)}${e.time?`<span class="ann-grid">${e.time.split("・").map(x=>chipHTML(x)).join("")}</span>`:""}${e.note?`<span style="display:block;margin-top:4px;color:var(--text-dim);font-size:.92em;white-space:pre-wrap">${esc(e.note)}</span>`:""}</span>`;
     return row;
   };
   auto.forEach(e=> wrap.appendChild(evRow(e)));
@@ -1623,7 +1652,7 @@ function renderBoard(zoneKey){
     row.className = "ann-item";
     row.innerHTML = `<span class="ann-date">${esc(a.date||"")}</span>
       ${isNew(a.date) ? '<span class="ann-new">NEW</span>' : ''}
-      <span class="ann-text">${esc(a.text)}</span>
+      <span class="ann-text ann-rich">${annHTML(a.text)}</span>
       <span class="ann-tools">
         <button class="mini" data-a="edit" title="編輯"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></button><button class="mini danger" data-a="del" title="刪除"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </span>`;
