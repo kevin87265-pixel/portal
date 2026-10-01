@@ -445,7 +445,8 @@ body.calviewing{overflow:hidden;}
 .ann-fold{margin-top:10px;border-top:1px solid var(--line);}
 .ann-fold-h{display:flex;align-items:center;gap:8px;width:100%;padding:12px 2px 4px;background:none;border:0;cursor:pointer;font-size:14px;color:var(--text-dim);letter-spacing:.08em;}
 .ann-fold-h b{padding:1px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12px;}
-.ann-fold-h svg{margin-left:auto;width:18px;height:18px;transition:transform .2s;}
+.ann-fold-h .more{margin-left:auto;font-size:12px;letter-spacing:.06em;color:var(--accent);padding:3px 10px;border:1px solid var(--accent-soft);background:var(--accent-soft);border-radius:999px;}
+.ann-fold-h svg{width:18px;height:18px;transition:transform .2s;color:var(--accent);}
 .ann-fold.open .ann-fold-h svg{transform:rotate(180deg);}
 .ann-fold-body{display:none;}
 .ann-fold.open .ann-fold-body{display:block;}
@@ -473,11 +474,13 @@ body.calviewing{overflow:hidden;}
 .ann-rich{white-space:normal !important;}
 .ann-line{display:block;}
 @media (max-width:600px){.ann-rich{flex-basis:100%;}}
-.ann-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin:6px 0 2px;}
+.ann-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:6px 0 2px;}
+@media (min-width:700px){.ann-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));}}
 .ann-chip{display:block;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:5px 9px;font-size:.9em;font-weight:500;line-height:1.5;white-space:normal;word-break:keep-all;}
 .ann-chip b{white-space:nowrap;color:var(--gold);font-weight:700;margin-right:6px;font-variant-numeric:tabular-nums;}
-.is-ritual .ann-chip{background:rgba(255,255,255,.7);border-color:rgba(178,76,58,.18);}
-.is-ritual .ann-chip b{color:#b24c3a;}
+.is-ritual .ann-chip{background:var(--bg);border-color:var(--line);}
+.ann-item.is-ritual .ann-text{min-width:100%;}
+.ann-item.is-ritual .ann-chip{font-weight:500;}
 .ann-time{font-size:.92em;color:var(--text-dim);font-weight:500;}
 .ann-time span{white-space:nowrap;}
 .gal-admin{margin:26px 0 8px;border-top:1px dashed var(--line-strong);padding-top:18px;text-align:center;}
@@ -1642,9 +1645,9 @@ function renderBoard(zoneKey){
   auto.forEach(e=> wrap.appendChild(evRow(e)));
   if(courses.length){
     const box = document.createElement("div"); box.className = "ann-fold" + (boardFold[zoneKey] ? " open" : "");
-    box.innerHTML = `<button type="button" class="ann-fold-h"><span>近 7 天課程</span><b>${courses.length} 堂</b><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="ann-fold-body"></div>`;
+    box.innerHTML = `<button type="button" class="ann-fold-h"><span>近 7 天課程</span><b>${courses.length} 堂</b><span class="more">${boardFold[zoneKey] ? "收起" : "展開查看"}</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="ann-fold-body"></div>`;
     courses.forEach(e=> box.querySelector(".ann-fold-body").appendChild(evRow(e)));
-    box.querySelector(".ann-fold-h").addEventListener("click", ()=>{ boardFold[zoneKey] = !boardFold[zoneKey]; box.classList.toggle("open"); });
+    box.querySelector(".ann-fold-h").addEventListener("click", ()=>{ boardFold[zoneKey] = !boardFold[zoneKey]; box.classList.toggle("open"); box.querySelector(".more").textContent = boardFold[zoneKey] ? "收起" : "展開查看"; });
     wrap.appendChild(box);
   }
   list.forEach((a, idx)=>{
