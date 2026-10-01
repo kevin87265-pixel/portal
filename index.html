@@ -578,7 +578,6 @@ footer .foot-note{margin-top:16px;}
       <h2 class="zone-title">行政區</h2>
       <p class="hero-desc">財務・法會・管理系統</p>
     </div>
-    <div class="rite-slot" data-rite="admin"></div>
     <div class="board" data-board="admin"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="admin"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
@@ -594,7 +593,6 @@ footer .foot-note{margin-top:16px;}
       <h2 class="zone-title">老師區</h2>
       <p class="hero-desc">填單・積點・教學資源</p>
     </div>
-    <div class="rite-slot" data-rite="teacher"></div>
     <div class="daily" id="daily-teacher"></div>
     <div class="board" data-board="teacher"></div>
     <div class="cats"></div>
@@ -611,7 +609,6 @@ footer .foot-note{margin-top:16px;}
       <h2 class="zone-title">學員區</h2>
       <p class="hero-desc">積點・課程・官方 LINE</p>
     </div>
-    <div class="rite-slot" data-rite="student"></div>
     <div class="board" data-board="student"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="student"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
@@ -1567,10 +1564,8 @@ function renderBoard(zoneKey){
   const list = state.ann[zoneKey];
   const wk = new Date(); wk.setDate(wk.getDate()+7); const wkK = ymd(wk);
   const rank = { ritual:0, order:1, other:2, course:3 };
-  const topRite = nextRituals(zoneKey)[0];
   let auto = zoneKey === "admin" ? [] : upcoming(zoneKey, 30)        // 行政排進行事曆的，近 30 天自動變公告
     .filter(e=> e.type !== "course" || e.date <= wkK);               // 課程只提醒 7 天內的
-  if(topRite) auto = auto.filter(e=> e.id !== topRite.id);          // 最近一場法會已經放在最上面
   auto.sort((x,y)=> (rank[x.type]??2) - (rank[y.type]??2) || x.date.localeCompare(y.date));
   const foldCourses = zoneKey === "teacher";                         // 老師區：法會是重點，課程收起來
   const courses = foldCourses ? auto.filter(e=> e.type === "course") : [];
@@ -2060,7 +2055,7 @@ function renderDaily(){
     <div class="daily-src">— ${esc(it.s)}</div>
     ${it.n ? `<div class="daily-note"><b>白話</b>${esc(it.n)}</div>` : ""}`;
 }
-function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); renderRite("home"); ["admin","teacher","student"].forEach(renderRiteZone); }
+function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); renderRite("home"); }
 
 /* ============================================================
    ⑤ 系統編輯表單
