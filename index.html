@@ -307,7 +307,7 @@ body.editing .ann-tools{display:flex;}
 .cal-day.today .dnum{background:var(--accent);color:#fff;font-weight:700;}
 .cal-day.sel{background:var(--accent-soft);box-shadow:inset 0 0 0 1.5px var(--accent);}
 .cal-day .dnum{display:grid;place-items:center;width:22px;height:22px;border-radius:999px;font-size:13px;line-height:1;margin:0 auto 1px;}
-.cal-day .chip{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;width:100%;font-size:10px;line-height:1.3;font-weight:700;
+.cal-day .chip{text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;width:100%;font-size:10px;line-height:1.3;font-weight:700;
   letter-spacing:0;padding:1px 2px;border-radius:4px;word-break:break-all;text-align:center;}
 @media (max-width:639px){ #cal-panel{padding:14px 8px 12px;} .calview-body{padding:4px 10px 48px;} .cal-day{padding:3px 1px 4px;} .cal-grid{gap:2px;} #cal-panel .cal-head{padding:0 6px;} }
 .cal-day .more{display:block;font-size:10px;color:var(--text-faint);line-height:1.2;}
@@ -372,6 +372,17 @@ body.calviewing{overflow:hidden;}
 .tt-item .st.done{background:#e3f4ea;color:#2f7d5b;}
 .tt-item .st.err{background:#fbe5e1;color:#b5523d;}
 .tt-item .tx{flex:1;min-width:0;color:var(--text-dim);line-height:1.5;}
+
+/* ---------- 公告：法會醒目、課程收合 ---------- */
+.ann-item.is-ritual{background:#fbefe9;border-radius:12px;padding:10px 10px;margin-left:-10px;margin-right:-10px;}
+.ann-item.is-ritual .ann-text{font-weight:700;}
+.ann-fold{margin-top:10px;border-top:1px solid var(--line);}
+.ann-fold-h{display:flex;align-items:center;gap:8px;width:100%;padding:12px 2px 4px;background:none;border:0;cursor:pointer;font-size:14px;color:var(--text-dim);letter-spacing:.08em;}
+.ann-fold-h b{padding:1px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12px;}
+.ann-fold-h svg{margin-left:auto;width:18px;height:18px;transition:transform .2s;}
+.ann-fold.open .ann-fold-h svg{transform:rotate(180deg);}
+.ann-fold-body{display:none;}
+.ann-fold.open .ann-fold-body{display:block;}
 
 /* ---------- 每日一句 ---------- */
 .daily{position:relative;margin-top:18px;padding:20px 20px 16px;border-radius:20px;background:var(--bg-card);border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;}
@@ -1379,15 +1390,22 @@ $("#a-submit").addEventListener("click", ()=>{
   closeModal("ann-modal");
   renderAll();
 });
+const boardFold = {};
 function renderBoard(zoneKey){
   ensureAnn();
   const wrap = document.querySelector(`[data-board="${zoneKey}"]`);
   const list = state.ann[zoneKey];
   const wk = new Date(); wk.setDate(wk.getDate()+7); const wkK = ymd(wk);
-  const auto = zoneKey === "admin" ? [] : upcoming(zoneKey, 30)      // 行政排進行事曆的，近 30 天自動變公告
-    .filter(e=> e.type !== "course" || e.date <= wkK).slice(0, 6);      // 課程只提醒 7 天內的，免得公告被洗版
+  const rank = { ritual:0, order:1, other:2, course:3 };
+  let auto = zoneKey === "admin" ? [] : upcoming(zoneKey, 30)        // 行政排進行事曆的，近 30 天自動變公告
+    .filter(e=> e.type !== "course" || e.date <= wkK);               // 課程只提醒 7 天內的
+  auto.sort((x,y)=> (rank[x.type]??2) - (rank[y.type]??2) || x.date.localeCompare(y.date));
+  const foldCourses = zoneKey === "teacher";                         // 老師區：法會是重點，課程收起來
+  const courses = foldCourses ? auto.filter(e=> e.type === "course") : [];
+  if(foldCourses) auto = auto.filter(e=> e.type !== "course");
+  auto = auto.slice(0, 6);
   wrap.innerHTML = "";
-  if(!editing && list.length===0 && auto.length===0){ wrap.style.display="none"; return; }
+  if(!editing && list.length===0 && auto.length===0 && courses.length===0){ wrap.style.display="none"; return; }
   wrap.style.display = "block";
   const head = document.createElement("div");
   head.className = "board-head";
@@ -1397,13 +1415,21 @@ function renderBoard(zoneKey){
     if(e.target.dataset.a==="add") openAnnModal(zoneKey, null);
   });
   wrap.appendChild(head);
-  auto.forEach(e=>{
+  const evRow = e=>{
     const t = evLook(e); const row = document.createElement("div");
-    row.className = "ann-item auto";
+    row.className = "ann-item auto" + (e.type==="ritual" ? " is-ritual" : "");
     row.innerHTML = `<span class="ann-date">${dateLabel(e)}</span>
       <span class="ann-text"><span class="ev-tag" style="background:${t.color}">${esc(tagLabel(e))}</span>${esc(e.title)}${e.time?`・${esc(e.time)}`:""}${e.note?`<br><span style="color:var(--text-dim);font-size:.92em;white-space:pre-wrap">${esc(e.note)}</span>`:""}</span>`;
-    wrap.appendChild(row);
-  });
+    return row;
+  };
+  auto.forEach(e=> wrap.appendChild(evRow(e)));
+  if(courses.length){
+    const box = document.createElement("div"); box.className = "ann-fold" + (boardFold[zoneKey] ? " open" : "");
+    box.innerHTML = `<button type="button" class="ann-fold-h"><span>近 7 天課程</span><b>${courses.length} 堂</b><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="ann-fold-body"></div>`;
+    courses.forEach(e=> box.querySelector(".ann-fold-body").appendChild(evRow(e)));
+    box.querySelector(".ann-fold-h").addEventListener("click", ()=>{ boardFold[zoneKey] = !boardFold[zoneKey]; box.classList.toggle("open"); });
+    wrap.appendChild(box);
+  }
   list.forEach((a, idx)=>{
     const row = document.createElement("div");
     row.className = "ann-item";
@@ -1562,7 +1588,7 @@ function evLook(e){
 function tagLabel(e){ return (e.type==="course" && e.course && e.title===e.course) ? "課程" : evLook(e).label; }
 function chipText(e){
   if(e.type === "order") return "出單截止";
-  if(e.type === "course") return e.course || e.title;
+  if(e.type === "course") return (e.course || e.title).replace(/[班課]$/,"");   // 「八字體驗班」→「八字體驗」，格子裡不會斷出一個「班」字
   return e.title;
 }
 const calView = {};                         // 各區目前看的月份與選取日
@@ -1814,13 +1840,26 @@ $("#e-del").addEventListener("click", async ()=>{
   const ok = await commitEvents(list=>{ const i = list.findIndex(x=> x.id===id); if(i>=0) list.splice(i,1); }, "已刪除");
   if(ok) closeModal("ev-modal");
 });
-const DAILY = [{"k": "經典", "q": "欲識三元萬法宗，先觀帝載與神功。", "s": "《滴天髓・通天論》", "n": "想學懂命理的大道理，先看天地陰陽怎麼運轉。"}, {"k": "人生", "q": "自知者不怨人，知命者不怨天。", "s": "《荀子・榮辱》", "n": "看懂自己的人不怪別人，看懂命的人不怪老天。"}, {"k": "精華", "q": "看八字，先看月令。\n生在哪個月，決定五行誰旺誰衰，是整張命盤的提綱。", "s": "學習精華（整理自《子平真詮》）", "n": "月令就是出生月份的地支，先抓住它，後面才不會亂。"}, {"k": "經典", "q": "能知衰旺之真機，其於三命之奧，思過半矣。", "s": "《滴天髓・衰旺》", "n": "看得懂日主強還是弱，八字就懂了一大半。"}, {"k": "人生", "q": "天行健，君子以自強不息。", "s": "《易經・乾卦・象傳》", "n": "天天運行不停，人也要天天進步。"}, {"k": "經典", "q": "八字用神，專求月令。", "s": "《子平真詮・論用神》", "n": "找用神，先從出生月份下手。"}, {"k": "精華", "q": "日主是「我」，其他七個字是我遇到的人事物。\n先問「我」是強是弱，再談喜歡什麼、怕什麼。", "s": "學習精華", "n": "日主＝日柱的天干。強弱沒判斷好，後面的喜忌都會錯。"}, {"k": "人生", "q": "樂天知命，故不憂。", "s": "《易經・繫辭上》", "n": "明白自己的命、順著時勢走，心裡就不慌。"}, {"k": "經典", "q": "一清到底有精神，管取生平富貴真。", "s": "《滴天髓・清濁》", "n": "命局五行乾淨不雜，人就有精神、有格局。"}, {"k": "學苑勉語", "q": "技藝終未精，起舞對晨星。\n謙謙待諸事，遇事心不驚。", "s": "學苑勉語", "n": "功夫還沒練到家，就早起多練；對事謙虛，遇到事情就不慌。"}, {"k": "經典", "q": "滿盤濁氣令人苦，一局清枯也苦人。", "s": "《滴天髓・清濁》", "n": "太雜亂的命辛苦，太單薄的命也辛苦，平衡最重要。"}, {"k": "人生", "q": "命由我作，福自己求。", "s": "《了凡四訓・立命之學》", "n": "命理是看清方向，福氣還是要靠自己去做。"}, {"k": "精華", "q": "生我者為印，我生者為食傷，\n剋我者為官殺，我剋者為財，同我者為比劫。", "s": "學習精華・十神口訣", "n": "十神就是從「我」出發，看其他五行跟我是什麼關係。"}, {"k": "經典", "q": "休咎係乎運，尤係乎歲。", "s": "《滴天髓・歲運》", "n": "好壞看大運，更要看當年的流年。"}, {"k": "人生", "q": "積善之家，必有餘慶。", "s": "《易經・坤卦・文言》", "n": "常做好事的家，福氣會留給後代。"}, {"k": "經典", "q": "論命惟以月令用神為主，然亦須配氣候而互參之。", "s": "《子平真詮・論用神配氣候得失》", "n": "看用神之外，也要看冷熱乾濕，季節很重要。"}, {"k": "精華", "q": "冬天出生的命要火來暖，夏天出生的命要水來潤，\n這就叫「調候」。", "s": "學習精華（整理自《窮通寶鑑》）", "n": "太冷太熱的命，先把溫度調好，其他才發揮得出來。"}, {"k": "人生", "q": "地勢坤，君子以厚德載物。", "s": "《易經・坤卦・象傳》", "n": "大地包容萬物，人也要有厚道的心量。"}, {"k": "經典", "q": "何知其人富？財氣通門戶。", "s": "《滴天髓》", "n": "財星有根、又能流通，才是真正會聚財的命。"}, {"k": "人生", "q": "窮則變，變則通，通則久。", "s": "《易經・繫辭下》", "n": "走到底了就要變，變了才通，通了才能長久。"}, {"k": "經典", "q": "何知其人貴？官星有理會。", "s": "《滴天髓》", "n": "官星用得恰當、有被照顧到，貴氣才會顯出來。"}, {"k": "精華", "q": "大運管十年的大方向，流年管一年的起伏。\n看事情，先看運，再看歲。", "s": "學習精華（整理自《滴天髓》）", "n": "大運像季節，流年像天氣。"}, {"k": "人生", "q": "君子藏器於身，待時而動。", "s": "《易經・繫辭下》", "n": "本事先練好放在身上，時機到了再出手。"}, {"k": "經典", "q": "何知其人吉？喜神為輔弼。", "s": "《滴天髓》", "n": "一生比較順的人，是喜用神一直在旁邊幫忙。"}, {"k": "人生", "q": "禍兮福之所倚，福兮禍之所伏。", "s": "《道德經・第五十八章》", "n": "壞事裡藏著好事，好事裡也藏著壞事。"}, {"k": "經典", "q": "天地之間，一氣而已，惟有動靜，遂分陰陽。", "s": "《子平真詮・論十干十二支》", "n": "陰陽不是兩樣東西，是同一股氣的動與靜。"}, {"k": "精華", "q": "天干透出來的看得見，地支藏著的力量更大。\n看根，比看表面重要。", "s": "學習精華", "n": "天干有沒有在地支扎根，決定它是真有力還是虛有其表。"}, {"k": "人生", "q": "謙謙君子，卑以自牧。", "s": "《易經・謙卦・象傳》", "n": "越有本事的人越謙虛，用謙虛來修養自己。"}, {"k": "經典", "q": "五陽皆陽丙為最，五陰皆陰癸為至。", "s": "《滴天髓・天干》", "n": "陽干裡丙火最陽，陰干裡癸水最陰。"}, {"k": "人生", "q": "從前種種，譬如昨日死；從後種種，譬如今日生。", "s": "《了凡四訓》", "n": "過去的就放下，從今天開始重新來過。"}, {"k": "經典", "q": "財官印食，此用神之善而順用之者也；\n煞傷劫刃，用神之不善而逆用之者也。", "s": "《子平真詮・論用神》", "n": "好的十神要順著用，凶的十神要想辦法制住來用。"}, {"k": "精華", "q": "地支相沖代表變動，相合代表牽絆。\n沖不一定壞，合也不一定好。", "s": "學習精華", "n": "要看沖掉的是喜神還是忌神，合住的是好東西還是壞東西。"}, {"k": "人生", "q": "知人者智，自知者明。", "s": "《道德經・第三十三章》", "n": "看懂別人是聰明，看懂自己才是真明白。"}, {"k": "經典", "q": "當順而順，當逆而逆，配合得宜，皆為貴格。", "s": "《子平真詮・論用神》", "n": "該順就順、該制就制，搭配得好，什麼格局都能好。"}, {"k": "人生", "q": "莫之為而為者，天也；莫之致而至者，命也。", "s": "《孟子・萬章上》", "n": "沒去做卻發生的是天意，沒去求卻來了的是命。"}, {"k": "經典", "q": "五陽從氣不從勢，五陰從勢無情義。", "s": "《滴天髓・天干》", "n": "陽干比較有骨氣，不輕易順從；陰干比較會順勢。"}, {"k": "精華", "q": "喜用神就是命局最需要的那個五行。\n找到它，就知道人生要往哪裡補。", "s": "學習精華", "n": "顏色、方位、行業、交朋友，都可以往喜用神的方向靠。"}, {"k": "人生", "q": "千里之行，始於足下。", "s": "《道德經・第六十四章》", "n": "再遠的路，也是從腳下這一步開始。"}, {"k": "經典", "q": "人稟天地，命屬陰陽，生居覆載之內，盡在五行之中。", "s": "《繼善篇》（收錄於《淵海子平》）", "n": "人生在天地之間，命就在陰陽五行裡。"}, {"k": "人生", "q": "知命者不立乎巖牆之下。", "s": "《孟子・盡心上》", "n": "懂命的人不會故意站在危牆下，知命也要懂得避險。"}, {"k": "經典", "q": "欲知貴賤，先觀月令乃提綱；\n次斷吉凶，專用日干為主本。", "s": "《繼善篇》（收錄於《淵海子平》）", "n": "高低看月令，吉凶看日主。"}, {"k": "精華", "q": "同一個八字，不同的人生。\n命是底牌，運是時機，努力是出牌的方式。", "s": "學習精華・論命心法", "n": "命盤不是判決書，是使用說明書。"}, {"k": "人生", "q": "業精於勤，荒於嬉；行成於思，毀於隨。", "s": "韓愈《進學解》", "n": "學問靠勤勞變精，靠思考做好；玩樂和隨便會毀掉它。"}, {"k": "經典", "q": "三元要成格局，四柱喜見財官。", "s": "《繼善篇》（收錄於《淵海子平》）", "n": "命局要成格局，四柱裡見到財星官星多半是好事。"}, {"k": "人生", "q": "博學之，審問之，慎思之，明辨之，篤行之。", "s": "《中庸》", "n": "多學、多問、多想、分辨清楚，最後要真的去做。"}, {"k": "經典", "q": "用神不可損傷，日主最宜健旺。", "s": "《繼善篇》（收錄於《淵海子平》）", "n": "用神不要被剋壞，日主自己要有力量。"}, {"k": "精華", "q": "斷命不是嚇人，是幫人看清楚：\n好時知道把握，壞時知道保守。", "s": "學習精華・論命心法", "n": "說話先給方向，再講風險，客人才聽得進去。"}, {"k": "人生", "q": "溫故而知新，可以為師矣。", "s": "《論語・為政》", "n": "把學過的反覆溫習，每次都有新體會，就能教別人了。"}, {"k": "經典", "q": "取用憑於生月，當推究於淺深；\n發覺在於日時，要消詳於強弱。", "s": "《繼善篇》（收錄於《淵海子平》）", "n": "取用神看出生月，事情何時發生看日時，還要細看強弱。"}, {"k": "人生", "q": "不知命，無以為君子也。", "s": "《論語・堯曰》", "n": "不懂得命，就很難成為真正有修養的人。"}, {"k": "經典", "q": "論運與看命，無二法也。", "s": "《子平真詮・論行運》", "n": "看大運跟看本命用的是同一套方法。"}, {"k": "人生", "q": "一命二運三風水，四積陰德五讀書。", "s": "民間俗諺", "n": "命和運之外，環境、做好事、讀書，都會改變人生。"}, {"k": "經典", "q": "甲木參天，脫胎要火。", "s": "《滴天髓・天干》", "n": "甲木像參天大樹，要有火來讓它發光發熱。"}, {"k": "經典", "q": "丁火柔中，內性昭融。", "s": "《滴天髓・天干》", "n": "丁火像燭光，外表柔和，內在明亮。"}];
+let QUOTES = null;                                            // 1200 句存在雲端，第一次抓下來後存在這台裝置，一週更新一次
+function loadQuotes(){
+  if(loadQuotes.p) return loadQuotes.p;
+  try{ const c = JSON.parse(localStorage.getItem("portal-quotes") || "null");
+       if(c && c.items && c.items.length && Date.now() - c.at < 7*864e5){ QUOTES = c; return loadQuotes.p = Promise.resolve(); } }catch(e){}
+  return loadQuotes.p = fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.portal_daily_quotes&select=data`,{headers:sbHeaders()})
+    .then(r=> r.ok ? r.json() : null)
+    .then(rows=>{ const d = rows && rows[0] && rows[0].data; if(!d || !d.items) return;
+      QUOTES = { ...d, at:Date.now() }; try{ localStorage.setItem("portal-quotes", JSON.stringify(QUOTES)); }catch(e){}
+      renderDaily(); })
+    .catch(()=>{});
+}
 // 每天換一句：從 2026/10/1 開始依序輪，台灣時間過午夜就換
 function renderDaily(){
   const el = document.getElementById("daily-teacher"); if(!el) return;
   const now = new Date(Date.now() + 8*3600e3);                         // 台灣時間
   const day = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - Date.UTC(2026,9,1)) / 864e5);
-  const it = DAILY[((day % DAILY.length) + DAILY.length) % DAILY.length];
+  if(!QUOTES){ el.style.display = "none"; loadQuotes().then(()=>{ if(QUOTES) renderDaily(); }); return; }
+  const L = QUOTES.items, it = L[((day % L.length) + L.length) % L.length];
+  el.style.display = "";
   el.innerHTML = `<div class="daily-h"><span>今日一句</span><span class="kind">${esc(it.k)}</span><span class="dt">${now.getUTCMonth()+1}/${now.getUTCDate()}（${WD[now.getUTCDay()]}）</span></div>
     <div class="daily-q">${esc(it.q)}</div>
     <div class="daily-src">— ${esc(it.s)}</div>
