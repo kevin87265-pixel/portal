@@ -473,9 +473,9 @@ body.calviewing{overflow:hidden;}
 .ann-rich{white-space:normal !important;}
 .ann-line{display:block;}
 @media (max-width:600px){.ann-rich{flex-basis:100%;}}
-.ann-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:6px 0 2px;}
-.ann-chip{display:block;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:5px 9px;font-size:.9em;font-weight:500;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ann-chip b{color:var(--gold);font-weight:700;margin-right:6px;font-variant-numeric:tabular-nums;}
+.ann-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin:6px 0 2px;}
+.ann-chip{display:block;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:5px 9px;font-size:.9em;font-weight:500;line-height:1.5;white-space:normal;word-break:keep-all;}
+.ann-chip b{white-space:nowrap;color:var(--gold);font-weight:700;margin-right:6px;font-variant-numeric:tabular-nums;}
 .is-ritual .ann-chip{background:rgba(255,255,255,.7);border-color:rgba(178,76,58,.18);}
 .is-ritual .ann-chip b{color:#b24c3a;}
 .ann-time{font-size:.92em;color:var(--text-dim);font-weight:500;}
