@@ -817,7 +817,7 @@ function render(){
   countUp();
   requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.c-bar i').forEach(i=>i.style.width=i.dataset.w+'%')));
   $('#out').onclick=logout;
-  document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{if(S.tab===b.dataset.t)return;S.tab=b.dataset.t;firstPaint=true;render();load(false);scrollTo({top:0});});
+  document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{if(S.tab===b.dataset.t)return;S.tab=b.dataset.t;firstPaint=true;load(true);scrollTo({top:0});});
   const pm=$('#pm'),nm=$('#nm');
   if(pm)pm.onclick=()=>{S.month=shift(S.month,-1);S.me=null;S.all=null;load(true);};
   if(nm)nm.onclick=()=>{if(S.month>=nowMonth())return;S.month=shift(S.month,1);S.me=null;S.all=null;load(true);};
@@ -826,26 +826,35 @@ function render(){
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{S.tab='cust';S.ctab=b.dataset.go;firstPaint=true;render();load(false);scrollTo({top:0});});
   const cq=$('#cq');if(cq)cq.oninput=()=>{S.cq=cq.value;const pos=cq.selectionStart;render();const n=$('#cq');n.focus();n.setSelectionRange(pos,pos);};
 }
+/* 上次的資料先存在手機裡，打開馬上顯示，再背景更新 */
+function lcKey(){return 'perfc_'+S.name;}
+function lcGet(k){try{const o=JSON.parse(localStorage.getItem(lcKey())||'{}');return o[k];}catch(e){return null;}}
+function lcPut(k,v){try{const o=JSON.parse(localStorage.getItem(lcKey())||'{}');o[k]=v;localStorage.setItem(lcKey(),JSON.stringify(o));}catch(e){}}
+function lcClear(){try{Object.keys(localStorage).filter(k=>k.indexOf('perfc_')===0).forEach(k=>localStorage.removeItem(k));}catch(e){}}
 async function load(clear){
   if(!S.token)return;const id=++S.req;
-  if(clear){S.net=false;render();}
+  const tab=S.tab,month=S.month;
+  if(clear){S.net=false;
+    if(tab==='all'){if(!S.all)S.all=lcGet('all_'+month)||null;}else if(!S.me){S.me=lcGet('me_'+month)||null;}
+    if(!(S.cust&&S.cust[month])){const c=lcGet('cu_'+month);if(c){S.cust=S.cust||{};S.cust[month]=c;}}
+    render();}
+  loadCfg();
+  const wantCust=tab==='cust'||(tab==='month'&&month>=nowMonth());
+  const pc=wantCust?api({action:'perfCustomers',token:S.token,month}).catch(()=>null):null;
   try{
-    const tab=S.tab,month=S.month;
     const r=await api({action:tab==='all'?'perfAll':'perfMe',token:S.token,month});
     if(id!==S.req)return;
     if(r&&r.relogin){expire();return;}
     if(!r||!r.ok)throw new Error(r&&r.err||'bad');
-    if(tab==='all')S.all=r;else{S.me=r;if(r.name)S.name=r.name;}
+    if(tab==='all'){S.all=r;lcPut('all_'+month,r);}else{S.me=r;if(r.name)S.name=r.name;lcPut('me_'+month,r);}
     S.net=false;render();
-    loadCfg();
-    if(tab==='cust'||(tab==='month'&&month>=nowMonth()&&!(S.cust&&S.cust[month]))){const c=await api({action:'perfCustomers',token:S.token,month});
-      if(id!==S.req)return;if(c&&c.ok){S.cust=S.cust||{};S.cust[month]=c.customers||[];render();}}
   }catch(e){if(id!==S.req)return;S.net=true;render();}
+  if(pc){const c=await pc;if(id!==S.req)return;if(c&&c.ok){S.cust=S.cust||{};S.cust[month]=c.customers||[];lcPut('cu_'+month,S.cust[month]);render();}}
 }
 function startTimer(){clearInterval(S.timer);S.timer=setInterval(()=>{if(S.token&&!document.hidden&&!(document.activeElement&&document.activeElement.tagName==='INPUT'))load(false);},60000);}
 function clearSess(){setTint(1);firstPaint=true;clearInterval(S.timer);S.token='';S.me=null;S.all=null;S.cust={};S.tab='month';try{sessionStorage.removeItem('perf3');}catch(e){}}
 function expire(){clearSess();renderLogin('登入已逾時，請重新登入');}
-async function logout(){const t=S.token;clearSess();renderLogin();toast('已登出');try{await api({action:'perfLogout',token:t});}catch(e){}}
+async function logout(){const t=S.token;lcClear();clearSess();renderLogin();toast('已登出');try{await api({action:'perfLogout',token:t});}catch(e){}}
 
 /* ====== 手機鍵盤：把正在填的欄位（連同標題）捲到可見區中央 ====== */
 function centerField(el){
