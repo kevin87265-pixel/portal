@@ -336,6 +336,35 @@ body.editing #editbar{display:flex;}
 .rite-more b{color:#8f6524;font-weight:700;}
 @media (max-width:420px){.rite-date{min-width:96px;padding:16px 8px;}.rite-days{font-size:32px;}.rite-title{font-size:21px;}.rite-body{padding:16px 14px 14px 16px;}}
 
+/* ---------- 待審核提醒條／本週提醒／資料頁模式 ---------- */
+.pend-bar{margin-top:16px;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:#fff7e8;border:1px solid var(--gold-line);box-shadow:var(--shadow);}
+.pend-bar[hidden],.remind[hidden]{display:none !important;}
+.pend-bar.quiet{background:var(--bg-card);border-color:var(--line);box-shadow:none;padding:11px 14px;}
+.pend-bar .pb-ico{flex:0 0 auto;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--gold-soft);font-size:18px;}
+.pend-bar .pb-txt{flex:1;min-width:0;line-height:1.5;}
+.pend-bar .pb-txt b{display:block;font-size:15px;color:var(--text);}
+.pend-bar .pb-txt span{display:block;font-size:12.5px;color:var(--text-dim);}
+.pend-bar a{flex:0 0 auto;text-decoration:none;background:var(--gold);color:#fff;border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:700;letter-spacing:.06em;white-space:nowrap;}
+.pend-bar.quiet a{background:transparent;color:var(--gold);border:1px solid var(--gold-line);font-weight:600;}
+.remind{margin-top:16px;padding:16px;border-radius:18px;background:var(--bg-card);border:1px solid var(--line);box-shadow:var(--shadow);}
+.rm-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.rm-h b{font-family:'Noto Serif TC',serif;font-size:17px;color:var(--gold);letter-spacing:.1em;}
+.rm-h span{font-size:12.5px;color:var(--text-dim);}
+#rm-text{width:100%;min-height:180px;border:1px solid var(--line-strong);border-radius:12px;padding:12px;font-family:inherit;font-size:14px;line-height:1.7;background:var(--bg);color:var(--text);resize:vertical;}
+.rm-note{font-size:12.5px;color:var(--text-dim);margin-top:8px;line-height:1.6;}
+.rm-note:empty{display:none;}
+.rm-acts{display:flex;gap:10px;margin-top:12px;}
+.rm-acts button{flex:1;height:46px;border-radius:14px;border:1px solid var(--line-strong);background:transparent;font-family:inherit;font-size:15px;letter-spacing:.1em;cursor:pointer;color:var(--text);}
+.rm-acts .primary{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:700;}
+.viewer-share{display:inline-flex;align-items:center;gap:4px;flex-shrink:0;width:72px;justify-content:flex-end;border:0;background:none;color:var(--text-dim);font-family:inherit;font-size:13px;cursor:pointer;}
+.viewer-share svg{width:17px;height:17px;}
+body.data-only header, body.data-only footer, body.data-only .zone-top, body.data-only .zone-hero,
+body.data-only .daily, body.data-only .board, body.data-only .pend-bar, body.data-only .remind, body.data-only .add-cat{display:none !important;}
+body.data-only .data-title{display:block;}
+.data-title{display:none;font-family:'Noto Serif TC',serif;font-size:20px;font-weight:900;letter-spacing:.12em;margin:4px 0 6px;color:var(--text);}
+body.remind-only header, body.remind-only footer, body.remind-only .zone-top, body.remind-only .zone-hero,
+body.remind-only .board, body.remind-only .cats, body.remind-only .add-cat{display:none !important;}
+
 /* ---------- 公告區 ---------- */
 .board{
   margin-top:16px;position:relative;overflow:hidden;
@@ -610,6 +639,12 @@ footer .foot-note{margin-top:16px;}
       <h2 class="zone-title">行政區</h2>
       <p class="hero-desc">財務・法會・管理系統</p>
     </div>
+    <div class="remind" id="remind-box">
+      <div class="rm-h"><b>本週提醒</b><span>自動寫好，複製貼到老師群組</span></div>
+      <textarea id="rm-text" readonly rows="8"></textarea>
+      <div class="rm-note" id="rm-note"></div>
+      <div class="rm-acts"><button type="button" id="rm-gen">重新產生</button><button type="button" class="primary" id="rm-copy">複製</button></div>
+    </div>
     <div class="board" data-board="admin"></div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="admin"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
@@ -625,8 +660,10 @@ footer .foot-note{margin-top:16px;}
       <h2 class="zone-title">老師區</h2>
       <p class="hero-desc">填單・積點・教學資源</p>
     </div>
+    <div class="pend-bar" id="pend-bar" hidden></div>
     <div class="daily" id="daily-teacher"></div>
     <div class="board" data-board="teacher"></div>
+    <div class="data-title">老師資料</div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="teacher"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
@@ -642,6 +679,7 @@ footer .foot-note{margin-top:16px;}
       <p class="hero-desc">積點・課程・官方 LINE</p>
     </div>
     <div class="board" data-board="student"></div>
+    <div class="data-title">學員資料</div>
     <div class="cats"></div>
     <button class="add-cat edit-only" data-zone="student"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新增分類</button>
   </div>
@@ -674,7 +712,7 @@ footer .foot-note{margin-top:16px;}
   <div class="viewer-bar">
     <button type="button" class="viewer-back" id="gallery-close" aria-label="返回"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>返回</span></button>
     <b id="gallery-title"></b>
-    <span style="width:72px;flex-shrink:0"></span>
+    <button type="button" class="viewer-share" id="gallery-share" aria-label="複製這頁連結"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span>連結</span></button>
   </div>
   <div class="gal-body" id="gallery-body"></div>
 </div>
@@ -815,6 +853,7 @@ footer .foot-note{margin-top:16px;}
   </div>
 </div>
 
+<script src="pending.js"></script>
 <script>
 /* ============================================================
    ① 基本設定
@@ -1868,6 +1907,91 @@ async function galSave(){
   }
 }
 
+/* ---------- 直接打開某個圖片集（回答問題時貼這個連結） ---------- */
+function findItemByName(name){
+  for(const z of ["teacher","student","admin"]){
+    const cats = state[z] || [];
+    for(let ci=0; ci<cats.length; ci++){
+      const items = cats[ci].items || [];
+      for(let ii=0; ii<items.length; ii++) if(items[ii].name === name) return { item:items[ii], zone:z, ci, ii };
+    }
+  }
+  return null;
+}
+function openByName(name){
+  const f = findItemByName(name); if(!f) return;
+  if(f.item.type === "gallery") openGallery(f.item, { zone:f.zone, ci:f.ci, ii:f.ii });
+}
+$("#gallery-share").addEventListener("click", ()=>{
+  if(!galItem) return;
+  const zone = (galPos && galPos.zone) || "teacher";
+  const base = zone === "student" ? "https://tinyurl.com/miiragic-student" : zone === "admin" ? "https://tinyurl.com/miiragic-admin" : "https://tinyurl.com/miiragic-teacher";
+  const url = `https://kevin87265-pixel.github.io/portal/?v=${zone[0]}&open=${encodeURIComponent(galItem.name)}`;
+  copyText(`${galItem.name}：${url}`, "已複製連結，貼給對方就會直接打開這一頁");
+});
+
+/* ---------- 老師區：積點待審核提醒（同一台裝置登入過積點系統就看得到） ---------- */
+async function renderPendBar(){
+  const bar = $("#pend-bar"); if(!bar || !window.MiiragicPending) return;
+  const r = await MiiragicPending.mine();
+  const go = MiiragicPending.POINTS_URL;
+  if(r.ok && r.total > 0){
+    const parts = []; if(r.e) parts.push("積點 "+r.e); if(r.p) parts.push("業績 "+r.p); if(r.r) parts.push("兌換 "+r.r);
+    bar.className = "pend-bar";
+    bar.innerHTML = `<span class="pb-ico">🔔</span><span class="pb-txt"><b>有 ${r.total} 筆夥伴等你審核</b><span>${parts.join("・")}</span></span><a href="${go}" target="_blank" rel="noopener">去審核</a>`;
+    bar.hidden = false;
+  }else if(!r.ok && r.reason === "login"){
+    bar.className = "pend-bar quiet";
+    bar.innerHTML = `<span class="pb-txt"><b style="font-size:14px">有沒有夥伴等你審核？</b><span>登入積點系統一次，之後這裡就會直接提醒你</span></span><a href="${go}" target="_blank" rel="noopener">打開積點</a>`;
+    bar.hidden = false;
+  }else{ bar.hidden = true; }
+}
+
+/* ---------- 行政區：本週提醒文字（複製貼到老師群組） ---------- */
+async function genRemind(){
+  const box = $("#rm-text"); if(!box || !state) return;
+  ensureCal(); ensureAnn();
+  const now = new Date(); now.setHours(0,0,0,0);
+  const end = new Date(now); end.setDate(end.getDate()+7);
+  const f = d => `${d.getMonth()+1}/${d.getDate()}（${WD[d.getDay()]}）`;
+  const tK = ymd(now), eK = ymd(end);
+  const inRange = (e, a, b) => { const last = e.end && e.end > e.date ? e.end : e.date; return last >= a && e.date <= b; };
+  const evs = state.events.filter(e=> e.type !== "internal" && e.to && e.to.teacher).sort((a,b)=> (a.date+(a.time||"")).localeCompare(b.date+(b.time||"")));
+  const L = [`【本週提醒】${f(now)}～${f(end)}`];
+  const lim30 = new Date(now); lim30.setDate(lim30.getDate()+30);
+  const rite = evs.find(e=> e.type === "ritual" && inRange(e, tK, ymd(lim30)));
+  if(rite){
+    const d = Math.round((new Date(rite.date+"T00:00") - now)/86400000);
+    L.push("", `🙏 ${rite.title}：${dateLabel(rite)}${d > 0 ? `（還有 ${d} 天）` : "（進行中）"}`);
+    if(rite.time) L.push(`　${rite.time}`);
+    if(rite.note) L.push(`　${rite.note}`);
+  }
+  const orders = evs.filter(e=> e.type === "order" && inRange(e, tK, eK));
+  if(orders.length){ L.push("", "⏰ 出單截止"); orders.forEach(e=> L.push(`・${dateLabel(e)}${e.time ? " "+e.time : ""}${e.title && e.title !== "出單截止" ? " "+e.title : ""}`)); }
+  const others = evs.filter(e=> e.type === "other" && inRange(e, tK, eK));
+  if(others.length){ L.push("", "📌 活動"); others.forEach(e=> L.push(`・${dateLabel(e)} ${e.title}${e.time ? " "+e.time : ""}`)); }
+  const courses = evs.filter(e=> e.type === "course" && inRange(e, tK, eK));
+  if(courses.length){ L.push("", "📚 本週課程"); courses.forEach(e=> L.push(`・${dateLabel(e)} ${e.title}${e.time ? " "+e.time : ""}`)); }
+  const back14 = new Date(now); back14.setDate(back14.getDate()-14); const bK = ymd(back14);
+  (state.ann.teacher || []).filter(a=> !a.date || a.date >= bK).forEach(a=>{
+    const lines = String(a.text||"").split("\n").map(x=> x.trim()).filter(Boolean);
+    if(lines.length){ L.push("", "📣 " + lines[0]); lines.slice(1).forEach(x=> L.push("・" + x)); }
+  });
+  if(L.length === 1) L.push("", "這週沒有出單截止、法會或課程。");
+  let note = "";
+  if(window.MiiragicPending){
+    const r = await MiiragicPending.byReferrer();
+    if(r.ok && r.list.length){ L.push("", "🔔 等你審核的夥伴申請", r.list.map(x=> `${x.name} ${x.total} 筆`).join("、"), "請記得進積點系統審核，夥伴才拿得到點數"); }
+    else if(r.ok && !r.isAdmin) note = "現在這台裝置登入的不是積點管理員帳號，只算得到那位老師自己的部分。";
+    else if(!r.ok) note = "想在提醒裡點名「誰還有夥伴沒審核」：先在這台裝置登入積點系統的管理員帳號，再按「重新產生」。";
+  }
+  L.push("", "價格、課表、規則都在這裡：", "https://tinyurl.com/miiragic-teacher");
+  box.value = L.join("\n");
+  $("#rm-note").textContent = note;
+}
+$("#rm-gen") && $("#rm-gen").addEventListener("click", ()=>{ genRemind(); toast("已重新產生"); });
+$("#rm-copy") && $("#rm-copy").addEventListener("click", ()=> copyText($("#rm-text").value, "已複製，貼到老師群組就好"));
+
 /* ---------- 官方LINE：複製連結／ID、傳給好友 ---------- */
 let lineItem = null;
 function lineText(it){ return `${it.name || "官方 LINE"}\n加好友連結：${it.url}${it.lineId ? `\nLINE ID：${it.lineId}` : ""}`; }
@@ -2199,7 +2323,7 @@ function renderDaily(){
     <div class="daily-src">— ${esc(it.s)}</div>
     ${it.n ? `<div class="daily-note"><b>白話</b>${esc(it.n)}</div>` : ""}`;
 }
-function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); }
+function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); if(currentZone==="admin") genRemind(); }
 
 /* ============================================================
    ⑤ 系統編輯表單
@@ -2296,6 +2420,8 @@ function show(zone){
   { const hr = document.querySelector('[data-rite="home"]'); if(hr) hr.style.display = ZONES.includes(zone) ? "none" : ""; }
   ZONES.forEach(z=> document.getElementById("zone-"+z).classList.toggle("active", zone===z));
   window.scrollTo(0,0);
+  if(zone==="teacher") renderPendBar();
+  if(zone==="admin") genRemind();
 }
 const ZONE_LABEL = { admin:"行政區", teacher:"老師區", student:"學員區" };
 function enterZone(zone){
@@ -2315,7 +2441,18 @@ const startZone =
   location.hash === "#teacher" || q.get("v")==="t" ? "teacher"
   : location.hash === "#student" || q.get("v")==="s" ? "student"
   : location.hash === "#admin" ? "admin" : null;
-if(startZone) enterZone(startZone);
+const DATA_ZONE = q.get("data"), VIEW = q.get("view"), OPEN = q.get("open");
+if(DATA_ZONE === "teacher" || DATA_ZONE === "student"){
+  // 給業績系統、學員專區嵌入用的「資料」頁：只留分類卡片
+  const okKey = DATA_ZONE === "student" || q.get("k") === ZONE_PASSWORDS.teacher || localStorage.getItem("portal-unlock-teacher") === "1";
+  document.body.classList.add("data-only");
+  if(okKey) show(DATA_ZONE); else enterZone(DATA_ZONE);
+}else if(VIEW === "remind"){
+  // 給行政後台嵌入用：只留本週提醒
+  if(q.get("k") === ZONE_PASSWORDS.admin || localStorage.getItem("portal-unlock-admin") === "1"){ document.body.classList.add("remind-only"); show("admin"); }
+  else enterZone("admin");
+}else if(startZone) enterZone(startZone);
+if(OPEN) setTimeout(()=> openByName(OPEN), 400);
 
 /* ============================================================
    ⑧ 主題與字級（記住選擇；首次跟隨手機系統）
