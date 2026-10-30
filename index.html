@@ -339,6 +339,8 @@ body.editing #editbar{display:flex;}
 /* ---------- 待審核提醒條／本週提醒／資料頁模式 ---------- */
 .pend-bar{margin-top:16px;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:#fff7e8;border:1px solid var(--gold-line);box-shadow:var(--shadow);}
 .pend-bar[hidden],.remind[hidden]{display:none !important;}
+#zone-admin .remind{display:none;}
+body.remind-only #zone-admin .remind{display:block;}
 .pend-bar.quiet{background:var(--bg-card);border-color:var(--line);box-shadow:none;padding:11px 14px;}
 .pend-bar .pb-ico{flex:0 0 auto;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--gold-soft);font-size:18px;}
 .pend-bar .pb-txt{flex:1;min-width:0;line-height:1.5;}
@@ -2323,7 +2325,7 @@ function renderDaily(){
     <div class="daily-src">— ${esc(it.s)}</div>
     ${it.n ? `<div class="daily-note"><b>白話</b>${esc(it.n)}</div>` : ""}`;
 }
-function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); if(currentZone==="admin") genRemind(); }
+function renderAll(){ renderDaily(); ensureAnn(); ensureCal(); if(calZone) renderCal(calZone); renderZone("admin","zone-admin"); renderZone("teacher","zone-teacher"); renderZone("student","zone-student"); renderBoard("admin"); renderBoard("teacher"); renderBoard("student"); if(currentZone==="admin" && document.body.classList.contains("remind-only")) genRemind(); }
 
 /* ============================================================
    ⑤ 系統編輯表單
@@ -2421,7 +2423,7 @@ function show(zone){
   ZONES.forEach(z=> document.getElementById("zone-"+z).classList.toggle("active", zone===z));
   window.scrollTo(0,0);
   if(zone==="teacher") renderPendBar();
-  if(zone==="admin") genRemind();
+  if(zone==="admin" && document.body.classList.contains("remind-only")) genRemind();
 }
 const ZONE_LABEL = { admin:"行政區", teacher:"老師區", student:"學員區" };
 function enterZone(zone){
