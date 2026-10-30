@@ -414,6 +414,18 @@ details.cust summary::-webkit-details-marker{display:none}
 .gname{font-size:19px}
 .ghi{font-size:14px;color:#3f2c0d}
 @media (max-width:380px){.gname{font-size:17px}}
+.todo .td{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.todo .td:first-of-type{border-top:0;padding-top:2px}
+.td-ic{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#f6ead0;color:#7d5f26}
+.td-ic svg{width:22px;height:22px}
+.todo .mid{flex:1;min-width:0}.todo .mid b{display:block;font-weight:700}.todo .mid span{display:block;font-size:13px;color:var(--sub);text-wrap:pretty}
+.todo .mid span b{display:inline;color:#a8473b;font-size:15px}
+.td-btn{flex:none;min-height:40px;padding:0 14px;display:inline-flex;align-items:center;border-radius:12px;background:linear-gradient(180deg,#2a4b72,#16314f);color:#f3dfa6;font-size:14px;text-decoration:none;border:0;white-space:nowrap;font-family:inherit}
+.lk{display:flex;align-items:center;gap:10px;min-height:52px;padding:8px 0;border-top:1px solid var(--line);color:inherit;text-decoration:none}
+.lk:first-of-type{border-top:0}.lk .mid{flex:1;min-width:0}.lk .mid b{display:block;font-weight:700}.lk .mid span{font-size:13px;color:var(--sub)}
+.lk svg{width:18px;height:18px;color:var(--gold-d);flex:none}
+.seg button{white-space:nowrap}
+@media (max-width:400px){.seg button{font-size:13px;padding:0 2px}}
 </style>
 </head>
 <body>
@@ -474,7 +486,7 @@ function theme(el,i){const r=RANKS[i];el.style.setProperty('--main',r.main);el.s
 function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.remove(),300);},2600);}
 
 /* ====== 狀態 ====== */
-const S={cust:{},token:'',name:'',role:'',tab:'month',month:nowMonth(),me:null,all:null,busy:false,net:false,timer:null,req:0};
+const S={cust:{},token:'',name:'',role:'',tab:'month',month:nowMonth(),me:null,all:null,busy:false,net:false,timer:null,req:0,cfg:null};
 try{const o=JSON.parse(sessionStorage.getItem('perf3')||'null');if(o&&o.token){S.token=o.token;S.name=o.name;S.role=o.role;}}catch(e){}
 
 /* ====== 後端 ====== */
@@ -545,7 +557,7 @@ const CORE=['陳捷容','羅文勳','蕭竣方','陳彩綺'];
 const STEPS=[{t:100000,p:2},{t:200000,p:5},{t:300000,p:8},{t:400000,p:10}];
 const TEAMP=[0,2,3,4,5]; /* 推薦人團隊業績抽成：依自己當月 PV 級距 */
 const RANKP=[60,68,75,82,90,97,105,112,120,127]; /* 聘階 %（依正式老師獎金規則；總裁以上為暫定） */
-function tabsHTML(){const admin=S.role==='管理';const T=[['month','本月業績'],['cust','客戶'],['rank','團隊']];if(admin)T.push(['all','全公司']);
+function tabsHTML(){const admin=S.role==='管理';const T=[['month','本月業績'],['cust','客戶'],['rank','團隊'],['info','資料']];if(admin)T.push(['all','全公司']);
   return `<div class="seg" style="grid-template-columns:repeat(${T.length},1fr)">${T.map(([k,n])=>`<button data-t="${k}" class="${S.tab===k?'on':''}">${n}</button>`).join('')}</div>`;}
 function greetHTML(){const d=S.me,ri=d?rankOf(d.rank,d.cum):-1,r=ri>=0?RANKS[ri]:null;
   const c=r?r.dark:'#3f2c0d';return `<span class="greet" style="--gc:${c}"><em class="gname">${esc(S.name)}</em>${r?`<em class="gname">${r.k}</em>`:''}<span class="ghi">您好</span></span>`;}
@@ -630,18 +642,21 @@ function douDue(c){return (c.dou||[]).map(d=>{
   if(d.type==='年斗'){const e=eveAfter(d.month);return {...d,dueMonth:e?e.getFullYear()+'.'+String(e.getMonth()+1).padStart(2,'0'):'',dueText:e?`${e.getFullYear()}/${e.getMonth()+1}/${e.getDate()}（除夕）`:'—'};}
   const st=d.after?shift(d.month,1):d.month,last=shift(st,2);return {...d,dueMonth:last,dueText:`${last} 法會後`,from:st};
 }).sort((a,b)=>a.dueMonth<b.dueMonth?1:-1);}
-function custView(){
-  const cs=S.cust&&S.cust[S.month];
-  if(!cs)return monthBar()+`<div class="sk" style="height:200px"></div><div class="sk gap" style="height:260px"></div>`;
-  const M=S.month,next=shift(M,1),mm=+M.split('.')[1];
-  const {done,todo,suggest}=custAdvice(cs,M);
-  // 斗燈到期通知：每位客人取最新一筆
+function douNotes(cs,M){const next=shift(M,1);
   const notes=[];cs.forEach(c=>{['年斗','季斗'].forEach(tp=>{const d=douDue(c).find(x=>x.type===tp);if(!d||!d.dueMonth)return;
     if(tp==='年斗'&&d.dueMonth<M)notes.push({c,d,lv:'over',txt:`今年年斗還沒續（${d.dueText}已到期）`});
     else if(d.dueMonth<M&&d.dueMonth>=shift(M,-2))notes.push({c,d,lv:'over',txt:`${tp}已到期（${d.dueText}），還沒續`});
     else if(d.dueMonth===M)notes.push({c,d,lv:'now',txt:tp==='季斗'?'本月最後一期，提醒續斗':`年斗將於 ${d.dueText} 到期`});
     else if(d.dueMonth===next||(tp==='年斗'&&d.dueMonth===shift(M,2)))notes.push({c,d,lv:'soon',txt:tp==='季斗'?'下個月最後一期':`年斗將於 ${d.dueText} 到期`});});});
   notes.sort((a,b)=>({over:0,now:1,soon:2}[a.lv]-{over:0,now:1,soon:2}[b.lv]));
+  return notes;}
+function custView(){
+  const cs=S.cust&&S.cust[S.month];
+  if(!cs)return monthBar()+`<div class="sk" style="height:200px"></div><div class="sk gap" style="height:260px"></div>`;
+  const M=S.month,next=shift(M,1),mm=+M.split('.')[1];
+  const {done,todo,suggest}=custAdvice(cs,M);
+  // 斗燈到期通知：每位客人取最新一筆
+  const notes=douNotes(cs,M);
   const bday=cs.filter(c=>+c.bm===mm);
   const q=(S.cq||'').trim();
   const all=cs.filter(c=>!q||c.name.includes(q)).sort((a,b)=>(b.last||'').localeCompare(a.last||''));
@@ -668,10 +683,41 @@ function custView(){
   <div class="subtabs">${CT.map(([k,n,c])=>`<button data-ct="${k}" class="${ct===k?'on':''}">${n}<i>${c}</i></button>`).join('')}</div>
   <section class="pane">${panel}</section>`;
 }
+/* ====== 我的待辦（整合分工 B）====== */
+const SUPA='https://plgrsxtlaznajzqgcuqr.supabase.co',SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZ3JzeHRsYXpuYWp6cWdjdXFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5Njg1MDIsImV4cCI6MjA5MDU0NDUwMn0.XyZ0wQbZQ-CInglRpv-MHMuMvkviRovm-o-On_FeyGs';
+const FILL_URL='https://kevin87265-pixel.github.io/statistics.html/',POINTS_URL='https://kevin87265-pixel.github.io/miiragic-points/';
+async function loadCfg(){if(S.cfg)return;try{const r=await fetch(SUPA+'/rest/v1/game_data?id=eq.portal_config_main&select=data',{headers:{apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY}});const j=await r.json();S.cfg=(j&&j[0]&&j[0].data)||{};}catch(e){S.cfg={err:1};}render();}
+function nextRitual(){const ev=(S.cfg&&S.cfg.events)||[],t=new Date();t.setHours(0,0,0,0);
+  return ev.filter(e=>e.type==='ritual'&&e.date&&new Date((e.end||e.date)+'T23:59:59')>=t).sort((a,b)=>a.date<b.date?-1:1)[0]||null;}
+function todoHTML(){
+  if(S.month<nowMonth())return '';
+  const items=[];const t=new Date();t.setHours(0,0,0,0);
+  const r=nextRitual();
+  if(r){const d=Math.round((new Date(r.date+'T00:00:00')-t)/864e5);const [,mo,da]=r.date.split('-').map(Number);
+    items.push({ic:'fa',t:esc(r.title||'法會'),s:d>0?`還有 <b class="num">${d}</b> 天（${mo}/${da}），記得先填單`:d===0?'<b>今天</b>法會':'法會進行中',btn:'去填單',href:FILL_URL});}
+  else items.push({ic:'fa',t:'下一場法會',s:S.cfg?'日期還沒公布':'讀取中…',btn:'去填單',href:FILL_URL});
+  const cs=S.cust&&S.cust[nowMonth()];
+  if(cs){const n=douNotes(cs,nowMonth()).filter(x=>x.lv!=='over').length,mm=new Date().getMonth()+1,b=cs.filter(c=>+c.bm===mm).length;
+    items.push({ic:'dou',t:'斗燈快到期',s:n?`<b class="num">${n}</b> 位客人要提醒續斗`:'近期沒有到期的',btn:n?'看名單':'',ct:'dou'});
+    items.push({ic:'bd',t:'本月生日',s:b?`<b class="num">${b}</b> 位客人這個月生日`:'這個月沒有客人生日',btn:b?'看名單':'',ct:'bday'});}
+  else items.push({ic:'dou',t:'客戶提醒',s:'讀取中…'});
+  items.push({ic:'pt',t:'積點待審核',s:'審核下面夥伴的申請',btn:'去審核',href:POINTS_URL});
+  const ICO={fa:'<path d="M12 3v3M5.6 5.6l2 2M18.4 5.6l-2 2M4 13h16M6 13a6 6 0 0112 0M8 17h8M10 21h4"/>',dou:'<path d="M12 3c2 3 4 4.5 4 8a4 4 0 01-8 0c0-3.5 2-5 4-8zM9 21h6"/>',bd:'<path d="M4 21h16M5 21v-7h14v7M12 14V9M12 6.5a1 1 0 100-.01M8 14v-2M16 14v-2"/>',pt:'<path d="M9 11l3 3 8-8M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h9"/>'};
+  return `<section class="pane todo"><div class="pane-h"><h2>我的待辦</h2></div>
+  ${items.map(x=>`<div class="td"><i class="td-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICO[x.ic]}</svg></i>
+  <div class="mid"><b>${x.t}</b><span>${x.s}</span></div>
+  ${x.btn?(x.href?`<a class="td-btn" href="${x.href}" target="_blank" rel="noopener">${x.btn}</a>`:`<button class="td-btn" data-go="${x.ct}">${x.btn}</button>`):''}</div>`).join('')}
+  </section>`;}
+function infoView(){
+  if(!S.cfg)return `<div class="sk" style="height:260px"></div>`;
+  const cats=(S.cfg.teacher||[]).filter(c=>(c.items||[]).some(i=>i.url));
+  if(!cats.length)return `<section class="pane"><div class="empty">資料讀不到，請稍後再試</div></section>`;
+  return cats.map(c=>`<section class="pane"><div class="pane-h"><h2>${esc(c.category||'資料')}</h2></div>
+  ${(c.items||[]).filter(i=>i.url).map(i=>`<a class="lk" href="${esc(i.url)}" target="_blank" rel="noopener"><div class="mid"><b>${esc(i.name)}</b>${i.desc?`<span>${esc(i.desc)}</span>`:''}</div>${IC.right}</a>`).join('')}</section>`).join('');}
 function monthView(d){
   const m=d.mine||{amount:0,priced:true,items:[]},items=(m.items||[]).filter(x=>+x.n);
   const max=Math.max(1,...items.map(x=>m.amount?+x.a:+x.n));
-  return `${monthBar()}
+  return `${todoHTML()}${monthBar()}
   <section class="pane ink">
     ${m.priced===false?`<div class="warn">${IC.alert}<span>價目表還沒填，金額先顯示 0，件數是正確的。</span></div>`:''}
     <div class="kpi-lab">本月個人業績</div>
@@ -764,7 +810,7 @@ function allView(d){
 function render(){
   if(!S.token){renderLogin();return;}
   const d=S.tab==='all'?S.all:S.me;
-  let inner=S.tab==='cust'?custView():d?(S.tab==='all'?allView(d):S.tab==='rank'?rankView(d):monthView(d)):(S.net?`<section class="pane"><div class="empty"><b>目前無法取得業績</b>請檢查網路後按「重試」。</div></section>`:skeleton());
+  let inner=S.tab==='cust'?custView():S.tab==='info'?infoView():d?(S.tab==='all'?allView(d):S.tab==='rank'?rankView(d):monthView(d)):(S.net?`<section class="pane"><div class="empty"><b>目前無法取得業績</b>請檢查網路後按「重試」。</div></section>`:skeleton());
   $('#root').innerHTML=shell(inner);
   const card=document.querySelector('.card');if(card){theme(card,+card.dataset.rank);tilt();}
   if(S.me)setTint(rankOf(S.me.rank,S.me.cum));
@@ -777,6 +823,7 @@ function render(){
   if(nm)nm.onclick=()=>{if(S.month>=nowMonth())return;S.month=shift(S.month,1);S.me=null;S.all=null;load(true);};
   const rt=$('#retry');if(rt)rt.onclick=()=>load(false);
   document.querySelectorAll('[data-ct]').forEach(b=>b.onclick=()=>{S.ctab=b.dataset.ct;render();});
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{S.tab='cust';S.ctab=b.dataset.go;firstPaint=true;render();load(false);scrollTo({top:0});});
   const cq=$('#cq');if(cq)cq.oninput=()=>{S.cq=cq.value;const pos=cq.selectionStart;render();const n=$('#cq');n.focus();n.setSelectionRange(pos,pos);};
 }
 async function load(clear){
@@ -790,7 +837,8 @@ async function load(clear){
     if(!r||!r.ok)throw new Error(r&&r.err||'bad');
     if(tab==='all')S.all=r;else{S.me=r;if(r.name)S.name=r.name;}
     S.net=false;render();
-    if(tab==='cust'){const c=await api({action:'perfCustomers',token:S.token,month});
+    loadCfg();
+    if(tab==='cust'||(tab==='month'&&month>=nowMonth()&&!(S.cust&&S.cust[month]))){const c=await api({action:'perfCustomers',token:S.token,month});
       if(id!==S.req)return;if(c&&c.ok){S.cust=S.cust||{};S.cust[month]=c.customers||[];render();}}
   }catch(e){if(id!==S.req)return;S.net=true;render();}
 }
