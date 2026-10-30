@@ -705,7 +705,7 @@ function todoHTML(){
     items.push({ic:'bd',t:'本月生日',s:b?`<b class="num">${b}</b> 位客人這個月生日`:'這個月沒有客人生日',btn:b?'看名單':'',ct:'bday'});}
   else items.push({ic:'dou',t:'客戶提醒',s:'讀取中…'});
   {const pr=S.pend&&S.pend.r;let st='讀取中…';
-    if(pr){if(pr.ok&&pr.notReferrer)st='目前沒有要你審核的';else if(pr.ok)st=pr.total?`<b class="num">${pr.total}</b> 筆等你審核`:'都審完了';else if(pr.reason==='login')st='在這支手機登入積點系統一次，就會顯示筆數';else st='暫時讀不到';}
+    if(pr){if(pr.ok&&pr.notReferrer)st='目前沒有要你審核的';else if(pr.ok)st=pr.total?`<b class="num">${pr.total}</b> 筆等你審核`:'都審完了';else if(pr.reason==='login')st='登入積點系統後會顯示';else st='暫時讀不到';}
     items.push({ic:'pt',t:'積點待審核',s:st,btn:'去審核',href:POINTS_URL});}
   const ICO={fa:'<path d="M12 3v3M5.6 5.6l2 2M18.4 5.6l-2 2M4 13h16M6 13a6 6 0 0112 0M8 17h8M10 21h4"/>',dou:'<path d="M12 3c2 3 4 4.5 4 8a4 4 0 01-8 0c0-3.5 2-5 4-8zM9 21h6"/>',bd:'<path d="M4 21h16M5 21v-7h14v7M12 14V9M12 6.5a1 1 0 100-.01M8 14v-2M16 14v-2"/>',pt:'<path d="M9 11l3 3 8-8M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h9"/>'};
   return `<section class="pane todo"><div class="pane-h"><h2>我的待辦</h2></div>
