@@ -426,6 +426,24 @@ details.cust summary::-webkit-details-marker{display:none}
 .lk svg{width:18px;height:18px;color:var(--gold-d);flex:none}
 .seg button{white-space:nowrap}
 @media (max-width:400px){.seg button{font-size:13px;padding:0 2px}}
+.todo{padding-top:12px;padding-bottom:12px}
+.todo summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer;min-height:36px}
+.todo summary::-webkit-details-marker{display:none}
+.td-tt{font-family:var(--serif);font-size:16px;color:#3a2a12;white-space:nowrap}
+.td-chips{flex:1;min-width:0;display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end}
+.td-chips i{font-style:normal;font-size:12px;padding:2px 8px;border-radius:999px;background:#f6ead0;color:#7d5f26;white-space:nowrap}
+.td-chips i.hot{background:#fbe9e5;color:#a8473b;font-weight:700}
+.td-car{width:18px;height:18px;color:var(--gold-d);flex:none;transition:transform .2s}
+.todo[open] .td-car{transform:rotate(180deg)}
+.todo[open] summary{margin-bottom:6px}
+.todo .td{padding:8px 0}
+.todo .td-ic{width:32px;height:32px;border-radius:10px}.todo .td-ic svg{width:18px;height:18px}
+.todo .td-btn{min-height:34px;padding:0 12px;font-size:13px}
+.todo .mid b{font-size:14px}.todo .mid span{font-size:12px}
+.todo .td:first-of-type{padding-top:8px;border-top:1px solid var(--line)}
+.td-chips{flex-wrap:nowrap;gap:4px}.td-chips i{font-size:12px;padding:2px 7px}.td-chips i b{margin-left:2px;font-family:var(--num)}
+.todo summary{gap:8px}.td-tt{font-size:15px}
+@media (max-width:370px){.td-chips i{padding:2px 5px;font-size:11px}}
 </style>
 </head>
 <body>
@@ -697,22 +715,23 @@ function todoHTML(){
   const items=[];const t=new Date();t.setHours(0,0,0,0);
   const r=nextRitual();
   if(r){const d=Math.round((new Date(r.date+'T00:00:00')-t)/864e5);const [,mo,da]=r.date.split('-').map(Number);
-    items.push({ic:'fa',t:esc(r.title||'法會'),s:d>0?`還有 <b class="num">${d}</b> 天（${mo}/${da}），記得先填單`:d===0?'<b>今天</b>法會':'法會進行中',btn:'去填單',fill:1});}
-  else items.push({ic:'fa',t:'下一場法會',s:S.cfg?'日期還沒公布':'讀取中…',btn:'去填單',fill:1});
+    items.push({ic:'fa',t:esc(r.title||'法會'),s:d>0?`還有 <b class="num">${d}</b> 天（${mo}/${da}），記得先填單`:d===0?'<b>今天</b>法會':'法會進行中',btn:'去填單',fill:1,c:d>0?d+'天':'今天',hot:d<=7});}
+  else items.push({ic:'fa',t:'下一場法會',s:S.cfg?'日期還沒公布':'讀取中…',btn:'去填單',fill:1,c:'—'});
   const cs=S.cust&&S.cust[nowMonth()];
   if(cs){const n=douNotes(cs,nowMonth()).filter(x=>x.lv!=='over').length,mm=new Date().getMonth()+1,b=cs.filter(c=>+c.bm===mm).length;
-    items.push({ic:'dou',t:'斗燈快到期',s:n?`<b class="num">${n}</b> 位客人要提醒續斗`:'近期沒有到期的',btn:n?'看名單':'',ct:'dou'});
-    items.push({ic:'bd',t:'本月生日',s:b?`<b class="num">${b}</b> 位客人這個月生日`:'這個月沒有客人生日',btn:b?'看名單':'',ct:'bday'});}
+    items.push({ic:'dou',t:'斗燈快到期',s:n?`<b class="num">${n}</b> 位客人要提醒續斗`:'近期沒有到期的',btn:n?'看名單':'',ct:'dou',c:n,hot:n>0});
+    items.push({ic:'bd',t:'本月生日',s:b?`<b class="num">${b}</b> 位客人這個月生日`:'這個月沒有客人生日',btn:b?'看名單':'',ct:'bday',c:b,hot:b>0});}
   else items.push({ic:'dou',t:'客戶提醒',s:'讀取中…'});
   {const pr=S.pend&&S.pend.r;let st='讀取中…';
     if(pr){if(pr.ok&&pr.notReferrer)st='目前沒有要你審核的';else if(pr.ok)st=pr.total?`<b class="num">${pr.total}</b> 筆等你審核`:'都審完了';else if(pr.reason==='login')st='登入積點系統後會顯示';else st='暫時讀不到';}
-    items.push({ic:'pt',t:'積點待審核',s:st,btn:'去審核',href:POINTS_URL});}
+    items.push({ic:'pt',t:'積點待審核',s:st,btn:'去審核',href:POINTS_URL,c:pr&&pr.ok?(pr.total||0):'—',hot:!!(pr&&pr.ok&&pr.total)});}
   const ICO={fa:'<path d="M12 3v3M5.6 5.6l2 2M18.4 5.6l-2 2M4 13h16M6 13a6 6 0 0112 0M8 17h8M10 21h4"/>',dou:'<path d="M12 3c2 3 4 4.5 4 8a4 4 0 01-8 0c0-3.5 2-5 4-8zM9 21h6"/>',bd:'<path d="M4 21h16M5 21v-7h14v7M12 14V9M12 6.5a1 1 0 100-.01M8 14v-2M16 14v-2"/>',pt:'<path d="M9 11l3 3 8-8M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h9"/>'};
-  return `<section class="pane todo"><div class="pane-h"><h2>我的待辦</h2></div>
+  const LB={fa:'法會',dou:'斗燈',bd:'生日',pt:'審核'};
+  return `<details class="pane todo" id="todoBox" ${S.todoOpen?'open':''}><summary><b class="td-tt">我的待辦</b><span class="td-chips">${items.filter(x=>x.c!==undefined).map(x=>`<i class="${x.hot?'hot':''}">${LB[x.ic]}<b>${x.c}</b></i>`).join('')}</span><svg class="td-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
   ${items.map(x=>`<div class="td"><i class="td-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICO[x.ic]}</svg></i>
   <div class="mid"><b>${x.t}</b><span>${x.s}</span></div>
   ${x.btn?(x.fill?`<button class="td-btn" data-fill="1">${x.btn}</button>`:x.href?`<a class="td-btn" href="${x.href}" target="_blank" rel="noopener">${x.btn}</a>`:`<button class="td-btn" data-go="${x.ct}">${x.btn}</button>`):''}</div>`).join('')}
-  </section>`;}
+  </details>`;}
 /* 帶著登入狀態直接打開填單（同一個網站，填單不用再登入） */
 function goFill(){try{sessionStorage.setItem('sec_tok',S.token);localStorage.setItem('xlUser',S.name);}catch(e){}location.href=FILL_URL;}
 async function saveAlias(){const i=$('#aliasIn'),m=$('#aliasMsg'),v=(i.value||'').trim();
@@ -735,7 +754,7 @@ function infoView(){
 function monthView(d){
   const m=d.mine||{amount:0,priced:true,items:[]},items=(m.items||[]).filter(x=>+x.n);
   const max=Math.max(1,...items.map(x=>m.amount?+x.a:+x.n));
-  return `${todoHTML()}${monthBar()}
+  return `${monthBar()}
   <section class="pane ink">
     ${m.priced===false?`<div class="warn">${IC.alert}<span>價目表還沒填，金額先顯示 0，件數是正確的。</span></div>`:''}
     <div class="kpi-lab">本月個人業績</div>
@@ -746,6 +765,7 @@ function monthView(d){
       <div><div class="k">本月做了</div><div class="v num">${items.reduce((s,x)=>s+(+x.n||0),0)} <small style="font-size:14px">件</small></div></div>
     </div>
   </section>
+  ${todoHTML()}
   <div class="grid2"><div>
   <section class="pane">
     <div class="pane-h"><h2>本月做了什麼</h2><small>${items.length} 項</small></div>
@@ -842,6 +862,7 @@ function render(){
   const rt=$('#retry');if(rt)rt.onclick=()=>load(false);
   document.querySelectorAll('[data-ct]').forEach(b=>b.onclick=()=>{S.ctab=b.dataset.ct;render();});
   document.querySelectorAll('[data-fill]').forEach(b=>b.onclick=goFill);
+  const tb=$('#todoBox');if(tb)tb.ontoggle=()=>{S.todoOpen=tb.open;};
   const sa=$('#saveAlias');if(sa)sa.onclick=saveAlias;
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{S.tab='cust';S.ctab=b.dataset.go;firstPaint=true;render();load(false);scrollTo({top:0});});
   const cq=$('#cq');if(cq)cq.oninput=()=>{S.cq=cq.value;const pos=cq.selectionStart;render();const n=$('#cq');n.focus();n.setSelectionRange(pos,pos);};
