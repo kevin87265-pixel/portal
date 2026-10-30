@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only"><title>業績總覽教學</title>
+<style>
+:root{color-scheme:light}
+*{box-sizing:border-box}body{margin:0;background:#f6efe1;color:#3a2a12;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;display:flex;flex-direction:column;align-items:center;padding:14px 12px 24px}
+h1{font-size:20px;margin:4px 0 10px;letter-spacing:.08em}
+.v{width:100%;max-width:420px;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 12px 30px -14px rgba(60,40,10,.5)}
+video{display:block;width:100%;height:auto;max-height:78vh;background:#000}
+.sp{display:flex;gap:8px;margin-top:12px;width:100%;max-width:420px}
+.sp button{flex:1;height:46px;border-radius:12px;border:1px solid #e3cd98;background:#fffaf0;color:#6b5530;font-size:16px;font-weight:700;font-family:inherit}
+.sp button.on{background:linear-gradient(180deg,#2a4b72,#16314f);color:#f3dfa6;border-color:#0d1d30}
+p{font-size:13px;color:#8a7650;margin:10px 0 0}
+</style></head><body>
+<h1>業績總覽 教學</h1>
+<div class="v"><video id="v" src="tutorial.mp4" controls playsinline preload="metadata"></video></div>
+<div class="sp"><button data-r="1" class="on">1 倍</button><button data-r="1.5">1.5 倍</button><button data-r="2">2 倍</button></div>
+<p>點上面按鈕切換播放速度</p>
+<script>
+const v=document.getElementById('v');
+document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{v.playbackRate=+b.dataset.r;v.defaultPlaybackRate=+b.dataset.r;document.querySelectorAll('[data-r]').forEach(x=>x.classList.toggle('on',x===b));});
+</script></body></html>
