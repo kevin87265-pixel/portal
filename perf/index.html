@@ -444,6 +444,22 @@ details.cust summary::-webkit-details-marker{display:none}
 .td-chips{flex-wrap:nowrap;gap:4px}.td-chips i{font-size:12px;padding:2px 7px}.td-chips i b{margin-left:2px;font-family:var(--num)}
 .todo summary{gap:8px}.td-tt{font-size:15px}
 @media (max-width:370px){.td-chips i{padding:2px 5px;font-size:11px}}
+.pwbox{margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+.pwbox summary{list-style:none;display:flex;align-items:center;justify-content:space-between;min-height:40px;font-size:14px;font-weight:600;color:#5d4a26;cursor:pointer}
+.pwbox summary::-webkit-details-marker{display:none}.pwbox summary svg{width:16px;height:16px}.pwbox[open] summary svg{transform:rotate(180deg)}
+.inbox.sm{margin-top:8px}.inbox.sm input{height:42px;font-size:15px}
+.pwin{-webkit-text-security:disc}
+.ann{padding:10px 0;border-top:1px solid var(--line)}.ann:first-of-type{border-top:0;padding-top:0}
+.ann.past{opacity:.6}
+.ann-h{display:flex;align-items:center;gap:8px}.ann-h b{font-size:17px}
+.ann-d{font-family:var(--num);font-size:20px;color:#a8473b;font-weight:700;margin:2px 0}
+.ann-l{font-size:14px;margin-top:2px}.ann-l.note{color:#a8473b}
+.ann-hl{margin:6px 0 0;padding-left:18px;font-size:14px}.ann-hl li{margin:2px 0}
+.ord{list-style:none;margin:0;padding:0}.ord li{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-top:1px solid var(--line)}
+.ord li:first-child{border-top:0}.ord li b{font-family:var(--num);white-space:nowrap;color:#3a2a12}.ord li.past{opacity:.5}
+.ann-txt{margin-top:8px;padding:10px 12px;border-radius:12px;background:#fbf4e3;font-size:14px;line-height:1.7}
+.go-fill{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:56px;margin:16px 0 4px;border-radius:16px;border:0;font-family:inherit;font-size:17px;font-weight:700;letter-spacing:.06em;color:#f3dfa6;background:linear-gradient(180deg,#2a4b72,#16314f);box-shadow:0 12px 24px -12px rgba(13,29,48,.7)}
+.go-fill svg{width:18px;height:18px}
 </style>
 </head>
 <body>
@@ -513,7 +529,7 @@ async function api(body){
   const q=new URLSearchParams();
   if(body.action==='perfLogout')return {ok:true};
   if(body.action==='perfLogin'){q.set('action','perfLogin');q.set('name',body.name);q.set('pw',body.pw);}
-  else{q.set('action',body.action);q.set('token',body.token||'');if(body.month)q.set('month',body.month);if(body.alias!==undefined)q.set('alias',body.alias);}
+  else{q.set('action',body.action);q.set('token',body.token||'');if(body.month)q.set('month',body.month);if(body.alias!==undefined)q.set('alias',body.alias);if(body.old!==undefined)q.set('old',body.old);if(body.npw!==undefined)q.set('pw',body.npw);}
   const r=await fetch(API_URL+'?'+q.toString(),{method:'GET'});const d=await r.json();
   if(body.action==='perfLogin'){
     if(!d||d.ok===false)return {ok:false,err:(d&&d.error)||'帳號或密碼不對'};
@@ -744,7 +760,43 @@ function acctCard(){const a=(S.me&&S.me.alias)||'';
   <p class="muted" style="margin:0 0 10px">設一個英文或數字帳號，之後用它或用名字都能登入，不用打中文。</p>
   <div class="inbox">${IC.user}<input id="aliasIn" type="text" placeholder="例如 tang88" value="${esc(a)}" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="20"></div>
   <button class="td-btn" id="saveAlias" style="margin-top:10px;width:100%;justify-content:center">儲存</button>
-  <p id="aliasMsg" class="muted" style="margin:8px 0 0;min-height:1.4em">${a?`目前帳號：${esc(a)}`:'還沒設定'}</p></section>`;}
+  <p id="aliasMsg" class="muted" style="margin:8px 0 0;min-height:1.4em">${a?`目前帳號：${esc(a)}`:'還沒設定'}</p>
+  <details class="pwbox"><summary>修改密碼<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+  <div class="inbox sm">${IC.lock}<input id="pwOld" class="pwin" type="text" placeholder="目前的密碼" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+  <div class="inbox sm">${IC.lock}<input id="pwNew" class="pwin" type="text" placeholder="新密碼（至少 4 碼）" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+  <div class="inbox sm">${IC.lock}<input id="pwNew2" class="pwin" type="text" placeholder="新密碼再輸入一次" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+  <button class="td-btn" id="savePw" style="margin-top:8px;width:100%;justify-content:center">確定修改</button>
+  <p id="pwMsg" class="muted" style="margin:6px 0 0">※ 會跟填單系統同步修改，兩邊都用新密碼登入</p></details></section>`;}
+async function savePw(){const o=$('#pwOld').value.trim(),n1=$('#pwNew').value.trim(),n2=$('#pwNew2').value.trim(),m=$('#pwMsg');
+  const bad=t=>{m.textContent=t;m.style.color='#a8473b';};
+  if(!o)return bad('請輸入目前的密碼');if(n1.length<4)return bad('新密碼至少要 4 碼');if(/\s/.test(n1))return bad('新密碼不能有空白');if(n1!==n2)return bad('兩次輸入的新密碼不一樣');if(n1===o)return bad('新密碼跟目前的一樣');
+  m.style.color='';m.textContent='處理中…';const r=await api({action:'perfSetPw',token:S.token,old:o,npw:n1}).catch(()=>null);
+  if(r&&r.relogin){expire();return;}
+  if(!r||!r.ok)return bad((r&&r.error)||'修改失敗，請稍後再試');
+  ['#pwOld','#pwNew','#pwNew2'].forEach(k=>$(k).value='');m.style.color='#2f7d4f';m.textContent='改好了！填單系統也一起換成新密碼了';}
+/* ====== 填單分頁：本月法會＋出單時間公告，下面才是前往按鈕 ====== */
+function fillView(){
+  if(!S.cfg)return `<div class="sk" style="height:220px"></div>`;
+  const now=new Date(),ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0'),t0=new Date();t0.setHours(0,0,0,0);
+  const ev=(S.cfg.events||[]).filter(e=>e.to&&e.to.teacher!==false);
+  const md=d=>{const [,m,dd]=d.split('-').map(Number);const w='日一二三四五六'[new Date(d+'T00:00:00').getDay()];return `${m}/${dd}（${w}）`;};
+  let rit=ev.filter(e=>e.type==='ritual'&&(e.date||'').slice(0,7)===ym);
+  const up=ev.filter(e=>e.type==='ritual'&&new Date((e.end||e.date)+'T23:59:59')>=t0).sort((a,b)=>a.date<b.date?-1:1);
+  if(up[0]&&!rit.includes(up[0]))rit=rit.concat(up[0]);
+  const ritH=rit.length?rit.map(e=>{const past=new Date((e.end||e.date)+'T23:59:59')<t0;
+    return `<div class="ann ${past?'past':''}"><div class="ann-h"><b>${esc(e.title||'法會')}</b>${past?'<i class="why">已圓滿</i>':''}</div>
+    <div class="ann-d">${md(e.date)}${e.end&&e.end!==e.date?' ～ '+md(e.end):''}</div>
+    ${e.time?`<div class="ann-l">${esc(e.time)}</div>`:''}
+    ${e.hl?`<ul class="ann-hl">${e.hl.split('\n').filter(Boolean).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+    ${e.place?`<div class="ann-l muted">${esc(e.place)}</div>`:''}
+    ${e.note?`<div class="ann-l note">${esc(e.note)}</div>`:''}</div>`;}).join(''):'<div class="empty">這個月的法會日期還沒公布</div>';
+  const ord=ev.filter(e=>e.type==='order'&&(e.date||'').slice(0,7)>=ym).sort((a,b)=>a.date<b.date?-1:1).slice(0,8);
+  const ann=((S.cfg.ann&&S.cfg.ann.teacher)||[]).filter(a=>(a.date||'').slice(0,7)===ym||!a.date);
+  const ordH=(ord.length?`<ul class="ord">${ord.map(e=>{const past=new Date(e.date+'T23:59:59')<t0;return `<li class="${past?'past':''}"><b>${md(e.date)}</b><span>${esc(e.title||'出單截止')}${e.time?'・'+esc(e.time):''}</span></li>`;}).join('')}</ul>`:'')
+    +ann.map(a=>`<div class="ann-txt">${esc(a.text||'').replace(/\n+/g,'<br>')}</div>`).join('');
+  return `<section class="pane"><div class="pane-h"><h2>本月法會</h2></div>${ritH}</section>
+  <section class="pane"><div class="pane-h"><h2>填單／出疏文時間</h2></div>${ordH||'<div class="empty">這個月的填單日期還沒公布</div>'}</section>
+  <button class="go-fill" data-fill="1">點我前往填單系統${IC.right}</button>`;}
 function infoView(){
   if(!S.cfg)return `<div class="sk" style="height:260px"></div>`;
   const cats=(S.cfg.teacher||[]).filter(c=>(c.items||[]).some(i=>i.url));
@@ -848,14 +900,14 @@ function allView(d){
 function render(){
   if(!S.token){renderLogin();return;}
   const d=S.tab==='all'?S.all:S.me;
-  let inner=S.tab==='cust'?custView():S.tab==='info'?infoView():d?(S.tab==='all'?allView(d):S.tab==='rank'?rankView(d):monthView(d)):(S.net?`<section class="pane"><div class="empty"><b>目前無法取得業績</b>請檢查網路後按「重試」。</div></section>`:skeleton());
+  let inner=S.tab==='cust'?custView():S.tab==='info'?infoView():S.tab==='fill'?fillView():d?(S.tab==='all'?allView(d):S.tab==='rank'?rankView(d):monthView(d)):(S.net?`<section class="pane"><div class="empty"><b>目前無法取得業績</b>請檢查網路後按「重試」。</div></section>`:skeleton());
   $('#root').innerHTML=shell(inner);
   const card=document.querySelector('.card');if(card){theme(card,+card.dataset.rank);tilt();}
   if(S.me)setTint(rankOf(S.me.rank,S.me.cum));
   countUp();
   requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.c-bar i').forEach(i=>i.style.width=i.dataset.w+'%')));
   $('#out').onclick=logout;
-  document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{if(b.dataset.t==='fill'){goFill();return;}if(S.tab===b.dataset.t)return;S.tab=b.dataset.t;firstPaint=true;load(true);scrollTo({top:0});});
+  document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{if(S.tab===b.dataset.t)return;S.tab=b.dataset.t;firstPaint=true;load(true);scrollTo({top:0});});
   const pm=$('#pm'),nm=$('#nm');
   if(pm)pm.onclick=()=>{S.month=shift(S.month,-1);S.me=null;S.all=null;load(true);};
   if(nm)nm.onclick=()=>{if(S.month>=nowMonth())return;S.month=shift(S.month,1);S.me=null;S.all=null;load(true);};
@@ -864,6 +916,7 @@ function render(){
   document.querySelectorAll('[data-fill]').forEach(b=>b.onclick=goFill);
   const tb=$('#todoBox');if(tb)tb.ontoggle=()=>{S.todoOpen=tb.open;};
   const sa=$('#saveAlias');if(sa)sa.onclick=saveAlias;
+  const sp=$('#savePw');if(sp)sp.onclick=savePw;
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{S.tab='cust';S.ctab=b.dataset.go;firstPaint=true;render();load(false);scrollTo({top:0});});
   const cq=$('#cq');if(cq)cq.oninput=()=>{S.cq=cq.value;const pos=cq.selectionStart;render();const n=$('#cq');n.focus();n.setSelectionRange(pos,pos);};
 }
@@ -915,6 +968,7 @@ function dRank(n){return RANKS[rankOf('',DCUM[n])].k;}
 async function demo(b){
   await new Promise(r=>setTimeout(r,350));
   const now=new Date().toISOString();
+  if(b.action==='perfSetPw'){return b.old==='0000'?{ok:false,error:'目前的密碼不對'}:{ok:true};}
   if(b.action==='perfSetAlias'){return {ok:true,alias:(b.alias||'').toLowerCase()};}
   if(b.action==='perfLogin'){if(!DCUM[b.name])return{ok:false,err:'帳號或密碼不對'};const t='d'+Date.now();DSESS[t]={name:b.name,role:b.name==='蕭竣方'?'管理':'老師'};return{ok:true,token:t,name:b.name,role:DSESS[t].role};}
   if(b.action==='perfLogout'){delete DSESS[b.token];return{ok:true};}
