@@ -494,8 +494,8 @@ async function api(body){
   if(!API_URL)return demo(body);
   const q=new URLSearchParams();
   if(body.action==='perfLogout')return {ok:true};
-  if(body.action==='perfLogin'){q.set('action','login');q.set('name',body.name);q.set('pw',body.pw);}
-  else{q.set('action',body.action);q.set('token',body.token||'');if(body.month)q.set('month',body.month);}
+  if(body.action==='perfLogin'){q.set('action','perfLogin');q.set('name',body.name);q.set('pw',body.pw);}
+  else{q.set('action',body.action);q.set('token',body.token||'');if(body.month)q.set('month',body.month);if(body.alias!==undefined)q.set('alias',body.alias);}
   const r=await fetch(API_URL+'?'+q.toString(),{method:'GET'});const d=await r.json();
   if(body.action==='perfLogin'){
     if(!d||d.ok===false)return {ok:false,err:(d&&d.error)||'帳號或密碼不對'};
@@ -518,7 +518,7 @@ function renderLogin(msg){
     <form class="pane" id="lf" autocomplete="off" novalidate>
       <div class="field">
         <label for="acc">帳號</label>
-        <div class="inbox">${IC.user}<input id="acc" type="text" placeholder="請輸入您的姓名" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next"></div>
+        <div class="inbox">${IC.user}<input id="acc" type="text" placeholder="姓名或自訂帳號" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next"></div>
       </div>
       <div class="field">
         <label for="pw">密碼</label>
@@ -557,7 +557,7 @@ const CORE=['陳捷容','羅文勳','蕭竣方','陳彩綺'];
 const STEPS=[{t:100000,p:2},{t:200000,p:5},{t:300000,p:8},{t:400000,p:10}];
 const TEAMP=[0,2,3,4,5]; /* 推薦人團隊業績抽成：依自己當月 PV 級距 */
 const RANKP=[60,68,75,82,90,97,105,112,120,127]; /* 聘階 %（依正式老師獎金規則；總裁以上為暫定） */
-function tabsHTML(){const admin=S.role==='管理';const T=[['month','本月業績'],['cust','客戶'],['rank','團隊'],['info','資料']];if(admin)T.push(['all','全公司']);
+function tabsHTML(){const admin=S.role==='管理';const T=[['month','業績'],['cust','客戶'],['rank','團隊'],['fill','填單'],['info','資料']];if(admin)T.push(['all','全公司']);
   return `<div class="seg" style="grid-template-columns:repeat(${T.length},1fr)">${T.map(([k,n])=>`<button data-t="${k}" class="${S.tab===k?'on':''}">${n}</button>`).join('')}</div>`;}
 function greetHTML(){const d=S.me,ri=d?rankOf(d.rank,d.cum):-1,r=ri>=0?RANKS[ri]:null;
   const c=r?r.dark:'#3f2c0d';return `<span class="greet" style="--gc:${c}"><em class="gname">${esc(S.name)}</em>${r?`<em class="gname">${r.k}</em>`:''}<span class="ghi">您好</span></span>`;}
@@ -685,7 +685,7 @@ function custView(){
 }
 /* ====== 我的待辦（整合分工 B）====== */
 const SUPA='https://plgrsxtlaznajzqgcuqr.supabase.co',SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZ3JzeHRsYXpuYWp6cWdjdXFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5Njg1MDIsImV4cCI6MjA5MDU0NDUwMn0.XyZ0wQbZQ-CInglRpv-MHMuMvkviRovm-o-On_FeyGs';
-const FILL_URL='https://kevin87265-pixel.github.io/statistics.html/',POINTS_URL='https://kevin87265-pixel.github.io/miiragic-points/';
+const FILL_URL='https://kevin87265-pixel.github.io/statistics.html/',POINTS_URL='https://kevin87265-pixel.github.io/miiragic-points/?go=review';
 function loadPend(){if(S.pend&&Date.now()-S.pend.at<60000)return;
   if(!window.MiiragicPending){if(!window.__pj){window.__pj=1;const sc=document.createElement('script');sc.src='https://kevin87265-pixel.github.io/portal/pending.js';sc.onload=()=>loadPend();document.head.appendChild(sc);}return;}
   MiiragicPending.mine().then(r=>{S.pend={r:r||{},at:Date.now()};if(S.tab==='month')render();}).catch(()=>{});}
@@ -697,8 +697,8 @@ function todoHTML(){
   const items=[];const t=new Date();t.setHours(0,0,0,0);
   const r=nextRitual();
   if(r){const d=Math.round((new Date(r.date+'T00:00:00')-t)/864e5);const [,mo,da]=r.date.split('-').map(Number);
-    items.push({ic:'fa',t:esc(r.title||'法會'),s:d>0?`還有 <b class="num">${d}</b> 天（${mo}/${da}），記得先填單`:d===0?'<b>今天</b>法會':'法會進行中',btn:'去填單',href:FILL_URL});}
-  else items.push({ic:'fa',t:'下一場法會',s:S.cfg?'日期還沒公布':'讀取中…',btn:'去填單',href:FILL_URL});
+    items.push({ic:'fa',t:esc(r.title||'法會'),s:d>0?`還有 <b class="num">${d}</b> 天（${mo}/${da}），記得先填單`:d===0?'<b>今天</b>法會':'法會進行中',btn:'去填單',fill:1});}
+  else items.push({ic:'fa',t:'下一場法會',s:S.cfg?'日期還沒公布':'讀取中…',btn:'去填單',fill:1});
   const cs=S.cust&&S.cust[nowMonth()];
   if(cs){const n=douNotes(cs,nowMonth()).filter(x=>x.lv!=='over').length,mm=new Date().getMonth()+1,b=cs.filter(c=>+c.bm===mm).length;
     items.push({ic:'dou',t:'斗燈快到期',s:n?`<b class="num">${n}</b> 位客人要提醒續斗`:'近期沒有到期的',btn:n?'看名單':'',ct:'dou'});
@@ -711,13 +711,26 @@ function todoHTML(){
   return `<section class="pane todo"><div class="pane-h"><h2>我的待辦</h2></div>
   ${items.map(x=>`<div class="td"><i class="td-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICO[x.ic]}</svg></i>
   <div class="mid"><b>${x.t}</b><span>${x.s}</span></div>
-  ${x.btn?(x.href?`<a class="td-btn" href="${x.href}" target="_blank" rel="noopener">${x.btn}</a>`:`<button class="td-btn" data-go="${x.ct}">${x.btn}</button>`):''}</div>`).join('')}
+  ${x.btn?(x.fill?`<button class="td-btn" data-fill="1">${x.btn}</button>`:x.href?`<a class="td-btn" href="${x.href}" target="_blank" rel="noopener">${x.btn}</a>`:`<button class="td-btn" data-go="${x.ct}">${x.btn}</button>`):''}</div>`).join('')}
   </section>`;}
+/* 帶著登入狀態直接打開填單（同一個網站，填單不用再登入） */
+function goFill(){try{sessionStorage.setItem('sec_tok',S.token);localStorage.setItem('xlUser',S.name);}catch(e){}location.href=FILL_URL;}
+async function saveAlias(){const i=$('#aliasIn'),m=$('#aliasMsg'),v=(i.value||'').trim();
+  m.textContent='儲存中…';const r=await api({action:'perfSetAlias',token:S.token,alias:v}).catch(()=>null);
+  if(r&&r.relogin){expire();return;}
+  if(!r||!r.ok){m.textContent=(r&&r.error)||'沒有存成功，請再試一次';return;}
+  if(S.me)S.me.alias=r.alias;lcPut('me_'+S.month,S.me);m.textContent=r.alias?`好了，之後可以用「${r.alias}」登入`:'已取消自訂帳號';}
+function acctCard(){const a=(S.me&&S.me.alias)||'';
+  return `<section class="pane"><div class="pane-h"><h2>我的登入帳號</h2></div>
+  <p class="muted" style="margin:0 0 10px">設一個英文或數字帳號，之後用它或用名字都能登入，不用打中文。</p>
+  <div class="inbox">${IC.user}<input id="aliasIn" type="text" placeholder="例如 tang88" value="${esc(a)}" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="20"></div>
+  <button class="td-btn" id="saveAlias" style="margin-top:10px;width:100%;justify-content:center">儲存</button>
+  <p id="aliasMsg" class="muted" style="margin:8px 0 0;min-height:1.4em">${a?`目前帳號：${esc(a)}`:'還沒設定'}</p></section>`;}
 function infoView(){
   if(!S.cfg)return `<div class="sk" style="height:260px"></div>`;
   const cats=(S.cfg.teacher||[]).filter(c=>(c.items||[]).some(i=>i.url));
   if(!cats.length)return `<section class="pane"><div class="empty">資料讀不到，請稍後再試</div></section>`;
-  return cats.map(c=>`<section class="pane"><div class="pane-h"><h2>${esc(c.category||'資料')}</h2></div>
+  return acctCard()+cats.map(c=>`<section class="pane"><div class="pane-h"><h2>${esc(c.category||'資料')}</h2></div>
   ${(c.items||[]).filter(i=>i.url).map(i=>`<a class="lk" href="${esc(i.url)}" target="_blank" rel="noopener"><div class="mid"><b>${esc(i.name)}</b>${i.desc?`<span>${esc(i.desc)}</span>`:''}</div>${IC.right}</a>`).join('')}</section>`).join('');}
 function monthView(d){
   const m=d.mine||{amount:0,priced:true,items:[]},items=(m.items||[]).filter(x=>+x.n);
@@ -822,12 +835,14 @@ function render(){
   countUp();
   requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.c-bar i').forEach(i=>i.style.width=i.dataset.w+'%')));
   $('#out').onclick=logout;
-  document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{if(S.tab===b.dataset.t)return;S.tab=b.dataset.t;firstPaint=true;load(true);scrollTo({top:0});});
+  document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{if(b.dataset.t==='fill'){goFill();return;}if(S.tab===b.dataset.t)return;S.tab=b.dataset.t;firstPaint=true;load(true);scrollTo({top:0});});
   const pm=$('#pm'),nm=$('#nm');
   if(pm)pm.onclick=()=>{S.month=shift(S.month,-1);S.me=null;S.all=null;load(true);};
   if(nm)nm.onclick=()=>{if(S.month>=nowMonth())return;S.month=shift(S.month,1);S.me=null;S.all=null;load(true);};
   const rt=$('#retry');if(rt)rt.onclick=()=>load(false);
   document.querySelectorAll('[data-ct]').forEach(b=>b.onclick=()=>{S.ctab=b.dataset.ct;render();});
+  document.querySelectorAll('[data-fill]').forEach(b=>b.onclick=goFill);
+  const sa=$('#saveAlias');if(sa)sa.onclick=saveAlias;
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{S.tab='cust';S.ctab=b.dataset.go;firstPaint=true;render();load(false);scrollTo({top:0});});
   const cq=$('#cq');if(cq)cq.oninput=()=>{S.cq=cq.value;const pos=cq.selectionStart;render();const n=$('#cq');n.focus();n.setSelectionRange(pos,pos);};
 }
@@ -879,6 +894,7 @@ function dRank(n){return RANKS[rankOf('',DCUM[n])].k;}
 async function demo(b){
   await new Promise(r=>setTimeout(r,350));
   const now=new Date().toISOString();
+  if(b.action==='perfSetAlias'){return {ok:true,alias:(b.alias||'').toLowerCase()};}
   if(b.action==='perfLogin'){if(!DCUM[b.name])return{ok:false,err:'帳號或密碼不對'};const t='d'+Date.now();DSESS[t]={name:b.name,role:b.name==='蕭竣方'?'管理':'老師'};return{ok:true,token:t,name:b.name,role:DSESS[t].role};}
   if(b.action==='perfLogout'){delete DSESS[b.token];return{ok:true};}
   const s=DSESS[b.token];if(!s)return{ok:false,relogin:true};
