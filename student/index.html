@@ -2338,6 +2338,27 @@ function rejectClaim(id){ var e=S.enroll.find(function(x){return x.id===id;}); e
 /* 啟動：先顯示載入中，有通行證就讀資料庫 */
 reload();
 
+/* ---------- 線上課程：學員只看到已上架的內容，還沒貼影片的顯示「建置中」（2026-10-31） ---------- */
+function lsReady(l){ return !!(l&&(l.v||l.doc)); }
+viewOnline=function(){
+  var h=head()+'<h2>線上課程</h2>';
+  if(!S.online.length) h+='<div class="card soft">線上課程建置中，完成後會在「最新消息」通知你。</div>';
+  S.online.forEach(function(o){
+    var ok=canWatch(o), any=(o.lessons||[]).some(lsReady);
+    h+='<div class="card"><div class="row"><b style="font-size:18px">'+esc(o.name)+'</b><span class="chip '+(!any?'c-warn':ok?'c-ok':'c-gray')+'">'+(!any?'建置中':ok?'已開通':'未開通')+'</span></div><p class="muted">'+esc(o.intro)+'</p>';
+    if(!any) h+='<p class="muted">影片和講義正在準備，完成後會在「最新消息」通知你。</p>';
+    else if(ok) h+='<ul class="list-plain">'+o.lessons.map(function(l,i){ return lsReady(l)?'<li onclick="openLesson(\''+o.id+'\','+i+')" style="cursor:pointer"><b>'+esc(l.t)+'</b><br><span class="muted">點開看'+(l.v&&l.doc?'影片和講義':l.v?'影片':'講義')+'</span></li>':'<li><b>'+esc(l.t)+'</b><br><span class="muted">建置中</span></li>'; }).join('')+'</ul>';
+    else h+='<p class="muted">開放對象：'+esc(openRule(o))+'。想看請聯絡學苑行政。</p>';
+    h+='</div>';
+  });
+  $('root').innerHTML=h;
+};
+openLesson=function(oid,i){
+  var o=S.online.find(function(x){return x.id===oid;}), l=o&&o.lessons[i]; if(!l) return;
+  sheet('<h2>'+esc(l.t)+'</h2>'+(l.v?'<a class="btn block" style="text-decoration:none" href="'+esc(l.v)+'" target="_blank" rel="noopener">看影片</a>':'<div class="card soft" style="text-align:center;padding:28px 10px">影片建置中</div>')+
+    (l.doc?'<a class="btn line block" style="text-decoration:none" href="'+esc(l.doc)+'" target="_blank" rel="noopener">下載講義</a>':'')+'<button class="btn gray block" onclick="closeSheet()">關閉</button>');
+};
+
 </script>
 </body>
 </html>
