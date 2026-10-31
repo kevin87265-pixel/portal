@@ -396,6 +396,13 @@ nav.tabs button.on svg{stroke-width:2.2}
 .tn-how-list{padding-left:20px;line-height:1.8}.tn-how-list li{margin-bottom:8px;word-break:break-all}
 .tn-card{margin-bottom:0}
 .tn-res{color:#d9677a}
+.seg.sub{flex-wrap:nowrap}.seg.sub button{flex:1 1 0;min-width:0;padding:8px 2px;font-size:14px;white-space:nowrap}
+.ch-sw{margin:0 0 12px}
+.th-sum{display:flex;align-items:center;gap:10px}.th-sum b{font-size:17px;flex:1}
+.th-sum .btn{margin:0;width:auto;padding:6px 14px;min-height:36px}
+.th-cur{display:flex;align-items:center;gap:6px;color:var(--quiet);font-size:14px}
+.th-cur>i{display:inline-block}.th-cur>i>i{display:block;width:18px;height:18px;border-radius:50%}
+.th-sum+.themes{margin-top:12px}
 
 </style>
 </head>
@@ -1437,7 +1444,7 @@ function viewMe(){
   var st=meStu(); var p=st.profile;
   var h=head();
   if(!p||PF){ h+=profileForm(st); $('root').innerHTML=h; bindAdv(); return; }
-  var subs=[['chart','我的命盤'],['lv','我的等級'],['info','資料與顏色'],['contact','聯絡我們']];
+  var subs=[['chart','我的命盤'],['lv','我的等級'],['info','資料與顏色'],['contact','聯絡學苑']];
   h+='<div class="seg sub">'+subs.map(function(x){return '<button class="'+(ME_SUB===x[0]?'on':'')+'" onclick="ME_SUB=\''+x[0]+'\';render()">'+x[1]+'</button>';}).join('')+'</div>';
   CHART_FOR=null;
   if(ME_SUB==='chart'){
@@ -2083,8 +2090,8 @@ function goPoints(){ location.href=POINTS_URL; }
 
 /* 首頁、我的、行政「更多」都放積點系統入口 */
 function pointsCard(){ return '<a class="card ptcard" href="'+POINTS_URL+'"><span class="ptic">'+img('coin')+'</span><span><b>積點系統</b><small>積點、推薦審核・同一組帳號不用再登入</small></span><span class="ptgo">›</span></a>'; }
-var _vh0=viewHome; viewHome=function(){ _vh0(); var r=$('root'); if(r) r.insertAdjacentHTML('beforeend',pointsCard()); };
-var _vm0=viewMe; viewMe=function(){ _vm0(); var r=$('root'); if(r) r.insertAdjacentHTML('beforeend',pointsCard()); };
+/* 積點系統入口只放在「我的 → 我的等級」（2026-11-01 K） */
+var _vm0=viewMe; viewMe=function(){ _vm0(); var r=$('root'); if(r&&ME_SUB==='lv'&&!PF&&meStu()&&meStu().profile) r.insertAdjacentHTML('beforeend',pointsCard()); };
 var _am0=aMore; aMore=function(){ _am0(); var r=$('root'); if(r) r.insertAdjacentHTML('beforeend','<a class="card ptcard" href="'+POINTS_URL+'"><span class="ptic">'+img('coin')+'</span><span><b>積點系統（管理員）</b><small>同一組帳號，點了直接進去</small></span><span class="ptgo">›</span></a>'); };
 
 
@@ -2416,34 +2423,38 @@ function tarotHow(){ var p=meStu().profile, s=solarOf(p), r=tarotNums(+s.y,+s.m,
   sheet('<h2>怎麼算的</h2><ol class="tn-how-list"><li><b>生日數字加到剩一位數</b><br>'+r.ds.split('').join('＋')+'＝'+r.chain.join(' → ')+'<br><b class="tn-res">'+r.n1+' '+TAROT[r.n1]+'</b></li>'+
     '<li><b>總和減出生日期</b><br>'+r.total+' − '+s.d+'＝'+r.n2raw+(r.n2raw!==r.n2?(r.n2raw>=22?'，超過 22 要減 22':'，小於 0 加 22'):'')+'<br><b class="tn-res">'+r.n2+' '+TAROT[r.n2]+'</b></li>'+
     '<li><b>星座靈數</b><br>'+r.zName+'<br><b class="tn-res">'+r.n3+' '+TAROT[r.n3]+'</b></li></ol><p class="muted">上課時老師會教你怎麼看這三張牌，也可以幫朋友算算看！</p><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
-var _viewMeT=viewMe;
-viewMe=function(){ if(ME_SUB==='tarot') ME_SUB='chart';
+var _viewMeT=viewMe; var CHART_SUB='bazi';
+viewMe=function(){ if(ME_SUB==='tarot'){ ME_SUB='chart'; CHART_SUB='tarot'; }
   _viewMeT();
   var st=meStu(), p=st&&st.profile; if(!p||PF||ME_SUB!=='chart') return;
   var fr=document.querySelector('#chartFrame'); var c=fr&&fr.closest('.card'); if(!c) return;
-  var nx=c.nextElementSibling, at=(nx&&nx.tagName==='P')?nx:c;
-  at.insertAdjacentHTML('afterend',tarotCard(p));
+  var nx=c.nextElementSibling, note=(nx&&nx.tagName==='P')?nx:null;
+  c.insertAdjacentHTML('beforebegin','<div class="seg ch-sw"><button class="'+(CHART_SUB==='bazi'?'on':'')+'" onclick="CHART_SUB=\'bazi\';render()">八字命盤</button><button class="'+(CHART_SUB==='tarot'?'on':'')+'" onclick="CHART_SUB=\'tarot\';render()">塔羅靈數</button></div>');
+  if(CHART_SUB==='tarot'){ c.insertAdjacentHTML('afterend',tarotCard(p)); c.remove(); if(note) note.remove(); }
 };
 
 /* ---------- 幸運色主題：海軍藍／墨綠／霧紫免費，五行幸運色到商城用小金幣換（2026-10-31） ---------- */
 var LUCKY=[['jade','翠綠','木','#24804a'],['red','朱紅','火','#b23a3a'],['amber','土黃','土','#b8860b'],['gold','黃金色','金','#c99a12'],['ink','墨黑','水','#22303f'],['rose','霧玫粉','火','#c27c88']];
 LUCKY.forEach(function(x){ THEMES.push([x[0],x[1]+'・'+x[2]]); });
-var FREE_THEMES=['blue','green','purple'];
+var FREE_THEMES=['blue']; var LV_THEMES={green:2,purple:4}; var THEME_OPEN=false;
 function themeItems(){ return LUCKY.map(function(x){ return {id:'th-'+x[0],name:x[1]+'幸運色',coins:30,stock:999,desc:'五行屬'+x[2]+'的幸運色。兌換後整個學員專區換成'+x[1]+'，到「我的 → 資料與顏色」可以隨時切換。',pickup:'自動發放',minLv:1,icon:'🎨',on:true,theme:x[0]}; }); }
 BASE.shop=BASE.shop.filter(function(i){return !i.theme;}).concat(themeItems());
-function ownTheme(t){ if(FREE_THEMES.indexOf(t)>=0||S.admin) return true;
+function ownTheme(t){ if(FREE_THEMES.indexOf(t)>=0||S.admin) return true; if(LV_THEMES[t]) return !!S.me&&lvOf(S.me).n>=LV_THEMES[t];
   return (S.orders||[]).some(function(o){ return o.acct===S.me&&o.status!=='refunded'&&(o.item==='th-'+t||((S.shop||[]).find(function(i){return i.id===o.item;})||{}).theme===t); }); }
 var _setTheme0=setTheme;
-setTheme=function(t){ if(!ownTheme(t)){ var it=(S.shop||[]).find(function(i){return i.theme===t&&i.on!==false;});
+setTheme=function(t){ if(!ownTheme(t)){ if(LV_THEMES[t]){ toast('升到 Lv'+LV_THEMES[t]+' 就會解鎖這個顏色'); return; } var it=(S.shop||[]).find(function(i){return i.theme===t&&i.on!==false;});
     if(it){ SHOP_SUB='items'; go('shop'); setTimeout(function(){ var el=document.querySelector('[data-th="'+t+'"]'); if(el) el.scrollIntoView({block:'center'}); },60); toast('這個幸運色要到商城用小金幣換'); } else toast('這個顏色還沒開放');
     return; }
   _setTheme0(t); };
 (function(){ var t=THEME; if(FREE_THEMES.indexOf(t)<0){ /* 開機時還不知道買了沒，先套用，載入後再檢查 */ } })();
 var _viewMeTh=viewMe;
 viewMe=function(){ _viewMeTh();
-  var box=document.querySelector('#root .themes'); if(!box) return;
-  box.querySelectorAll('.sw').forEach(function(b){ var m=(b.className.match(/sw-(\w+)/)||[])[1]; if(m&&!ownTheme(m)){ b.classList.add('lock'); b.querySelector('span').insertAdjacentHTML('beforeend','<em>商城換</em>'); } });
-  var h=box.previousElementSibling; if(h&&!document.querySelector('.th-note')) box.insertAdjacentHTML('afterend','<p class="muted th-note" style="margin:10px 0 0">五行幸運色可以到「商城」用小金幣換，換到就能用。</p>');
+  var box=document.querySelector('#root .themes'); if(!box) return; var card=box.closest('.card');
+  var cur=THEMES.find(function(x){return x[0]===THEME;})||THEMES[0];
+  if(!THEME_OPEN){ card.innerHTML='<div class="th-sum"><b>主題顏色</b><span class="th-cur"><i class="sw-'+THEME+'"><i></i></i>'+esc(cur[1])+'</span><button class="btn line sm" onclick="THEME_OPEN=true;render()">換顏色 ▾</button></div>'; return; }
+  var h3=card.querySelector('h3'); if(h3) h3.outerHTML='<div class="th-sum"><b>主題顏色</b><button class="btn line sm" onclick="THEME_OPEN=false;render()">收合 ▴</button></div>';
+  box.querySelectorAll('.sw').forEach(function(b){ var m=(b.className.match(/sw-(\w+)/)||[])[1]; if(m&&!ownTheme(m)){ b.classList.add('lock'); b.querySelector('span').insertAdjacentHTML('beforeend','<em>'+(LV_THEMES[m]?'Lv'+LV_THEMES[m]+' 解鎖':'商城換')+'</em>'); } });
+  if(!card.querySelector('.th-note')) box.insertAdjacentHTML('afterend','<p class="muted th-note" style="margin:10px 0 0">升級會解鎖新顏色；五行幸運色可以到「商城」用小金幣換。</p>');
 };
 var _doRedeemTh=doRedeem;
 doRedeem=function(id){ var it=(S.shop||[]).find(function(x){return x.id===id;});
@@ -2462,6 +2473,9 @@ viewShop=function(){ _viewShopTh(); if(SHOP_SUB!=='items') return;
 /* 開機時記住的顏色如果沒買（例如換了手機帳號），載入資料後退回海軍藍 */
 var _applyTh=apply;
 apply=function(d){ _applyTh(d); if(!ownTheme(THEME)){ THEME='blue'; try{ localStorage.setItem('course_theme','blue'); }catch(e){} applyTheme(); } };
+
+/* 等級獎勵文字跟顏色解鎖一致（2026-11-01） */
+(function(){ var m={2:'名字旁出現徽章，解鎖「墨綠」主題顏色',3:'商城解鎖「學長姐限定」商品',4:'額滿時候補優先，解鎖「霧紫」主題顏色',5:'生日當月送 100 小金幣，解鎖一對一諮詢兌換'}; LV.forEach(function(l){ if(m[l.n]) l.perk=m[l.n]; }); })();
 
 </script>
 </body>
