@@ -366,14 +366,25 @@ nav.tabs button.on svg{stroke-width:2.2}
 .month-sw{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 12px}.month-sw b{font-size:18px}
 .card>.stat3:first-child{border-top:0;margin-top:0;padding-top:0}
 .card.claim{border:2px dashed #f0b54a;background:#fffaf0}
-.tn-row{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line,#e6e8ee)}
-.tn-row:first-of-type{border-top:0}
-.tn-no{flex:0 0 28px;height:28px;border-radius:50%;background:#f39aa6;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
-.tn-main{flex:1;min-width:0}
-.tn-t{font-size:14px;color:var(--muted,#6b7280)}
-.tn-n{font-size:20px;margin:2px 0}
-.tn-n b{font-size:26px}
-.tn-how{font-size:13px;word-break:break-all}
+.tn-card{padding:12px}
+.tn-card>a{position:relative;display:block}
+.tn-zoom{position:absolute;left:6px;top:6px;background:rgba(255,255,255,.85);color:#555;font-size:11px;padding:2px 8px;border-radius:10px}
+.tn-link{color:var(--pri,#1e2f5c);font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tn-img{width:100%;border-radius:10px;display:block}
+.tn-head{display:flex;justify-content:space-between;align-items:baseline;margin:10px 2px 6px}
+.tn-head b{font-size:17px}.tn-head .muted{font-size:13px}
+.tn-cols{display:flex;gap:8px}
+.tn-col{flex:1;min-width:0;text-align:center;background:#fdf3f5;border-radius:12px;padding:8px 4px 10px}
+.tn-no{display:inline-flex;width:22px;height:22px;border-radius:50%;background:#f39aa6;color:#fff;font-weight:700;font-size:13px;align-items:center;justify-content:center}
+.tn-big{font-size:26px;font-weight:700;line-height:1.15;margin-top:2px}
+.tn-nm{font-size:16px;font-weight:600;white-space:nowrap}
+.tn-lb{font-size:12px;color:var(--muted,#6b7280);margin-top:2px;white-space:nowrap}
+.tn-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.tn-foot .btn{margin:0}.tn-foot .muted{font-size:12px}
+.tn-how-list{padding-left:20px;line-height:1.8}.tn-how-list li{margin-bottom:8px;word-break:break-all}
+.wrap:has(.tn-card){padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+.tn-card{margin-bottom:0}
+.tn-res{color:#d9677a}
 
 </style>
 </head>
@@ -2383,13 +2394,16 @@ function tarotNums(y,m,d){
 }
 function tarotCard(p){
   var s=solarOf(p); if(!s) return '<div class="card soft">生日資料不完整，請到「資料與顏色」補上生日。</div>';
-  var r=tarotNums(+s.y,+s.m,+s.d), row=function(no,t,n,how){ return '<div class="tn-row"><span class="tn-no">'+no+'</span><div class="tn-main"><div class="tn-t">'+t+'</div><div class="tn-n"><b>'+n+'</b>　'+TAROT[n]+'</div><div class="muted tn-how">'+how+'</div></div></div>'; };
-  return '<div class="card"><h3>找出自己的塔羅靈數</h3><a href="img/tarot-num.jpg" target="_blank" rel="noopener"><img src="img/tarot-num.jpg" alt="找出自己的塔羅靈數：三個步驟與星座靈數對照表" style="width:100%;border-radius:12px;display:block" loading="lazy"></a><p class="muted" style="margin:8px 0 0">點圖片可以放大看。</p></div><div class="card"><h3>我的塔羅靈數</h3><p class="muted">國曆生日 '+s.y+'/'+s.m+'/'+s.d+'</p>'+
-    row(1,'生日數字總和，加到剩一位數',r.n1,r.ds.split('').join('＋')+'＝'+r.chain.join(' → '))+
-    row(2,'總和減出生日期',r.n2,r.total+' − '+s.d+'＝'+r.n2raw+(r.n2raw!==r.n2?(r.n2raw>=22?'，超過 22 要減 22，得 '+r.n2:'，小於 0 加 22，得 '+r.n2):''))+
-    row(3,'星座靈數',r.n3,r.zName)+
-    '<p class="muted" style="margin:10px 0 0">上課時老師會教你怎麼看這三張牌。也可以幫身邊朋友算算看，驗證他的個性！</p></div>';
+  var r=tarotNums(+s.y,+s.m,+s.d);
+  var col=function(no,lb,n){ return '<div class="tn-col"><span class="tn-no">'+no+'</span><div class="tn-big">'+n+'</div><div class="tn-nm">'+TAROT[n]+'</div><div class="tn-lb">'+lb+'</div></div>'; };
+  return '<div class="card tn-card"><a href="img/tarot-num.jpg" target="_blank" rel="noopener"><img src="img/tarot-num.jpg" alt="找出自己的塔羅靈數：三個步驟與星座靈數對照表" class="tn-img"><span class="tn-zoom">點圖放大</span></a>'+
+    '<div class="tn-head"><div><b>我的塔羅靈數</b><span class="muted">　'+s.y+'/'+s.m+'/'+s.d+'</span></div><a class="tn-link" onclick="tarotHow()">看怎麼算 ›</a></div>'+
+    '<div class="tn-cols">'+col(1,'加到一位數',r.n1)+col(2,'總和減日期',r.n2)+col(3,r.zName,r.n3)+'</div></div>';
 }
+function tarotHow(){ var p=meStu().profile, s=solarOf(p), r=tarotNums(+s.y,+s.m,+s.d);
+  sheet('<h2>怎麼算的</h2><ol class="tn-how-list"><li><b>生日數字加到剩一位數</b><br>'+r.ds.split('').join('＋')+'＝'+r.chain.join(' → ')+'<br><b class="tn-res">'+r.n1+' '+TAROT[r.n1]+'</b></li>'+
+    '<li><b>總和減出生日期</b><br>'+r.total+' − '+s.d+'＝'+r.n2raw+(r.n2raw!==r.n2?(r.n2raw>=22?'，超過 22 要減 22':'，小於 0 加 22'):'')+'<br><b class="tn-res">'+r.n2+' '+TAROT[r.n2]+'</b></li>'+
+    '<li><b>星座靈數</b><br>'+r.zName+'<br><b class="tn-res">'+r.n3+' '+TAROT[r.n3]+'</b></li></ol><p class="muted">上課時老師會教你怎麼看這三張牌，也可以幫朋友算算看！</p><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
 var _viewMeT=viewMe;
 viewMe=function(){
   var st=meStu(), p=st&&st.profile;
