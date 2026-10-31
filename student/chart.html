@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light only">
+<link rel="stylesheet" href="dojo/ui.css"><link rel="stylesheet" href="dojo/app.css">
+<style>
+html,body{background:#fff!important;margin:0;padding:0}
+#ppForm,#ppSaved,#ppMsg{display:none!important}
+.hideBtn{display:none!important}
+#t{padding:0 2px}
+@media print{@page{margin:10mm} body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head><body><div id="t"></div>
+<script>
+/* 排盤畫完不要把外層頁面捲走 */
+Element.prototype.scrollIntoView=function(){}; window.scrollTo=function(){}; window.scroll=function(){}; (function(f){HTMLElement.prototype.focus=function(o){ return f.call(this,{preventScroll:true}); };})(HTMLElement.prototype.focus);
+</script>
+<script>
+/* 命理道場原版八字排盤（不改內容），學員專區只負責把資料帶進去 */
+(function(){var g=document.getElementById.bind(document);document.getElementById=function(id){var e=g(id);if(!e){e=document.createElement('div');e.id=id;e.style.display='none';document.body.appendChild(e);}return e;};})();
+</script>
+<script src="dojo/lunar.js"></script><script src="dojo/engine.js"></script><script src="dojo/paipan.js"></script>
+<script>
+var mounted=false;
+function sendH(){ try{ var t=document.getElementById('t'); parent.postMessage({type:'chartH',h:Math.ceil(t.getBoundingClientRect().height)+12},'*'); }catch(e){} }
+function draw(p){
+  var t=document.getElementById('t');
+  if(!mounted){ MDJPaipan.mount({root:t}); mounted=true; }
+  var q=function(s){return t.querySelector(s);};
+  q('#ppName').value=p.name||'';
+  q('#ppSex [data-v="'+(p.sex==='F'?'0':'1')+'"]').click();
+  q('#ppCal [data-v="'+(p.cal==='農'?'lunar':'solar')+'"]').click();
+  var lp=q('#ppLeap'); if(lp) lp.checked=!!p.leap;
+  q('#ppY').value=p.y; q('#ppM').value=p.m; q('#ppD').value=p.d; q('#ppH').value=p.h; q('#ppMi').value=p.mi;
+  q('#ppForm').requestSubmit();
+  setTimeout(function(){
+    [].forEach.call(t.querySelectorAll('button'),function(b){ if(/做練習|互算|存到我的命盤/.test(b.textContent)) b.classList.add('hideBtn'); });
+    sendH();
+  },60);
+}
+window.addEventListener('message',function(e){ var d=e.data||{}; if(d.type==='chart'&&d.p) draw(d.p); });
+window.addEventListener('resize',sendH);
+try{ parent.postMessage({type:'chartReady'},'*'); }catch(e){}
+</script></body></html>

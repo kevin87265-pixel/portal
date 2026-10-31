@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>神奇身心靈學苑・學員專區（試用版）</title>
+<style>
+:root,body.t-blue{--pri:#1d3461;--pri2:#2c4b80;--pri-soft:#eaf0f8;--bg:#f3f5f9;--line:#e1e6ef;--ink:#1a2233;--quiet:#667085;--acc:#c6a15b;--acc-soft:#fbf6ea;--accd:#9a7631}
+body.t-green{--pri:#1f4a3a;--pri2:#2f6a53;--pri-soft:#e8f1ec;--bg:#f2f5f3;--line:#dce6e0;--ink:#17241e;--quiet:#617068;--acc:#c6a15b;--acc-soft:#fbf6ea;--accd:#9a7631}
+body.t-purple{--pri:#46395f;--pri2:#655285;--pri-soft:#efebf6;--bg:#f6f3f8;--line:#e6e0ee;--ink:#221c2e;--quiet:#6c6478;--acc:#c6a15b;--acc-soft:#fbf6ea;--accd:#9a7631}
+:root{color-scheme:light only;--ok:#1d7a55;--ok-bg:#eaf6f0;--warn:#9a6a1c;--warn-bg:#fdf5e6;--bad:#9b4646;--bad-bg:#fbefef;--r:18px;--sh:0 2px 10px rgba(20,32,60,.05),0 10px 28px rgba(20,32,60,.04)}
+@media (prefers-color-scheme:dark){:root{color-scheme:light only}}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%;overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;font-size:16px;line-height:1.7;text-wrap:pretty;overflow-x:clip;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;color:var(--ink);letter-spacing:.04em;line-height:1.45;text-wrap:balance}
+h2{font-size:22px;margin:20px 0 12px} h3{font-size:18px;margin:0 0 10px} p{margin:8px 0}
+button{font:inherit;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent}
+img{max-width:100%}
+.wrap{max-width:720px;margin:0 auto;padding:14px 16px calc(100px + env(safe-area-inset-bottom))}
+.muted{color:var(--quiet);font-size:15px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;min-width:0}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.two>*,.three>*{min-width:0}
+.demo{font-size:14px;color:var(--quiet);background:#fff;border:1px dashed var(--line);border-radius:12px;padding:8px 12px;margin:0 0 12px}
+/* 頁首 */
+header.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px}
+header.top h1{font-size:21px;margin:0} header.top small{display:block;color:var(--quiet);font-size:14px;font-family:inherit;letter-spacing:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin:2px 2px 12px}
+.topbar b{font-family:"Noto Serif TC","Songti TC",serif;font-size:17px;color:var(--pri);letter-spacing:.06em;margin-right:8px}
+.topbar span{color:var(--quiet);font-size:15px}
+.lnk{border:0;background:none;color:var(--quiet);font-size:15px;padding:6px 2px}
+.adm-head{display:flex;justify-content:space-between;align-items:center;background:var(--pri);color:#fff;border-radius:16px;padding:14px 18px;margin:0 0 14px;box-shadow:0 8px 22px rgba(20,32,60,.14)}
+.adm-head b{font-family:"Noto Serif TC","Songti TC",serif;font-size:21px;letter-spacing:.1em}
+.adm-head button{border:1px solid rgba(255,255,255,.55);background:transparent;color:#fff;border-radius:10px;padding:6px 14px;font-size:15px}
+/* 卡片與按鈕 */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 14px;box-shadow:var(--sh);min-width:0;overflow-wrap:break-word}
+.card.soft{background:var(--pri-soft);border-color:transparent;box-shadow:none}
+.card.miss{border-color:var(--acc);background:var(--acc-soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:46px;padding:10px 18px;border:1px solid var(--pri);border-radius:12px;background:var(--pri);color:#fff;font-size:16px;font-weight:700;line-height:1.35;text-align:center;max-width:100%}
+.btn:active{filter:brightness(.92)}
+.btn.line{background:#fff;color:var(--pri)}
+.btn.gray{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.ok{background:var(--pri);border-color:var(--pri)}
+.btn.block{display:flex;width:100%;margin-top:10px}
+.btn.big{min-height:54px;font-size:18px;border-radius:999px}
+.btn.sm{min-height:38px;padding:6px 12px;font-size:15px;border-radius:10px}
+.btn:disabled{opacity:.45}
+.chip{display:inline-flex;align-items:center;min-height:26px;padding:2px 10px;border-radius:999px;font-size:14px;font-weight:600;white-space:nowrap;border:0}
+.c-ok{color:var(--ok);background:var(--ok-bg)} .c-warn{color:var(--warn);background:var(--warn-bg)} .c-bad{color:var(--bad);background:var(--bad-bg)} .c-blue{color:var(--pri);background:var(--pri-soft)} .c-gray{color:#5b6475;background:#eef0f4}
+label.f{display:block;margin:14px 0 6px;font-size:15px;font-weight:600;color:var(--quiet)}
+input.t,select.t,textarea.t{display:block;width:100%;min-height:48px;padding:10px 13px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:inherit;font-size:16px}
+input.t:focus,select.t:focus,textarea.t:focus{outline:none;border-color:var(--pri2);box-shadow:0 0 0 3px var(--pri-soft)}
+textarea.t{min-height:100px}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.seg button{flex:1 1 auto;min-height:42px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--quiet);font-size:15px}
+.seg button.on{background:var(--pri);border-color:var(--pri);color:#fff;font-weight:700}
+.seg.sub{background:#fff;border:1px solid var(--line);border-radius:14px;padding:4px;gap:4px}
+.seg.sub button{border:0;border-radius:10px;min-height:40px}
+.seg.sub button.on{background:var(--pri-soft);color:var(--pri)}
+.back{border:0;background:none;color:var(--pri);font-weight:700;font-size:16px;padding:4px 0;margin:0 0 6px}
+.sess{border-top:1px solid var(--line);padding:12px 0 2px;margin-top:10px}
+.sess:first-of-type{border-top:0;margin-top:0}
+/* 學員：狀態列 */
+.status{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 14px;box-shadow:var(--sh)}
+.st-mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.st-mid b{font-size:17px;font-family:"Noto Serif TC","Songti TC",serif}
+.st-mid small{color:var(--quiet);font-size:13px}
+.st-coin{display:flex;align-items:center;gap:5px;padding-left:12px;border-left:1px solid var(--line)}
+.st-coin b{font-size:20px;color:var(--ink)}
+.coinimg{width:30px;height:30px}
+.coin{display:inline-block;width:1.1em;height:1.1em;vertical-align:-.18em;margin-right:3px;background:url(img/coin.png) center/contain no-repeat}
+.xp{height:8px;border-radius:99px;background:var(--pri-soft);overflow:hidden;margin-top:2px}
+.xp span{display:block;height:100%;border-radius:99px;background:var(--lvc,var(--pri))}
+/* 等級徽章 */
+.lvbadge{position:relative;display:inline-flex;flex:none;width:52px;height:52px;border-radius:50%;padding:3px;background:#fff;border:2px solid var(--lvc,var(--pri))}
+.lvbadge img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.lvbadge b{position:absolute;right:-4px;bottom:-4px;min-width:22px;height:22px;border-radius:99px;background:var(--lvc,var(--pri));color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;border:2px solid #fff}
+.lvbadge.sm{width:38px;height:38px} .lvbadge.sm b{min-width:18px;height:18px;font-size:11px}
+.lvbadge.xl{width:84px;height:84px;margin:0 auto}
+.lv1,.lvb1{--lvc:#8a94a8}.lv2,.lvb2{--lvc:#2f8a62}.lv3,.lvb3{--lvc:#2f6fb5}.lv4,.lvb4{--lvc:#6a55b8}.lv5,.lvb5{--lvc:#b8892c}.lv6,.lvb6{--lvc:#8f4f9e}
+.lvb6{border-color:#c6a15b;box-shadow:0 0 0 2px #8f4f9e}
+.lvcard{background:#fff;border:1px solid var(--line);border-top:4px solid var(--lvc);border-radius:var(--r);padding:16px;margin:0 0 14px;box-shadow:var(--sh)}
+.lv5.lvcard{background:linear-gradient(160deg,#fffaf0,#fff 60%)}
+.lv6.lvcard{background:linear-gradient(160deg,#f8f1fb,#fffaf0 55%,#fff);border:2px solid #c6a15b;border-top-width:5px}
+.coins{display:flex;align-items:center;gap:5px;font-size:22px;font-weight:800}
+.lvrow{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-left:4px solid var(--lvc);border-radius:14px;padding:12px;margin:0 0 10px;background:#fff}
+.lvrow.cur{background:var(--pri-soft)} .lvrow p{margin:4px 0 0}
+.lvtag{font-size:13px;font-weight:700;padding:1px 8px;border-radius:99px;color:var(--lvc);background:#f0f2f6;margin-left:8px}
+.lvt1{--lvc:#6f7a90}.lvt2{--lvc:#2f8a62}.lvt3{--lvc:#2f6fb5}.lvt4{--lvc:#6a55b8}.lvt5{--lvc:#9a7225}.lvt6{--lvc:#8f4f9e}
+/* 學員：今天的課 */
+.today{position:relative;background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px 18px 16px;margin:0 0 14px;box-shadow:var(--sh);overflow:hidden}
+.td-txt{padding-right:104px;min-height:96px}
+.td-lab{display:flex;align-items:center;gap:6px;color:var(--pri);font-weight:700;font-size:15px}
+.si{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.td-big{display:block;font-family:"Noto Serif TC","Songti TC",serif;font-size:28px;line-height:1.3;margin:6px 0 2px;color:var(--ink)}
+.td-txt p{margin:0;color:var(--quiet)}
+.td-img{position:absolute;top:14px;right:12px;width:96px;height:96px}
+.td-done{margin-top:12px;text-align:center;background:var(--ok-bg);color:var(--ok);border-radius:999px;padding:12px;font-weight:700}
+/* 學員：四格入口 */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 10px}
+.tile{display:flex;align-items:center;gap:10px;width:100%;min-height:84px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px 10px 10px 8px;text-align:left;box-shadow:var(--sh);min-width:0}
+.tile .ill{width:56px;height:56px;flex:none}
+.tile span{flex:1;min-width:0;display:flex;flex-direction:column}
+.tile b{font-size:17px;font-family:"Noto Serif TC","Songti TC",serif}
+.tile small{font-size:13px;color:var(--quiet);line-height:1.4}
+.tile i{font-style:normal;color:var(--quiet);font-size:20px}
+.tile.wide{margin:0 0 14px}
+.sec-h{display:flex;align-items:center;gap:8px;margin:18px 2px 8px}
+.sec-h b{font-family:"Noto Serif TC","Songti TC",serif;font-size:19px}
+.sec-h.in{margin:0 0 6px} .sec-h .si{color:var(--pri)}
+.sec-ill{width:34px;height:34px}
+.news{padding:4px 14px}
+.nrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;border-top:1px solid var(--line);background:none;padding:12px 0}
+.nrow:first-child{border-top:0}
+.nrow span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column}
+.nrow small{color:var(--quiet);font-size:14px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.nrow i{font-style:normal;color:var(--quiet);font-size:20px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--pri);flex:none}
+.dot.rec{background:var(--acc)}
+/* 主題顏色 */
+.themes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.sw{display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid var(--line);border-radius:14px;background:#fff;padding:12px 4px}
+.sw i{width:40px;height:40px;border-radius:50%}
+.sw-blue i{background:#1d3461}.sw-green i{background:#1f4a3a}.sw-purple i{background:#46395f}
+.sw.on{border-color:var(--pri);background:var(--pri-soft);font-weight:700}
+/* 行政：今日 */
+.today-h{margin:4px 2px 12px;font-size:24px}
+.todos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:0 0 12px}
+.todo{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--line);background:#fff;border-radius:16px;padding:10px 4px 10px;box-shadow:var(--sh);min-width:0}
+.todo-ill{width:44px;height:44px;opacity:.55}
+.todo b{position:absolute;top:8px;right:10px;min-width:24px;height:24px;border-radius:99px;background:#eef0f4;color:var(--quiet);font-size:14px;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.todo span{font-size:14px;color:var(--quiet)}
+.todo.has{border-color:var(--acc);background:var(--acc-soft)}
+.todo.has .todo-ill{opacity:1} .todo.has b{background:var(--accd);color:#fff} .todo.has span{color:var(--ink);font-weight:600}
+.alert{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--acc);background:var(--acc-soft);border-radius:14px;padding:12px 14px;margin:0 0 12px;flex-wrap:wrap}
+.alert b{flex:1 1 100%;font-size:15px;color:var(--accd)} .alert span{flex:1;font-size:14px;color:var(--quiet)} .alert i{font-style:normal}
+.ck-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.ck-top>div:first-child{min-width:0;display:flex;flex-direction:column}
+.ck-name{font-family:"Noto Serif TC","Songti TC",serif;font-size:26px;margin:4px 0 0;line-height:1.3}
+.code{flex:none;display:flex;flex-direction:column;align-items:center;border:1px solid var(--line);background:var(--pri-soft);border-radius:14px;padding:8px 14px;color:var(--pri)}
+.code span{font-size:13px;font-weight:600}
+.code b{font-size:32px;letter-spacing:3px;line-height:1.2;color:var(--ink);font-family:-apple-system,"Helvetica Neue",Arial,sans-serif}
+.stat3{display:grid;grid-template-columns:repeat(3,1fr);margin:14px 0 4px;border-top:1px solid var(--line);padding-top:10px}
+.stat3 div{text-align:center;border-left:1px solid var(--line)} .stat3 div:first-child{border-left:0}
+.stat3 span{display:block;font-size:14px;color:var(--quiet)}
+.stat3 b{font-size:28px;color:var(--pri);font-family:"Noto Serif TC",serif} .stat3 b.g{color:var(--ok)} .stat3 b.w{color:var(--accd)}
+.roster{list-style:none;margin:0;padding:0}
+.roster li{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding:11px 0;flex-wrap:wrap}
+.roster li:first-child{border-top:0}
+.roster .nm{display:flex;align-items:center} .roster .nm b{font-size:17px;font-family:"Noto Serif TC","Songti TC",serif}
+.roster .acts{display:flex;gap:6px;margin-left:auto}
+/* 行政：更多 */
+.menu{padding:2px 14px}
+.menu button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-top:1px solid var(--line);background:none;padding:12px 0}
+.menu button:first-child{border-top:0}
+.menu span{flex:1;display:flex;flex-direction:column} .menu b{font-size:17px} .menu small{color:var(--quiet);font-size:14px}
+.menu i{font-style:normal;color:var(--quiet);font-size:20px}
+.m-ill{width:40px;height:40px}
+/* 商城 */
+.goods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.good{display:flex;flex-direction:column;gap:4px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:var(--sh);min-width:0}
+.good b{font-size:16px}
+.good .btn{margin-top:auto;min-height:42px;font-size:15px;padding:8px}
+.good .chip{align-self:flex-start;margin-top:auto}
+.gimg{height:104px;border-radius:12px;background:var(--pri-soft);display:flex;align-items:center;justify-content:center}
+.gimg img{width:80px;height:80px}
+.gsm{display:inline-block;width:38px} .gsm .gimg{height:38px;border-radius:8px} .gsm .gimg img{width:30px;height:30px}
+.gprice{font-weight:800;font-size:18px;color:var(--ink)}
+/* 共用 */
+.list-plain{list-style:none;margin:0;padding:0}
+.list-plain li{border-top:1px solid var(--line);padding:10px 0}
+.list-plain li:first-child{border-top:0}
+.copybox{white-space:pre-wrap;background:var(--pri-soft);border-radius:12px;padding:14px;font-size:16px;overflow-wrap:anywhere}
+.mask{position:fixed;inset:0;background:rgba(15,22,40,.42);display:none;align-items:flex-end;justify-content:center;z-index:100}
+.mask.show{display:flex}
+.sheet{background:#fff;width:100%;max-width:720px;border-radius:22px 22px 0 0;padding:22px 18px calc(26px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:15px;display:none;z-index:200;max-width:90%}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:4px 4px env(safe-area-inset-bottom);box-shadow:0 -4px 16px rgba(20,32,60,.05)}
+nav.tabs button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;padding:7px 0 8px;color:var(--quiet);font-size:13px}
+nav.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs button.on{color:var(--pri);font-weight:700}
+nav.tabs button.on svg{stroke-width:2.2}
+@media (min-width:720px){nav.tabs{justify-content:center} nav.tabs button{max-width:150px;font-size:14px} .goods{grid-template-columns:repeat(3,minmax(0,1fr))}}
+#__kbSpacer{height:0}
+.paylist{list-style:none;margin:0 0 10px;padding:0}
+.paylist li{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:8px 0}
+.paylist li:first-child{border-top:0}
+.paysel{display:grid;gap:8px}
+.paysel button{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px;font-size:16px}
+.paysel button.on{border:2px solid var(--pri);background:var(--pri-soft)}
+.rules{margin:0;padding-left:1.3em} .rules li{margin:0 0 8px}
+.adm-head b small{display:block;font-size:13px;letter-spacing:.2em;opacity:.75;font-family:-apple-system,"PingFang TC",sans-serif;font-weight:500}
+.pg-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 2px 10px}
+.pg-h h2{margin:0}
+.search{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23667085' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E%3C/svg%3E") 12px center no-repeat;padding-left:42px}
+.stu{padding:14px}
+.stu-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stu-top b{font-size:19px;font-family:"Noto Serif TC","Songti TC",serif}
+.stu-top .lvtag{margin-left:0}.stu-top .chip{margin-left:auto}
+.ctags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
+.ctag{font-size:14px;font-weight:600;padding:2px 10px;border-radius:8px;background:#eef0f4;color:#4b5565}
+.ct-bazi{background:#e8eef9;color:#1d3461}.ct-tarot{background:#f1ebf8;color:#5b3f86}
+.stu-meta{font-size:14px}
+.stu-acts{display:flex;gap:8px;margin-top:10px}
+.grp{display:flex;align-items:center;gap:10px;margin:22px 2px 10px}
+.grp span{font-family:"Noto Serif TC","Songti TC",serif;font-size:20px;font-weight:700;color:var(--ink)}
+.grp::after{content:"";flex:1;height:1px;background:var(--line)}
+.grp::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--pri)}
+.grp-tarot::before{background:#6a4f95}.grp-other::before{background:var(--acc)}
+.crs{border-left:5px solid var(--pri)}
+.crs-tarot{border-left-color:#6a4f95}.crs-other{border-left-color:var(--acc)}
+.crs-h{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.crs-h b{display:block;font-family:"Noto Serif TC","Songti TC",serif;font-size:21px;line-height:1.35}
+.crs-h small{display:block;color:var(--quiet);font-size:14px}
+.kv3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 6px}
+.kv3.one{grid-template-columns:1fr}
+.kv3 div{background:var(--pri-soft);border-radius:12px;padding:8px 10px}
+.kv3 div.sh{background:var(--acc-soft)}
+.kv3 span{display:block;font-size:13px;color:var(--quiet)}
+.kv3 b{font-size:19px;color:var(--ink)}
+.combo{font-size:14px;color:var(--quiet);margin:2px 0 4px}
+.sess-h{font-weight:700;font-size:15px;margin:12px 0 4px;color:var(--pri)}
+.sess-h span{font-weight:400;color:var(--quiet);font-size:13px}
+.srow{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line);padding:8px 0}
+.srow .sd{flex:1;min-width:0;font-weight:600}
+.srow .sd small{display:block;font-weight:400;color:var(--quiet);font-size:13px}
+.nw{white-space:nowrap}
+.scard{display:flex;gap:14px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin:0 0 10px;box-shadow:var(--sh);align-items:flex-start}
+.dblk{flex:none;width:64px;border-radius:14px;background:var(--pri);color:#fff;text-align:center;padding:8px 2px 7px}
+.dblk b{display:block;font-size:28px;line-height:1.05;font-family:-apple-system,"Helvetica Neue",Arial,sans-serif}
+.dblk span{display:block;font-size:12px;opacity:.85;margin-top:2px}
+.sc-body{flex:1;min-width:0;display:flex;flex-direction:column}
+.sc-top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:2px}
+.sc-name{font-family:"Noto Serif TC","Songti TC",serif;font-size:20px;line-height:1.35;color:var(--ink)}
+.sc-time{font-size:16px;font-weight:600;color:var(--pri);margin-top:2px}
+.sc-sub{font-size:14px;color:var(--quiet)}
+.stag{font-size:12px;font-weight:700;letter-spacing:.1em;padding:1px 8px;border-radius:6px}
+.st-bazi{background:#e8eef9;color:#1d3461}.st-tarot{background:#f1ebf8;color:#5b3f86}.st-free{background:var(--acc-soft);color:var(--accd)}
+.mc{padding:14px}.mc-top{display:flex;gap:14px;align-items:flex-start}
+.mc.past{opacity:.75}.mc.past .dblk{background:#8a93a5}
+.mc-act{display:flex;align-items:center;gap:10px;margin-top:12px}
+.hint{margin:12px 0 0;padding:9px 12px;border-radius:10px;background:var(--pri-soft);color:var(--pri);font-size:14px}
+.lb{display:inline-block;width:3em;color:var(--quiet);font-size:14px}
+.btn.line-g{background:#06c755;border-color:#06c755;color:#fff;text-decoration:none}
+.btn.line-g svg{width:22px;height:22px;fill:#fff}
+.login{position:fixed;inset:0;overflow:auto;z-index:60;display:flex;justify-content:center;align-items:center;padding:20px 18px}
+.lg-in{width:100%;max-width:400px}
+.lg-stu{background:linear-gradient(180deg,var(--pri-soft) 0%,#fff 55%)}
+.lg-adm{background:linear-gradient(160deg,#16233f,#243a66)}
+.lg-brand{text-align:center;margin:0 0 18px}
+.lg-brand h1{font-size:26px;margin:10px 0 2px;letter-spacing:.12em}
+.lg-brand p{margin:0;color:var(--quiet);font-size:15px;letter-spacing:.2em}
+.lg-emb{display:inline-flex;width:84px;height:84px;border-radius:50%;background:#fff;box-shadow:0 8px 24px rgba(20,32,60,.12);padding:8px}
+.lg-emb img{width:100%;height:100%}
+.lg-card{background:#fff;border-radius:22px;padding:6px 20px 16px;box-shadow:0 12px 32px rgba(20,32,60,.10)}
+.lg-forgot{display:block;margin:10px auto 0;color:var(--pri);font-weight:600}
+.lg-foot{text-align:center;margin-top:16px;color:var(--quiet);font-size:14px}
+.lg-foot p{margin:0 0 8px}
+.lg-line{display:inline-block;color:#06a648;font-weight:700;text-decoration:none;border:1px solid #06c755;border-radius:999px;padding:8px 18px}
+.lg-demo{text-align:center;font-size:12px;color:var(--quiet);margin:14px 0 0}
+.lg-adm .lg-brand h1,.lg-adm .lg-brand p{color:#fff}.lg-adm .lg-brand p{opacity:.75}
+.lg-adm .lg-demo{color:rgba(255,255,255,.6)}
+.lg-lock{display:inline-flex;width:72px;height:72px;border-radius:20px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);align-items:center;justify-content:center}
+.lg-lock svg{width:34px;height:34px;fill:none;stroke:#e9d3a1;stroke-width:1.8;stroke-linecap:round}
+.lg-stu{align-items:flex-start;padding-top:0;background:#fff}
+.lg-hero{margin:0 -18px -34px;height:250px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent);mask-image:linear-gradient(180deg,#000 70%,transparent)}
+.lg-hero img{width:100%;height:100%;object-fit:cover;object-position:center 55%}
+.lg-stu .lg-brand{position:relative;margin-bottom:14px}
+.lg-stu .lg-brand h1{margin-top:0}
+@media (min-width:600px){.lg-hero{height:300px;border-radius:0 0 24px 24px}}
+.lg-hero{height:260px;margin:0 -18px -20px}
+.lg-hero img{object-position:center 40%}
+.lg-hero{height:280px;margin:0 -18px -14px}
+.lg-hero img{object-position:center 45%}
+.fest-tag{position:absolute;top:14px;right:16px;z-index:2;background:#fff;color:var(--fa,var(--pri));font-weight:700;font-size:13px;letter-spacing:.15em;padding:4px 12px;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.lg-stu[class*=fest-] .lg-hero{-webkit-mask-image:linear-gradient(180deg,#000 72%,transparent);mask-image:linear-gradient(180deg,#000 72%,transparent)}
+.lg-stu[class*=fest-] .btn.big{background:var(--fa);border-color:var(--fa)}
+.lg-stu[class*=fest-] .lg-forgot{color:var(--fa)}
+/* 沉浸式節慶背景 */
+.lg-stu[class*=fest-]{background-attachment:fixed}
+.lg-stu[class*=fest-] .lg-hero{-webkit-mask-image:none;mask-image:none;margin:0 -18px 0;height:270px;border-radius:0 0 28px 28px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.lg-stu[class*=fest-] .lg-brand{margin:14px 0 14px}
+.lg-stu[class*=fest-] .lg-brand h1{color:var(--fi);text-shadow:0 2px 10px rgba(0,0,0,.18)}
+.lg-stu[class*=fest-] .lg-brand p{color:var(--fi);opacity:.85}
+.lg-stu[class*=fest-] .lg-card{box-shadow:0 14px 36px rgba(0,0,0,.18)}
+@media (min-width:600px){.lg-stu[class*=fest-] .lg-hero{height:320px}}
+/* 主視覺與登入框融合（2026-10-31） */
+.lg-stu[class*=fest-]{padding:0 18px 24px}
+.lg-stu[class*=fest-] .lg-in{position:relative;z-index:1;padding-top:clamp(210px,44vh,340px)}
+.lg-stu[class*=fest-] .lg-hero{position:absolute;z-index:0;top:0;left:0;right:0;margin:0;height:clamp(380px,72vh,600px);border-radius:0;box-shadow:none;
+ -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 48%,rgba(0,0,0,.55) 72%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 48%,rgba(0,0,0,.55) 72%,transparent 100%)}
+.lg-stu[class*=fest-] .lg-hero img{object-position:center 38%}
+.lg-stu[class*=fest-] .lg-brand{margin:0 0 14px}
+.lg-stu[class*=fest-] .lg-brand h1{color:#fff;font-size:28px;text-shadow:0 2px 4px rgba(0,0,0,.45),0 4px 22px rgba(0,0,0,.45)}
+.lg-stu[class*=fest-] .lg-brand p{color:#fff;opacity:1;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.5),0 2px 12px rgba(0,0,0,.4)}
+.lg-stu[class*=fest-] .lg-card{background:rgba(255,255,255,.80);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);border:1px solid rgba(255,255,255,.7);box-shadow:0 18px 40px rgba(0,0,0,.22)}
+.lg-stu[class*=fest-] .lg-card input.t{background:rgba(255,255,255,.92)}
+.lg-stu[class*=fest-] .fest-tag{position:absolute;z-index:2;top:14px;right:16px;background:rgba(255,255,255,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+@media (min-width:600px){.lg-stu[class*=fest-] .lg-hero{height:clamp(420px,78vh,700px)}.lg-stu[class*=fest-] .lg-in{padding-top:clamp(260px,48vh,400px)}}
+.lg-stu[class*=fest-] .lg-in{position:static}
+.lg-stu[class*=fest-] .lg-in>*:not(.lg-hero):not(.fest-tag){position:relative;z-index:1}
+.lg-stu[class*=fest-] .lg-hero{height:clamp(360px,60vh,520px);left:0;right:0}
+.lg-stu[class*=fest-] .lg-hero img{object-position:center 30%}
+.lg-stu[class*=fest-] .lg-in{padding-top:calc(clamp(360px,60vh,520px) - 112px)}
+@media (min-width:600px){
+ .lg-stu[class*=fest-] .lg-hero{height:clamp(440px,74vh,640px);left:50%;right:auto;width:min(100%,980px);transform:translateX(-50%);
+  -webkit-mask-image:radial-gradient(ellipse 62% 78% at 50% 36%,#000 58%,transparent 100%);mask-image:radial-gradient(ellipse 62% 78% at 50% 36%,#000 58%,transparent 100%)}
+ .lg-stu[class*=fest-] .lg-in{padding-top:calc(clamp(440px,74vh,640px) - 150px)}}
+@media (min-width:600px){
+ .lg-stu[class*=fest-] .lg-hero{width:min(100%,900px);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 84%,transparent 100%),linear-gradient(180deg,#000 55%,transparent 100%);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 84%,transparent 100%),linear-gradient(180deg,#000 55%,transparent 100%);mask-composite:intersect}
+ .lg-stu[class*=fest-] .lg-hero img{object-position:center 22%}
+ .lg-stu[class*=fest-] .lg-in{padding-top:calc(clamp(440px,74vh,640px) - 96px)}}
+/* 登入一頁滿、不能滑（2026-10-31） */
+.login.lg-stu[class*=fest-]{overflow:hidden;height:100vh;height:100dvh;padding:0 16px;align-items:stretch;overscroll-behavior:none;touch-action:manipulation}
+.lg-stu[class*=fest-] .lg-in{height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 max(12px,env(safe-area-inset-bottom))!important;margin:0 auto}
+.lg-stu[class*=fest-] .lg-hero{height:calc(100% - 330px);min-height:260px}
+.lg-stu[class*=fest-] .lg-brand{margin:0 0 10px}
+.lg-stu[class*=fest-] .lg-brand h1{font-size:26px}
+.lg-stu[class*=fest-] .lg-card{padding:4px 18px 10px}
+.lg-stu[class*=fest-] .lg-card label.f{margin-top:8px}
+.lg-stu[class*=fest-] .lg-card input.t{min-height:44px}
+.lg-stu[class*=fest-] .lg-card .btn.big{min-height:48px;margin-top:12px}
+.lg-stu[class*=fest-] .lg-forgot{margin-top:6px}
+.lg-foot1{margin-top:10px;font-size:14px;color:var(--ink);text-align:center;white-space:nowrap}
+.lg-foot1 a{color:#06a648;font-weight:700;text-decoration:none;margin-left:4px;border-bottom:1.5px solid #06c755}
+.lg-stu[class*=fest-] .lg-demo{margin:6px 0 0;font-size:11.5px}
+@media (max-height:700px){.lg-stu[class*=fest-] .lg-brand h1{font-size:22px}.lg-stu[class*=fest-] .lg-brand p{font-size:13px}.lg-stu[class*=fest-] .lg-card input.t{min-height:42px}.lg-stu[class*=fest-] .lg-card .btn.big{min-height:44px;margin-top:10px}.lg-stu[class*=fest-] .lg-hero{min-height:200px}}
+@media (min-width:600px){.lg-stu[class*=fest-] .lg-hero{height:calc(100% - 300px);min-height:300px}.lg-stu[class*=fest-] .lg-hero img{object-position:center 30%}}
+/* 主視覺動態：上下浮動＋光粉（2026-10-31） */
+.lg-stu[class*=fest-] .fest-tag{display:none}
+.lg-hero img{transform:scale(1.07);animation:heroFloat 6s ease-in-out infinite;will-change:transform}
+@keyframes heroFloat{0%,100%{transform:scale(1.07) translateY(-7px)}50%{transform:scale(1.07) translateY(7px)}}
+.lg-hero{position:relative}
+.lg-spk{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.lg-spk i{position:absolute;border-radius:50%;background:radial-gradient(circle,#fff 0%,#fff6c8 35%,rgba(255,215,110,.55) 60%,transparent 72%);box-shadow:0 0 12px 4px rgba(255,226,140,.85),0 0 3px 1px #fff;opacity:0;animation:spk 5s ease-in-out infinite}
+.lg-spk i:nth-child(3n){background:radial-gradient(circle,#fff 0%,rgba(255,255,255,.7) 45%,transparent 72%);box-shadow:0 0 6px 2px rgba(255,255,255,.8)}
+@keyframes spk{0%{opacity:0;transform:translateY(14px) scale(.4)}25%{opacity:1;transform:translateY(0) scale(1)}55%{opacity:.85;transform:translateY(-16px) scale(.85)}100%{opacity:0;transform:translateY(-40px) scale(.3)}}
+@media (prefers-reduced-motion:reduce){.lg-hero img,.lg-spk i{animation:none}.lg-spk{display:none}}
+/* 正式版：載入中、積點系統入口 */
+.boot{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--quiet)}
+.spin{width:38px;height:38px;border-radius:50%;border:4px solid var(--pri-soft);border-top-color:var(--pri);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ptcard{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);margin-top:14px}
+.ptcard .ptic{width:48px;height:48px;flex:none;border-radius:14px;background:var(--pri-soft);padding:6px}
+.ptcard .ptic img{width:100%;height:100%}
+.ptcard b{display:block;font-size:17px}.ptcard small{display:block;color:var(--quiet);font-size:13px;margin-top:2px}
+.ptcard .ptgo{margin-left:auto;font-size:26px;color:var(--pri)}
+</style>
+</head>
+<body class="t-blue">
+<div class="wrap" id="root"></div>
+<div id="__kbSpacer"></div>
+<nav class="tabs" id="tabs" style="display:none"></nav>
+<div class="mask" id="mask"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+var lunarInfo=[0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,0x1ab54,0x02b60,0x09570,0x052f2,0x04970,0x06566,0x0d4a0,0x0ea50,0x16a95,0x05ad0,0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,0x06ca0,0x0b550,0x15355,0x04da0,0x0a5b0,0x14573,0x052b0,0x0a9a8,0x0e950,0x06aa0,0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,0x05260,0x0f263,0x0d950,0x05b57,0x056a0,0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,0x0d250,0x0d558,0x0b540,0x0b6a0,0x195a6,0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,0x06b58,0x05ac0,0x0ab60,0x096d5,0x092e0,0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,0x05aa0,0x076a3,0x096d0,0x04afb,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0,0x14b63,0x09370,0x049f8,0x04970,0x064b0,0x168a6,0x0ea50,0x06b20,0x1a6c4,0x0aae0,0x092e0,0x0d2e3,0x0c960,0x0d557,0x0d4a0,0x0da50,0x05d55,0x056a0,0x0a6d0,0x055d4,0x052d0,0x0a9b8,0x0a950,0x0b4a0,0x0b6a6,0x0ad50,0x055a0,0x0aba4,0x0a5b0,0x052b0,0x0b273,0x06930,0x07337,0x06aa0,0x0ad50,0x14b55,0x04b60,0x0a570,0x054e4,0x0d260,0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a4d0,0x0d150,0x0f252,0x0d520];
+function lLeapMonth(y){return lunarInfo[y-1900]&0xf;}
+function lLeapDays(y){return lLeapMonth(y)?((lunarInfo[y-1900]&0x10000)?30:29):0;}
+function lMonthDays(y,m){return (lunarInfo[y-1900]&(0x10000>>m))?30:29;}
+function lYearDays(y){let s=348;for(let i=0x8000;i>0x8;i>>=1)s+=(lunarInfo[y-1900]&i)?1:0;return s+lLeapDays(y);}
+/* 農曆 → 國曆（西元） */
+function lunar2solar(ly,lm,ld,isLeap){
+  ly=parseInt(ly); lm=parseInt(lm); ld=parseInt(ld);
+  if(!(ly>=1900&&ly<=2100))return null;
+  if(!(lm>=1&&lm<=12)||!(ld>=1&&ld<=30))return null;
+  const leap=lLeapMonth(ly);
+  if(isLeap&&leap!==lm) isLeap=false;
+  if(isLeap? ld>lLeapDays(ly) : ld>lMonthDays(ly,lm)) return null;
+  let off=0;
+  for(let i=1900;i<ly;i++) off+=lYearDays(i);
+  for(let i=1;i<lm;i++){ off+=lMonthDays(ly,i); if(leap>0&&i===leap) off+=lLeapDays(ly); }
+  if(isLeap) off+=lMonthDays(ly,lm);
+  off+=ld-1;
+  const d=new Date(Date.UTC(1900,0,31)+off*86400000);
+  return {y:d.getUTCFullYear(),m:d.getUTCMonth()+1,d:d.getUTCDate()};
+}
+/* 民國農曆（年可為民國或西元，月可帶「閏」）→ 國曆西元 {y,m,d} */
+function l2sWest(by,bm,bd){
+  by=parseInt(by); bd=parseInt(bd);
+  const ms=''+(bm==null?'':bm); const isLeap=ms.indexOf('閏')>=0;
+  const mn=parseInt(ms.replace('閏',''));
+  if(!by||!mn||!bd)return null;
+  const ly = by>=1000 ? by : by+1911;
+  return lunar2solar(ly,mn,bd,isLeap);
+}
+
+</script>
+
+</script>
+<script>
+/* =====================================================================
+   學員專區（流程試用版 2026-10-31）
+   - 資料只存在這支手機；正式版接資料庫、沿用積點系統帳號
+   - 付款先模擬成功；正式版接綠界
+   - 八字命盤直接用命理道場原版排盤（chart.html），不另外做
+   ===================================================================== */
+var KEY='course_demo_v5';
+function today(off){ var d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+(off||0)); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function seed(){
+  return seedExtra({
+    settings:{changeDays:3,maxChanges:2,waitlist:true,
+      company:{name:'神奇身心靈學苑',phone:'04-22544917（13:00-22:00）',line:'神奇學苑官方 LINE（@792edykw）',lineUrl:'https://lin.ee/n2N8qhh',addr:'台中市西屯區市政路 386 號 11 樓之 8'},
+      teacher:{name:'羅文勳 院長',phone:'',line:'羅老師官方 LINE',lineUrl:'https://lin.ee/ocCkqfn'}},
+    news:[
+      {id:'n1',type:'公告',pin:true,title:'學員專區上線試用',body:'之後報名、改日期、上課簽到、看命盤都在這裡。有問題請聯絡學苑行政。',date:today(0)},
+      {id:'n2',type:'推薦',pin:false,title:'11 月八字進階班開課',body:'11/21～11/22 羅文勳院長親授，進階拆解十神格局。名額有限。',date:today(-1),link:'c2'}
+    ],
+    /* 課程資料來源：入口網站「老師區 → 課程資料」的課程價格表、2026 課程分潤表、11 月課表（2026-10-31 抄錄）
+       pay = [現金匯款, 刷卡一次, 刷卡6期, 刷卡12期, 無卡12期, 無卡24期]；日期從入口網站行事曆自動帶入 */
+    courses:[
+      {id:'c1',name:'八字初階班',mode:'線下實體課',intro:'快速打好八字基礎，輕鬆拆解命盤！',teacher:'羅文勳 院長',place:'學苑教室',price:19800,share:5570,seats:20,
+        pay:[19800,20600,20900,21700,21600,23200],combo:{name:'八字兩階合報（初階＋進階）',pay:[47600,49500,50300,52000,51900,55700],share:10088},
+        sessions:[{id:'s1',date:today(0),time:'10:00-18:30',seats:20,note:'試用示範場次'}]},
+      {id:'c2',name:'八字進階班',alias:'八字高階創業班',mode:'線下實體課',intro:'進階拆解十神格局，實戰演練命盤關鍵！',teacher:'羅文勳 院長',place:'學苑教室',price:29800,share:4878,seats:2,
+        pay:[29800,31000,31500,32600,32500,34900],combo:{name:'八字兩階合報（初階＋進階）',pay:[47600,49500,50300,52000,51900,55700],share:10088},sessions:[]},
+      {id:'c3',name:'塔羅初階班',mode:'線下實體課',intro:'完整講解塔羅 22 大牌，為你揭示深藏的智慧與指引。',teacher:'陳彩綺 講師',place:'學苑教室',price:12000,share:1840,seats:15,
+        pay:[12000,12500,12700,13200,13100,14100],combo:{name:'塔羅兩階合報（初階＋創業菁英）',pay:[34900,36300,36900,38100,38000,40900],share:5404},sessions:[]},
+      {id:'c4',name:'塔羅進階班',alias:'塔羅創業菁英班',mode:'線下實體課',intro:'塔羅創業菁英班：從解牌到接案實戰。',teacher:'陳彩綺 講師',place:'學苑教室',price:24900,share:4000,seats:15,
+        pay:[24900,25900,26300,27200,27100,29200],combo:{name:'塔羅兩階合報（初階＋創業菁英）',pay:[34900,36300,36900,38100,38000,40900],share:5404},sessions:[]},
+      {id:'c5',name:'八字體驗班',mode:'線上／線下',intro:'洞悉人脈秘密，一招讓你突破人性。',teacher:'羅文勳 院長',place:'線上課',price:0,share:0,seats:50,sessions:[]},
+      {id:'c6',name:'塔羅體驗班',mode:'線上課',intro:'教你基礎認識塔羅，利用塔羅牌來洞悉未來趨勢。',teacher:'陳彩綺 講師',place:'線上課',price:0,share:0,seats:50,sessions:[]},
+      {id:'c7',name:'命盤解析課',mode:'線上／實體',intro:'老師實戰批盤現場，學會說出命的故事。學員免費開放。',teacher:'羅文勳 院長',place:'線上課',price:0,share:0,seats:80,sessions:[]}
+    ],
+    online:[
+      {id:'o1',name:'八字入門影音',intro:'實體課前的預習影片。',open:'all',
+        lessons:[{t:'第一堂　天干地支',v:'',doc:''},{t:'第二堂　五行生剋',v:'',doc:''},{t:'第三堂　排盤怎麼看',v:'',doc:''}]},
+      {id:'o2',name:'八字初階課後複習',intro:'上過八字初階的學員才會開通。',open:'course:c1',
+        lessons:[{t:'複習一　十神',v:'',doc:''},{t:'複習二　旺衰',v:'',doc:''}]}
+    ],
+    students:[
+      {acct:'lin@demo.tw',name:'林小美',phone:'0912-000-001',email:'lin@demo.tw',referrer:'羅文勳',second:'',ratio:'',createdAt:today(-20),updatedAt:today(-19),note:'朋友介紹',
+        profile:{name:'林小美',sex:'F',phone:'0912-000-001',email:'lin@demo.tw',cal:'國',y:'1988',m:'3',d:'21',leap:false,timeMode:'clock',hh:'9',mi:'30',shichen:''}},
+      {acct:'chen@demo.tw',name:'陳大明',phone:'0912-000-002',email:'chen@demo.tw',referrer:'陳彩綺',second:'康瑋齊',ratio:'九比一',createdAt:today(-12),updatedAt:today(-11),note:'',
+        profile:{name:'陳大明',sex:'M',phone:'0912-000-002',email:'chen@demo.tw',cal:'農',y:'75',m:'8',d:'15',leap:false,timeMode:'sc',hh:'',mi:'',shichen:'6'}},
+      {acct:'chang@demo.tw',name:'張雅婷',phone:'0912-000-003',email:'chang@demo.tw',referrer:'沈佳琪',second:'謝欣諭',ratio:'一半',createdAt:today(-8),updatedAt:today(-6),note:'想先上塔羅',
+        profile:{name:'張雅婷',sex:'F',phone:'0912-000-003',email:'chang@demo.tw',cal:'國',y:'1995',m:'11',d:'2',leap:false,timeMode:'none',hh:'',mi:'',shichen:''}},
+      {acct:'lee@demo.tw',name:'李志偉',phone:'0912-000-004',email:'lee@demo.tw',referrer:'羅文勳',second:'',ratio:'',createdAt:today(-2),note:'還沒填資料',profile:null},
+      {acct:'wu@demo.tw',name:'吳佩珊',phone:'0912-000-005',email:'wu@demo.tw',referrer:'湯雯莉',second:'',ratio:'',createdAt:today(0),note:'今天剛開通',profile:null}
+    ],
+    enroll:[
+      {id:'e1',acct:'lin@demo.tw',course:'c1',session:'s1',status:'paid',changes:0,paidAt:today(-10)},
+      {id:'e2',acct:'lin@demo.tw',course:'c3',session:'p_nov-28',status:'paid',changes:1,paidAt:today(-9)},
+      {id:'e3',acct:'chen@demo.tw',course:'c1',session:'s1',status:'checked',changes:0,paidAt:today(-8),checkedAt:today(0)+' 13:52'},
+      {id:'e4',acct:'chang@demo.tw',course:'c3',session:'p_nov-28',status:'paid',changes:0,paidAt:today(-5)},
+      {id:'e5',acct:'chang@demo.tw',course:'c2',session:'p_nov-21',status:'wait',changes:0,paidAt:''},
+      {id:'e6',acct:'chen@demo.tw',course:'c2',session:'p_nov-21',status:'paid',changes:0,paidAt:today(-4)},
+      {id:'e7',acct:'lee@demo.tw',course:'c2',session:'p_nov-21',status:'paid',changes:0,paidAt:today(-1)},
+      {id:'e8',acct:'wu@demo.tw',course:'c1',session:'s1',status:'refunded',changes:0,paidAt:today(-3)}
+    ],
+    me:null, admin:false
+  });
+}
+var S; try{ S=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){ S=null; }
+if(!S) S=seed();
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} }
+function $(id){ return document.getElementById(id); }
+function esc(s){ return (''+(s==null?'':s)).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function half(s){ return (''+(s||'')).replace(/[０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-65248);}).replace(/[：]/g,':').trim(); }
+function money(n){ return 'NT$ '+(+n||0).toLocaleString('en-US'); }
+function wd(d){ var x=new Date(d+'T12:00:00'); return '日一二三四五六'[x.getDay()]; }
+function sdate(x){ return dlabel(x.date)+(x.end&&x.end!==x.date?'～'+dlabel(x.end):''); }
+function onDay(x){ var t=today(); return t>=x.date&&t<=(x.end||x.date); }
+function dlabel(d){ var p=d.split('-'); return (+p[1])+'/'+(+p[2])+'（'+wd(d)+'）'; }
+function daysUntil(d){ var a=new Date(today()+'T12:00:00'), b=new Date(d+'T12:00:00'); return Math.round((b-a)/864e5); }
+function toast(m){ var t=$('toast'); t.textContent=m; t.style.display='block'; clearTimeout(toast._t); toast._t=setTimeout(function(){t.style.display='none';},2200); }
+function course(id){ return S.courses.find(function(c){return c.id===id;}); }
+function sessOf(sid){ for(var i=0;i<S.courses.length;i++){ var s=S.courses[i].sessions.find(function(x){return x.id===sid;}); if(s) return {c:S.courses[i],s:s}; } return null; }
+function taken(sid){ return S.enroll.filter(function(e){return e.session===sid&&(e.status==='paid'||e.status==='checked'||e.status==='pending');}).length; }
+function left(s){ return Math.max(0,s.seats-taken(s.id)); }
+function meStu(){ return S.students.find(function(x){return x.acct===S.me;}); }
+function stuOf(a){ return S.students.find(function(x){return x.acct===a;}); }
+var PFA=null; /* 行政代填時的學員帳號 */
+function formStu(){ return PFA?stuOf(PFA):meStu(); }
+function allSess(){ var a=[]; S.courses.forEach(function(c){ c.sessions.forEach(function(s){ a.push({c:c,s:s}); }); }); a.sort(function(x,y){ return (x.s.date+x.s.time)<(y.s.date+y.s.time)?-1:1; }); return a; }
+var TAB='home', ATAB='today';
+
+/* ---------- 登入 ---------- */
+function viewLogin(){
+  $('tabs').style.display='none';
+  $('root').innerHTML='<div class="demo">流程試用版：資料只存在這支手機，付款先用模擬。正式版沿用積點系統的帳號密碼。</div>'+
+  '<header class="top"><h1>神奇身心靈學苑<small>學員專區</small></h1></header>'+
+  '<div class="card"><h2>登入</h2>'+
+  '<label class="f">帳號（Email）</label><input class="t" id="lu" type="text" autocomplete="username" value="lin@demo.tw">'+
+  '<label class="f">密碼</label><input class="t" id="lp" type="password" autocomplete="current-password" placeholder="試用版隨便輸入即可">'+
+  '<button class="btn block" onclick="doLogin()">登入</button>'+
+  '<p class="muted">還沒有帳號？請聯絡學苑行政幫你開通。</p></div>'+
+  '<div class="card soft"><b>行政人員</b><p class="muted">開課、名單、消息、線上課、通知文字和設定都在行政後台。</p><button class="btn line" onclick="S.admin=true;save();render()">進入行政後台（試用）</button></div>';
+}
+function doLogin(){ var u=half($('lu').value).toLowerCase(); var st=S.students.find(function(x){return x.acct===u;}); if(!st){ toast('查不到這個帳號，請聯絡行政開通'); return; } S.me=u; save(); TAB=st.profile?'home':'me'; render(); if(!st.profile) toast('第一次登入，請先填你的資料'); }
+function logout(){ S.me=null; S.admin=false; save(); render(); }
+
+/* ---------- 學員端 ---------- */
+function tabsStudent(){
+  var t=[['home','首頁'],['table','課表'],['mine','我的課'],['online','線上課'],['shop','商城'],['me','我的']];
+  $('tabs').style.display='flex';
+  $('tabs').innerHTML=t.map(function(x){return '<button class="'+(TAB===x[0]?'on':'')+'" onclick="go(\''+x[0]+'\')">'+x[1]+'</button>';}).join('');
+}
+function go(t){ TAB=t; render(); scrollTo(0,0); }
+function head(){ var st=meStu(); return '<div class="demo">流程試用版：資料只存在這支手機，付款先用模擬。</div><header class="top"><h1>學員專區<small>'+esc(st?st.name:'')+(st?' '+lvOf(st.acct).badge+' Lv'+lvOf(st.acct).n+'・<i class="coin"></i>'+coinsOf(st.acct):'')+'</small></h1><button class="btn gray" onclick="logout()">登出</button></header>'; }
+
+/* 首頁：最新消息＋近期開課 */
+function viewHome(){
+  var h=head()+lvCard(S.me)+'<h2>最新消息</h2>';
+  var list=S.news.slice().sort(function(a,b){ return (b.pin?1:0)-(a.pin?1:0) || (a.date<b.date?1:-1); });
+  if(!list.length) h+='<div class="card soft">目前沒有消息。</div>';
+  list.forEach(function(n){
+    h+='<div class="card" onclick="openNews(\''+n.id+'\')" style="cursor:pointer"><div class="row"><span class="chip '+(n.type==='推薦'?'c-warn':'c-blue')+'">'+esc(n.type)+'</span>'+(n.pin?'<span class="chip c-gray">置頂</span>':'')+'<span class="muted">'+dlabel(n.date)+'</span></div><b style="font-size:18px;display:block;margin-top:6px">'+esc(n.title)+'</b><p class="muted" style="margin:4px 0 0">'+esc(n.body.slice(0,40))+(n.body.length>40?'…':'')+'</p></div>';
+  });
+  var up=allSess().filter(function(x){ return daysUntil(x.s.date)>=0; }).slice(0,3);
+  h+='<h2 style="margin-top:20px">近期開課</h2>';
+  up.forEach(function(x){ h+=sessRow(x); });
+  h+='<button class="btn line block" onclick="go(\'table\')">看完整課表</button>';
+  $('root').innerHTML=h;
+}
+function openNews(id){
+  var n=S.news.find(function(x){return x.id===id;});
+  sheet('<div class="row"><span class="chip '+(n.type==='推薦'?'c-warn':'c-blue')+'">'+esc(n.type)+'</span><span class="muted">'+dlabel(n.date)+'</span></div><h2>'+esc(n.title)+'</h2><p style="white-space:pre-wrap">'+esc(n.body)+'</p>'+
+    (n.link&&course(n.link)?'<button class="btn block" onclick="closeSheet();openCourse(\''+n.link+'\')">看這門課</button>':'')+'<button class="btn gray block" onclick="closeSheet()">關閉</button>');
+}
+
+/* 課表：依月份列出所有場次 */
+function sessRow(x){
+  var n=left(x.s), past=daysUntil(x.s.date)<0;
+  var mine=S.enroll.find(function(e){return e.acct===S.me&&e.session===x.s.id&&e.status!=='refunded';});
+  var tag= past?'<span class="chip c-gray">已結束</span>': mine?'<span class="chip c-ok">'+(mine.status==='wait'?'候補中':'已報名')+'</span>': n>0?'<span class="chip c-blue">剩 '+n+' 位</span>':'<span class="chip c-warn">額滿</span>';
+  return '<div class="card" onclick="openCourse(\''+x.c.id+'\')" style="cursor:pointer;padding:12px 14px"><div class="row"><b>'+sdate(x.s)+' '+esc(x.s.time)+'</b>'+tag+'</div><div style="font-size:18px;font-weight:700;margin-top:2px">'+esc(x.c.name)+'</div><div class="muted">'+esc(x.c.place)+'・'+esc(x.c.teacher)+'</div></div>';
+}
+function viewTable(){
+  var h=head()+'<h2>課表</h2><p class="muted">點任一堂課看介紹和報名。</p>';
+  var last='';
+  allSess().filter(function(x){ return daysUntil(x.s.date)>=-7; }).forEach(function(x){
+    var ym=x.s.date.slice(0,7); if(ym!==last){ last=ym; h+='<h3>'+(+ym.slice(0,4))+' 年 '+(+ym.slice(5))+' 月</h3>'; }
+    h+=sessRow(x);
+  });
+  $('root').innerHTML=h;
+}
+function openCourse(cid){
+  var c=course(cid);
+  var h='<h2>'+esc(c.name)+'</h2><p>'+esc(c.intro)+'</p><div class="row muted"><span>講師：'+esc(c.teacher)+'</span><span>地點：'+esc(c.place)+'</span></div><p style="font-size:19px;font-weight:700;margin:8px 0">'+money(c.price)+'</p><h3>可以選的日期</h3>';
+  c.sessions.slice().sort(function(a,b){return a.date<b.date?-1:1;}).forEach(function(s){
+    var n=left(s), past=daysUntil(s.date)<0;
+    var mine=S.enroll.find(function(e){return e.acct===S.me&&e.session===s.id&&e.status!=='refunded';});
+    var btn= past?'<span class="chip c-gray">已結束</span>': mine?'<span class="chip c-ok">你已報名</span>': n>0?'<button class="btn" onclick="askEnroll(\''+s.id+'\')">報名這天</button>': S.settings.waitlist?'<button class="btn line" onclick="askEnroll(\''+s.id+'\',true)">登記候補</button>':'<span class="chip c-warn">額滿</span>';
+    h+='<div class="sess"><div class="row"><b>'+dlabel(s.date)+' '+esc(s.time)+'</b>'+(past||mine?'':'<span class="muted">剩 '+n+' 位</span>')+'</div><div style="margin-top:8px">'+btn+'</div></div>';
+  });
+  h+='<button class="btn gray block" onclick="closeSheet()">關閉</button>';
+  sheet(h);
+}
+function askEnroll(sid,wait){
+  var o=sessOf(sid);
+  var already=S.enroll.find(function(e){return e.acct===S.me&&e.course===o.c.id&&e.status!=='refunded'&&e.status!=='wait';});
+  if(already&&!wait){ toast('這門課你已經報名了，要換日期請到「我的課」'); return; }
+  sheet('<h2>'+(wait?'登記候補':'確認報名')+'</h2><p><b>'+esc(o.c.name)+'</b></p><p>'+sdate(o.s)+' '+esc(o.s.time)+'・'+esc(o.c.place)+'</p>'+
+    (wait?'<p class="muted">有人取消時，行政會依候補順序通知你，確認後再付款。</p>':'<p style="font-size:19px;font-weight:700">'+money(o.c.price)+'</p><p class="muted">還沒簽到前都可以改日期或申請退款（退款請找行政）。上課當天簽到後就不能退款。</p><p class="muted">正式版這裡會進入綠界付款（刷卡或轉帳）；試用版按下就當作付款成功。</p>')+
+    '<button class="btn block" onclick="doEnroll(\''+sid+'\','+(!!wait)+')">'+(wait?'登記候補':'前往付款')+'</button><button class="btn gray block" onclick="closeSheet()">取消</button>');
+}
+function doEnroll(sid,wait){
+  var o=sessOf(sid);
+  S.enroll.push({id:'e'+Date.now(),acct:S.me,course:o.c.id,session:sid,status:wait?'wait':'paid',changes:0,paidAt:wait?'':today()});
+  save(); closeSheet(); TAB='mine'; render(); toast(wait?'已登記候補':'付款成功，已完成報名');
+}
+
+/* 我的課程 */
+var ST={paid:['已付款・待上課','c-blue'],checked:['已簽到・不可退款','c-ok'],wait:['候補中','c-warn'],refunded:['已退款','c-gray'],pending:['待付款','c-warn']};
+function canChange(e,o){ return e.status==='paid' && daysUntil(o.s.date)>=S.settings.changeDays && (e.changes||0)<S.settings.maxChanges; }
+function viewMine(){
+  var h=head()+'<h2>我的課程</h2>';
+  var list=S.enroll.filter(function(e){return e.acct===S.me;});
+  if(!list.length) h+='<div class="card soft"><p>你還沒有報名任何實體課程。</p><button class="btn" onclick="go(\'table\')">看課表</button></div>';
+  list.forEach(function(e){
+    var o=sessOf(e.session); if(!o) return; var st=ST[e.status]||['',''];
+    var isToday=onDay(o.s);
+    h+='<div class="card"><div class="row"><b style="font-size:18px">'+esc(o.c.name)+'</b><span class="chip '+st[1]+'">'+st[0]+'</span></div><p>'+sdate(o.s)+' '+esc(o.s.time)+'・'+esc(o.c.place)+'</p>';
+    if(e.status==='paid'&&isToday) h+='<button class="btn ok block" onclick="askCheckin(\''+e.id+'\')">我到了，簽到</button>';
+    else if(e.status==='paid'&&daysUntil(o.s.date)>0) h+='<p class="muted">上課當天這裡會出現「簽到」按鈕。</p>';
+    if(e.status==='checked') h+='<p class="muted">簽到時間：'+esc(e.checkedAt)+'</p>';
+    if(e.status==='paid'){
+      if(canChange(e,o)) h+='<button class="btn line" onclick="askChange(\''+e.id+'\')">改上課日期</button> <span class="muted">還可以改 '+(S.settings.maxChanges-(e.changes||0))+' 次</span>';
+      else if(daysUntil(o.s.date)>0) h+='<p class="muted">已超過改日期期限或次數用完，要調整請聯絡行政。</p>';
+    }
+    h+='</div>';
+  });
+  h+='<p class="muted">線上課程在下方「線上課程」。</p>';
+  $('root').innerHTML=h;
+}
+function askChange(eid){
+  var e=S.enroll.find(function(x){return x.id===eid;}); var c=course(e.course);
+  var opts=c.sessions.filter(function(s){return s.id!==e.session&&daysUntil(s.date)>=S.settings.changeDays&&left(s)>0;});
+  if(!opts.length){ toast('目前沒有其他可以換的日期'); return; }
+  sheet('<h2>改上課日期</h2><p><b>'+esc(c.name)+'</b></p>'+opts.map(function(s){return '<button class="btn line block" onclick="doChange(\''+eid+'\',\''+s.id+'\')">'+dlabel(s.date)+' '+esc(s.time)+'（剩 '+left(s)+' 位）</button>';}).join('')+'<button class="btn gray block" onclick="closeSheet()">取消</button>');
+}
+function doChange(eid,sid){ var e=S.enroll.find(function(x){return x.id===eid;}); e.session=sid; e.changes=(e.changes||0)+1; save(); closeSheet(); render(); toast('已改好日期'); }
+
+/* 線上課程專區 */
+function canWatch(o){
+  if(o.open==='all') return true;
+  if(o.open.indexOf('course:')===0){ var cid=o.open.slice(7); return S.enroll.some(function(e){return e.acct===S.me&&e.course===cid&&e.status==='checked';}); }
+  if(o.open.indexOf('list:')===0) return o.open.slice(5).split(',').indexOf(S.me)>=0;
+  return false;
+}
+function openRule(o){ if(o.open==='all') return '全部學員'; if(o.open.indexOf('course:')===0){ var c=course(o.open.slice(7)); return '上過「'+(c?c.name:'')+'」的學員'; } return '指定學員'; }
+function viewOnline(){
+  var h=head()+'<h2>線上課程</h2>';
+  if(!S.online.length) h+='<div class="card soft">目前還沒有線上課程。</div>';
+  S.online.forEach(function(o){
+    var ok=canWatch(o);
+    h+='<div class="card"><div class="row"><b style="font-size:18px">'+esc(o.name)+'</b><span class="chip '+(ok?'c-ok':'c-gray')+'">'+(ok?'已開通':'未開通')+'</span></div><p class="muted">'+esc(o.intro)+'</p>';
+    if(ok) h+='<ul class="list-plain">'+o.lessons.map(function(l,i){return '<li onclick="openLesson(\''+o.id+'\','+i+')" style="cursor:pointer"><b>'+esc(l.t)+'</b><br><span class="muted">點開看影片和講義</span></li>';}).join('')+'</ul>';
+    else h+='<p class="muted">開放對象：'+esc(openRule(o))+'。想看請聯絡學苑行政。</p>';
+    h+='</div>';
+  });
+  $('root').innerHTML=h;
+}
+function openLesson(oid,i){
+  var o=S.online.find(function(x){return x.id===oid;}), l=o.lessons[i];
+  sheet('<h2>'+esc(l.t)+'</h2><div class="card soft" style="text-align:center;padding:40px 10px">'+(l.v?'影片：<a href="'+esc(l.v)+'" target="_blank" rel="noopener">開啟影片</a>':'影片放這裡（行政在後台貼影片連結）')+'</div>'+
+    (l.doc?'<p><a href="'+esc(l.doc)+'" target="_blank" rel="noopener">下載講義</a></p>':'<p class="muted">講義也可以放在這裡。</p>')+'<button class="btn gray block" onclick="closeSheet()">關閉</button>');
+}
+
+/* 我的：資料＋命盤＋聯絡我們 */
+var PF=null, ME_SUB='chart';
+function viewMe(){
+  var st=meStu(); var p=st.profile;
+  var h=head();
+  if(!p||PF){ h+=profileForm(st); $('root').innerHTML=h; bindAdv(); return; }
+  h+='<div class="seg" style="margin-bottom:12px"><button class="'+(ME_SUB==='chart'?'on':'')+'" onclick="ME_SUB=\'chart\';render()">我的命盤</button><button class="'+(ME_SUB==='info'?'on':'')+'" onclick="ME_SUB=\'info\';render()">我的資料</button><button class="'+(ME_SUB==='contact'?'on':'')+'" onclick="ME_SUB=\'contact\';render()">聯絡我們</button></div>';
+  CHART_FOR=null;
+  if(ME_SUB==='chart'){
+    h+='<div class="card" style="padding:8px"><iframe id="chartFrame" src="chart.html" title="八字命盤" style="width:100%;border:0;height:900px;display:block"></iframe></div>'+(p.timeMode==='none'?'<p class="muted">你沒有填出生時間，時柱先用中午 12 點排，只能參考。</p>':'');
+  } else if(ME_SUB==='info'){
+    h+='<div class="card"><ul class="list-plain"><li>姓名：'+esc(p.name)+'（'+(p.sex==='M'?'男':'女')+'）</li><li>生日：'+esc(birthText(p))+'</li><li>手機：'+esc(p.phone)+'</li><li>Email：'+esc(p.email)+'</li></ul><button class="btn line block" onclick="PF=JSON.parse(JSON.stringify(meStu().profile));render()">修改我的資料</button></div>';
+  } else {
+    var c=S.settings.company, t=S.settings.teacher;
+    h+='<div class="card"><h3 style="margin-top:0">'+esc(c.name)+'</h3><ul class="list-plain"><li>電話：'+esc(c.phone)+'</li><li>LINE：'+esc(c.line)+'</li><li>地址：'+esc(c.addr)+'</li></ul></div>'+
+       '<div class="card"><h3 style="margin-top:0">'+esc(t.name)+'</h3><ul class="list-plain"><li>電話：'+esc(t.phone)+'</li><li>LINE：'+esc(t.line)+'</li></ul></div><p class="muted">要改日期、退款或其他問題，都可以直接聯絡學苑行政。</p>';
+  }
+  $('root').innerHTML=h;
+}
+var CHART_FOR=null; /* 行政看某位學員命盤時的帳號 */
+function chartPayload(p){
+  var s=solarOf(p), t=timeOf(p)||{h:12,mi:0};
+  var y=+half(p.y); if(y<1000) y+=1911;
+  return {name:p.name,sex:p.sex,cal:p.cal,leap:!!p.leap,y:y,m:+half(p.m),d:+half(p.d),h:t.h,mi:t.mi};
+}
+window.addEventListener('message',function(e){
+  var d=e.data||{}, f=$('chartFrame'); if(!f) return;
+  if(d.type==='chartReady'){ var st=CHART_FOR?stuOf(CHART_FOR):meStu(); if(st&&st.profile) f.contentWindow.postMessage({type:'chart',p:chartPayload(st.profile)},'*'); }
+  if(d.type==='chartH'&&d.h) f.style.height=(d.h+8)+'px';
+});
+function profileForm(st){
+  st=st||formStu();
+  if(!PF) PF={name:st.name||'',sex:'',phone:'',email:st.email||'',cal:'國',y:'',m:'',d:'',leap:false,timeMode:'clock',hh:'',mi:'',shichen:''};
+  var SC=['子 23-1點','丑 1-3點','寅 3-5點','卯 5-7點','辰 7-9點','巳 9-11點','午 11-13點','未 13-15點','申 15-17點','酉 17-19點','戌 19-21點','亥 21-23點'];
+  return '<h2>我的資料</h2><div class="card"><p class="muted">填好生日，系統就會幫你排出八字命盤，上八字課會用到。</p>'+
+    (PFA?'<p><b>行政代填：'+esc(st.name)+'</b></p>':'')+'<label class="f">姓名</label><input class="t" id="pName" type="text" value="'+esc(PF.name)+'">'+
+    '<label class="f">性別</label><div class="seg"><button class="'+(PF.sex==='M'?'on':'')+'" onclick="pf(\'sex\',\'M\')">男</button><button class="'+(PF.sex==='F'?'on':'')+'" onclick="pf(\'sex\',\'F\')">女</button></div>'+
+    '<label class="f">手機</label><input class="t" id="pPhone" type="text" value="'+esc(PF.phone)+'">'+
+    '<label class="f">Email（收報名和上課通知）</label><input class="t" id="pEmail" type="text" value="'+esc(PF.email)+'">'+
+    '<label class="f">生日是</label><div class="seg"><button class="'+(PF.cal==='國'?'on':'')+'" onclick="pf(\'cal\',\'國\')">國曆</button><button class="'+(PF.cal==='農'?'on':'')+'" onclick="pf(\'cal\',\'農\')">農曆</button></div>'+
+    '<div class="three" style="margin-top:8px"><div><label class="f">年（西元或民國）</label><input class="t" id="pY" data-adv="y" type="text" inputmode="numeric" value="'+esc(PF.y)+'"></div><div><label class="f">月</label><input class="t" id="pM" data-adv="m" type="text" inputmode="numeric" value="'+esc(PF.m)+'"></div><div><label class="f">日</label><input class="t" id="pD" data-adv="d" type="text" inputmode="numeric" value="'+esc(PF.d)+'"></div></div>'+
+    (PF.cal==='農'?'<label style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="pLeap" '+(PF.leap?'checked':'')+' style="width:22px;height:22px"> 這個月是閏月</label>':'')+
+    '<label class="f">出生時間</label><div class="seg"><button class="'+(PF.timeMode==='clock'?'on':'')+'" onclick="pf(\'timeMode\',\'clock\')">知道幾點幾分</button><button class="'+(PF.timeMode==='sc'?'on':'')+'" onclick="pf(\'timeMode\',\'sc\')">只知道時辰</button><button class="'+(PF.timeMode==='none'?'on':'')+'" onclick="pf(\'timeMode\',\'none\')">不知道</button></div>'+
+    (PF.timeMode==='clock'?'<div class="two" style="margin-top:8px"><div><label class="f">幾點（0-23）</label><input class="t" id="pH" data-adv="h" type="text" inputmode="numeric" value="'+esc(PF.hh)+'"></div><div><label class="f">幾分</label><input class="t" id="pMi" data-adv="mi" type="text" inputmode="numeric" value="'+esc(PF.mi)+'"></div></div>':'')+
+    (PF.timeMode==='sc'?'<select class="t" id="pSC" style="margin-top:8px"><option value="">請選時辰</option>'+SC.map(function(x,i){return '<option value="'+i+'" '+(String(PF.shichen)===String(i)?'selected':'')+'>'+x+'</option>';}).join('')+'</select>':'')+
+    (PF.timeMode==='none'?'<p class="muted">不知道時間也可以，時柱先用中午排，只能參考。</p>':'')+
+    '<div id="pErr" class="c-bad" style="display:none;margin-top:10px;padding:8px 12px;border-radius:10px"></div>'+
+    '<button class="btn block" onclick="saveProfile()">儲存並排盤</button>'+(st.profile||PFA?'<button class="btn gray block" onclick="cancelProfile()">取消</button>':'')+'</div>';
+}
+function grab(){ if(!$('pName')) return; PF.name=$('pName').value; PF.phone=$('pPhone').value; PF.email=$('pEmail').value; PF.y=$('pY').value; PF.m=$('pM').value; PF.d=$('pD').value;
+  if($('pLeap')) PF.leap=$('pLeap').checked; if($('pH')){ PF.hh=$('pH').value; PF.mi=$('pMi').value; } if($('pSC')) PF.shichen=$('pSC').value; }
+function pf(k,v){ grab(); PF[k]=v; render(); }
+function cancelProfile(){ PF=null; if(PFA){ PFA=null; ATAB='students'; } render(); }
+/* 生日、時間填完自動跳下一格 */
+function advReady(kind,v){
+  v=half(v); var n=+v; if(!/^\d+$/.test(v)) return false;
+  if(kind==='y') return v.length>=4 || (v.length===3&&n>=100&&n<=130) || (v.length===2&&n>=10&&n!==19&&n!==20);
+  if(kind==='m') return v.length>=2 || n>=2;
+  if(kind==='d') return v.length>=2 || n>=4;
+  if(kind==='h') return v.length>=2 || n>=3;
+  if(kind==='mi') return v.length>=2;
+  return false;
+}
+function bindAdv(){
+  var list=[].slice.call(document.querySelectorAll('[data-adv]'));
+  list.forEach(function(el,i){
+    el.addEventListener('input',function(){
+      if(!advReady(el.dataset.adv,el.value)) return;
+      var nx=list[i+1];
+      if(nx){ nx.focus(); try{ nx.select(); }catch(e){} }
+      else if(el.dataset.adv==='d'){ var t=$('pSC'); if(t) t.focus(); else el.blur(); }
+      else el.blur();
+    });
+  });
+}
+function solarOf(p){
+  var y=+half(p.y), m=+half(p.m), d=+half(p.d); if(!y||!m||!d) return null;
+  if(y<1000) y+=1911;
+  if(p.cal==='農') return lunar2solar(y,m,d,!!p.leap);
+  var dt=new Date(Date.UTC(y,m-1,d)); if(dt.getUTCMonth()!==m-1) return null; return {y:y,m:m,d:d};
+}
+function timeOf(p){
+  if(p.timeMode==='clock'){ var h=half(p.hh), mi=half(p.mi); if(h==='') return null; return {h:+h, mi:+mi||0}; }
+  if(p.timeMode==='sc'&&p.shichen!==''){ var i=+p.shichen; return {h:i===0?23:i*2, mi:0}; }
+  return null;
+}
+function birthText(p){ var s=solarOf(p); var t=p.timeMode==='clock'?(half(p.hh)+':'+String(+half(p.mi)||0).padStart(2,'0')):p.timeMode==='sc'?('子丑寅卯辰巳午未申酉戌亥'[+p.shichen]+'時'):'時間不詳';
+  return (p.cal==='農'?'農曆 '+p.y+'/'+(p.leap?'閏':'')+p.m+'/'+p.d+'（國曆 '+(s?s.y+'/'+s.m+'/'+s.d:'?')+'）':'國曆 '+(s?s.y+'/'+s.m+'/'+s.d:'?'))+'　'+t; }
+function saveProfile(){
+  grab(); var err=function(m){ var e=$('pErr'); e.textContent=m; e.style.display='block'; e.scrollIntoView({block:'center'}); };
+  if(!PF.name.trim()) return err('請填姓名');
+  if(!PF.sex) return err('請選性別');
+  var s=solarOf(PF); if(!s) return err('生日看起來不對，請再確認年、月、日');
+  if(s.y<1901||s.y>2099) return err('出生年要在 1901 到 2099 之間');
+  if(PF.timeMode==='clock'){ var h=+half(PF.hh), mi=+half(PF.mi)||0; if(half(PF.hh)===''||h<0||h>23||mi<0||mi>59) return err('出生時間請填 0 到 23 點、0 到 59 分'); }
+  if(PF.timeMode==='sc'&&PF.shichen==='') return err('請選時辰');
+  var st=formStu(); st.profile=PF; st.name=PF.name.trim(); st.phone=PF.phone; st.email=PF.email; st.updatedAt=today(); PF=null; ME_SUB='chart';
+  if(PFA){ PFA=null; ATAB='students'; save(); render(); toast('已代填 '+st.name+' 的資料'); return; }
+  save(); render(); toast('已儲存，命盤排好了');
+}
+
+/* ---------- 行政後台 ---------- */
+/* 行政：下方五個主分頁；課程、更多底下再分小分頁 */
+var AN=[['today','今日'],['students','學員'],['courses','課程'],['shop','商城'],['more','更多']];
+var AGRP={today:'today',students:'students',open:'students',edit:'students',courses:'courses',roster:'courses',notice:'courses',shop:'shop',more:'more',news:'more',online:'more',set:'more',manual:'more'};
+var MORE=[['news','最新消息','發公告、推薦課程'],['online','線上課程','影片、講義、誰可以看'],['set','設定','改期規則、聯絡方式、金幣經驗'],['manual','使用手冊','從開通到上完課的 13 個步驟']];
+function aGo(t){ ATAB=t; render(); scrollTo(0,0); }
+function tabsAdmin(){
+  var g=AGRP[ATAB]||'today';
+  $('tabs').style.display='flex';
+  $('tabs').innerHTML=AN.map(function(x){return '<button class="'+(g===x[0]?'on':'')+'" onclick="aGo(\''+x[0]+'\')">'+x[1]+'</button>';}).join('');
+}
+function ahead(){
+  var g=AGRP[ATAB], h='<header class="top adm"><h1>行政後台<small>神奇身心靈學苑・學員專區（試用版）</small></h1><button class="btn gray" onclick="logout()">離開</button></header>';
+  if(g==='courses') h+='<div class="seg sub">'+[['courses','開課'],['roster','報名名單'],['notice','通知文字']].map(function(x){return '<button class="'+(ATAB===x[0]?'on':'')+'" onclick="aGo(\''+x[0]+'\')">'+x[1]+'</button>';}).join('')+'</div>';
+  if(g==='more'&&ATAB!=='more') h+='<button class="back" onclick="aGo(\'more\')">‹ 更多</button>';
+  if(ATAB==='open'||ATAB==='edit') h+='<button class="back" onclick="PF=null;PFA=null;aGo(\'students\')">‹ 學員列表</button>';
+  return h;
+}
+function aMore(){
+  var h=ahead()+'<h2>更多</h2><div class="card menu">'+MORE.map(function(x){return '<button onclick="aGo(\''+x[0]+'\')"><b>'+x[1]+'</b><span class="muted">'+x[2]+'</span><i>›</i></button>';}).join('')+'</div>';
+  $('root').innerHTML=h;
+}
+/* 今日：待辦一眼看完 */
+function todoBar(){
+  var w=S.orders.filter(function(o){return o.status==='wait';}).length;
+  var np=S.students.filter(function(x){return !x.profile;}).length;
+  var wt=S.enroll.filter(function(e){return e.status==='wait';}).length;
+  var it=function(n,t,go){ return '<button class="todo'+(n?' has':'')+'" onclick="'+go+'"><b>'+n+'</b><span>'+t+'</span></button>'; };
+  return '<div class="todos">'+it(w,'兌換待處理',"ASH='orders';aGo('shop')")+it(np,'資料未填',"aGo('students')")+it(wt,'候補中',"aGo('roster')")+'</div>';
+}
+function aCourses(){
+  var h=ahead()+'<h2>開課管理</h2><div class="card soft"><b>日期從入口網站的行事曆自動帶進來</b><p class="muted" style="margin:4px 0 0">行政在入口網站排課（勾給學員）就會出現在這裡和學員課表。這裡只要設定每門課的價格、分潤、名額。</p></div>';
+  (S.portalMiss||[]).forEach(function(n){ h+='<div class="card miss"><div class="row" style="justify-content:space-between"><span><b>'+esc(n)+'</b><br><span class="muted">入口網站有排課，但還沒設定價格</span></span><button class="btn" onclick="editCourse(null,\''+esc(n).replace(/'/g,'')+'\')">設定這門課</button></div></div>'; });
+  S.courses.forEach(function(c){
+    h+='<div class="card"><div class="row"><b style="font-size:18px">'+esc(c.name)+'</b>'+(c.alias?'<span class="muted">（'+esc(c.alias)+'）</span>':'')+'</div><p class="muted" style="margin:2px 0">'+(c.price>0?'匯款 '+money(c.price)+'・刷卡 '+money((c.pay||[])[1]||c.price)+'・推薦分潤 '+(+c.share).toLocaleString('en-US')+(c.combo?'<br>'+esc(c.combo.name)+' '+money(c.combo.pay[0])+'・分潤 '+c.combo.share.toLocaleString('en-US'):''):'免費課程')+'</p><p class="muted">'+esc(c.teacher)+'・'+esc(c.place)+'</p>'+
+      (function(){ var past=c.sessions.filter(function(s){return (s.end||s.date)<today();}).length; return past?'<p class="muted" style="margin:4px 0">已結束 '+past+' 場（不顯示）</p>':''; })()+
+      c.sessions.filter(function(s){return (s.end||s.date)>=today();}).sort(function(a,b){return a.date<b.date?-1:1;}).map(function(s){return '<div class="sess row"><span>'+dlabel(s.date)+' '+esc(s.time)+'</span>'+(s.src==='portal'?'<span class="chip c-gray">入口網站</span>':'')+'<span class="chip c-blue">已報 '+taken(s.id)+' / '+s.seats+'</span><button class="btn gray" onclick="editSess(\''+c.id+'\',\''+s.id+'\')">改</button></div>';}).join('')+
+      '<div class="row" style="margin-top:10px"><button class="btn line" onclick="editSess(\''+c.id+'\')">加場次</button><button class="btn gray" onclick="editCourse(\''+c.id+'\')">改課程資料</button></div></div>';
+  });
+  h+='<button class="btn block" onclick="editCourse()">新增課程</button>'+(window.rulesCard?rulesCard():'');
+  $('root').innerHTML=h;
+}
+function editCourse(cid){
+  var c=cid?course(cid):{name:arguments[1]||'',intro:'',teacher:'羅文勳老師',place:'',price:'',share:''};
+  sheet('<h2>'+(cid?'改課程資料':'新增課程')+'</h2><label class="f">課程名稱</label><input class="t" id="cN" type="text" value="'+esc(c.name)+'"><label class="f">介紹</label><textarea class="t" id="cI">'+esc(c.intro)+'</textarea><label class="f">講師</label><input class="t" id="cT" type="text" value="'+esc(c.teacher)+'"><label class="f">地點</label><input class="t" id="cP" type="text" value="'+esc(c.place)+'">'+
+    '<div class="two"><div><label class="f">售價（元）</label><input class="t" id="cPr" type="text" value="'+esc(c.price)+'"></div><div><label class="f">推薦分潤（元）</label><input class="t" id="cSh" type="text" value="'+esc(c.share)+'"></div></div>'+
+    '<button class="btn block" onclick="saveCourse(\''+(cid||'')+'\')">儲存</button><button class="btn gray block" onclick="closeSheet()">取消</button>');
+}
+function saveCourse(cid){
+  var o={name:$('cN').value.trim(),intro:$('cI').value.trim(),teacher:$('cT').value.trim(),place:$('cP').value.trim(),price:+half($('cPr').value)||0,share:+half($('cSh').value)||0};
+  if(!o.name){ toast('請填課程名稱'); return; }
+  if(cid) Object.assign(course(cid),o); else { o.id='c'+Date.now(); o.sessions=[]; S.courses.push(o); }
+  if(window.syncPortal) syncPortal(S.portalEv);
+  save(); closeSheet(); render(); toast('已儲存');
+}
+function editSess(cid,sid){
+  var c=course(cid), s=sid?c.sessions.find(function(x){return x.id===sid;}):{date:today(7),time:'14:00',seats:20}; var p=s.date.split('-');
+  sheet('<h2>'+(sid?'改場次':'加場次')+'</h2><p><b>'+esc(c.name)+'</b></p><div class="three"><div><label class="f">年</label><input class="t" id="sY" type="text" inputmode="numeric" value="'+p[0]+'"></div><div><label class="f">月</label><input class="t" id="sM" type="text" inputmode="numeric" value="'+(+p[1])+'"></div><div><label class="f">日</label><input class="t" id="sD" type="text" inputmode="numeric" value="'+(+p[2])+'"></div></div>'+
+    '<div class="two"><div><label class="f">開始時間</label><input class="t" id="sT" type="text" value="'+esc(s.time)+'"></div><div><label class="f">名額</label><input class="t" id="sS" type="text" inputmode="numeric" value="'+esc(s.seats)+'"></div></div>'+
+    '<button class="btn block" onclick="saveSess(\''+cid+'\',\''+(sid||'')+'\')">儲存</button><button class="btn gray block" onclick="closeSheet()">取消</button>');
+}
+function saveSess(cid,sid){
+  var y=+half($('sY').value), m=+half($('sM').value), d=+half($('sD').value), t=half($('sT').value), n=+half($('sS').value);
+  var dt=new Date(Date.UTC(y,m-1,d)); if(!y||dt.getUTCMonth()!==m-1){ toast('日期不對'); return; }
+  if(!/^\d{1,2}:\d{2}$/.test(t)){ toast('時間請寫成 14:00'); return; } if(!(n>0)){ toast('名額要大於 0'); return; }
+  var o={date:y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0'),time:t,seats:n};
+  var c=course(cid); if(sid) Object.assign(c.sessions.find(function(x){return x.id===sid;}),o); else { o.id='s'+Date.now(); c.sessions.push(o); }
+  save(); closeSheet(); render(); toast('已儲存');
+}
+var RS='';
+function aRoster(){
+  var all=allSess(); if(!RS&&all.length) RS=all[0].s.id;
+  var h=ahead()+'<h2>報名名單</h2><select class="t" onchange="RS=this.value;render()">'+all.map(function(x){return '<option value="'+x.s.id+'" '+(x.s.id===RS?'selected':'')+'>'+esc(x.c.name)+'・'+sdate(x.s)+' '+x.s.time+'</option>';}).join('')+'</select>';
+  var list=S.enroll.filter(function(e){return e.session===RS;}); var cnt=function(k){return list.filter(function(e){return e.status===k;}).length;};
+  h+='<div class="row" style="margin:12px 0"><span class="chip c-blue">已付款 '+cnt('paid')+'</span><span class="chip c-ok">已簽到 '+cnt('checked')+'</span><span class="chip c-warn">候補 '+cnt('wait')+'</span><span class="chip c-gray">已退款 '+cnt('refunded')+'</span></div>';
+  if(!list.length) h+='<div class="card soft">這場還沒有人報名。</div>';
+  list.forEach(function(e){
+    var st=S.students.find(function(x){return x.acct===e.acct;})||{name:e.acct}; var s=ST[e.status]||['',''];
+    h+='<div class="card"><div class="row"><b>'+esc(st.name)+'</b><span class="chip '+s[1]+'">'+s[0]+'</span></div><p class="muted">推薦人：'+esc(st.referrer||'')+(st.second?'・第二人：'+esc(st.second)+'（'+esc(st.ratio)+'）':'')+'</p>'+
+      (e.status==='paid'&&onDay(sessOf(e.session).s)?'<button class="btn ok" onclick="askAdminCheckin(\''+e.id+'\')">幫他簽到</button> ':'')+(e.status==='paid'?'<button class="btn gray" onclick="markRefund(\''+e.id+'\')">標記已退款</button>':'')+(e.status==='wait'?'<button class="btn line" onclick="promote(\''+e.id+'\')">轉為正式報名（已付款）</button>':'')+(e.status==='pending'?'<button class="btn ok" onclick="confirmPaid(\''+e.id+'\')">確認已收款</button> <button class="btn gray" onclick="cancelPending(\''+e.id+'\')">取消報名</button>':'')+'</div>';
+  });
+  $('root').innerHTML=h;
+}
+function markRefund(id){ var e=S.enroll.find(function(x){return x.id===id;}); e.status='refunded'; save(); render(); toast('已標記退款'); }
+function promote(id){ var e=S.enroll.find(function(x){return x.id===id;}); var o=sessOf(e.session); if(left(o.s)<=0){ toast('這場已額滿'); return; } e.status='paid'; e.paidAt=today(); save(); render(); toast('已轉為正式報名'); }
+var OPN={ratio:''}, OPV={};
+function aStudents(){
+  var h=ahead()+'<h2>學員</h2><button class="btn block" onclick="aGo(\'open\')">開通新學員</button>';
+  var list=S.students.slice().sort(function(a,b){ return (b.createdAt||'')<(a.createdAt||'')?-1:1; });
+  list.forEach(function(s){
+    var ok=!!s.profile;
+    h+='<div class="card"><div class="row"><b style="font-size:18px">'+esc(s.name)+'</b><span class="chip '+(ok?'c-ok':'c-warn')+'">'+(ok?'資料已填':'資料未填')+'</span></div>'+
+      '<p class="muted">'+esc(s.acct)+(s.phone?'・'+esc(s.phone):'')+'<br>建檔 '+esc(s.createdAt||'—')+(s.updatedAt?'・資料更新 '+esc(s.updatedAt):'')+'<br>推薦人 '+esc(s.referrer)+(s.second?'・第二人 '+esc(s.second)+'（'+esc(s.ratio)+'）':'')+(s.note?'<br>備註：'+esc(s.note):'')+'</p>'+
+      (ok?'<p class="muted">'+esc(birthText(s.profile))+'</p>':'')+'<p style="margin:4px 0 8px">'+lvOf(s.acct).badge+' Lv'+lvOf(s.acct).n+' '+lvOf(s.acct).name+'・經驗 '+expOf(s.acct)+'・<i class="coin"></i>'+coinsOf(s.acct)+'</p>'+
+      '<div class="row">'+(ok?'<button class="btn" onclick="adminChart(\''+s.acct+'\')">看命盤／列印</button>':'')+'<button class="btn gray" onclick="adminFill(\''+s.acct+'\')">'+(ok?'修改資料':'幫他填資料')+'</button><button class="btn line" onclick="copyAct(\''+s.acct+'\')">複製開通通知</button><button class="btn gray" onclick="askAdj(\''+s.acct+'\')">調整金幣</button></div></div>';
+  });
+  $('root').innerHTML=h;
+}
+function adminFill(a){ PFA=a; var st=stuOf(a); PF=st.profile?JSON.parse(JSON.stringify(st.profile)):null; ATAB='edit'; render(); scrollTo(0,0); }
+function aEdit(){ $('root').innerHTML=ahead()+profileForm(stuOf(PFA)); bindAdv(); }
+function adminChart(a){
+  CHART_FOR=a; var st=stuOf(a);
+  sheet('<h2>'+esc(st.name)+' 的命盤</h2><div style="border:1px solid var(--line);border-radius:12px;padding:6px"><iframe id="chartFrame" src="chart.html" title="八字命盤" style="width:100%;border:0;height:900px;display:block"></iframe></div>'+
+    '<button class="btn block" onclick="printChart()">一鍵列印</button><button class="btn gray block" onclick="closeSheet();CHART_FOR=null">關閉</button>');
+}
+function printChart(){ try{ var w=$('chartFrame').contentWindow; w.focus(); w.print(); }catch(e){ toast('這個預覽環境不能列印，搬到正式網址後就可以'); } }
+function actText(s){ var ct=S.settings.company;
+  return '【'+ct.name+'｜學員專區開通】\n'+s.name+' 您好，您的學員帳號已開通。\n帳號：'+s.acct+'\n預設密碼：12345（第一次登入會請您設定自己的密碼）\n網址：（正式網址上線後填入）\n\n登入後請先到「我的」填寫基本資料（含生日），系統會自動排出您的八字命盤。\n有問題請洽學苑 LINE：'+ct.line+(ct.lineUrl?' '+ct.lineUrl:''); }
+function copyAct(a){ var s=stuOf(a); sheet('<h2>開通通知</h2><p class="muted">複製後貼給學員的 LINE；正式版開通時也會自動寄 Email。</p><div class="copybox" id="ntxt">'+esc(actText(s))+'</div><button class="btn block" onclick="copyTxt()">複製</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
+function aManual(){
+  var step=function(n,who,t,body){ return '<div class="card"><div class="row"><span class="chip c-blue">第 '+n+' 步</span><span class="chip c-gray">'+who+'</span></div><h3 style="margin:8px 0 4px">'+t+'</h3>'+body+'</div>'; };
+  var h=ahead()+'<h2>行政使用手冊</h2><p>學員從開通到上完課，整個流程照下面走。</p>'+
+  step(1,'學員','留下 LINE 和 Email','<p>想上課的人把 LINE 和 Email 給學苑，官方 LINE 私訊或現場留資料都可以。</p>')+
+  step(2,'行政','開通帳號、建檔','<p>到「學員」按「開通新學員」，填姓名、手機、Email、推薦人；分潤要分給第二人就一起填。建檔日期系統自動帶今天，可以改，也可以寫備註。</p><p class="muted">推薦人開通後不能改，請確認再按。</p>')+
+  step(3,'行政','通知學員登入','<p>開通後會跳出「開通通知」，按複製貼到學員的 LINE。正式版開通時也會自動寄 Email。</p>')+
+  step(4,'學員','用 Email 登入、填基本資料','<p>學員用 Email 和預設密碼（12345）登入，第一次登入會先請他設定自己的密碼，到「我的」填姓名、性別、手機、生日和出生時間。填完系統馬上排出八字命盤。</p>')+
+  step(5,'行政','後台即時看到資料、印命盤','<p>學員填好後，「學員」那一格會從「資料未填」變成「資料已填」。按「看命盤／列印」就能直接印出命盤，不用再手排。</p><p class="muted">學員不會填的，行政可以按「幫他填資料」代填。</p>')+
+  step(6,'學員','報名、付款','<p>學員在「課表」選課、選日期、付款（正式版走綠界）。額滿可以登記候補。</p>')+
+  step(7,'行政','開課前通知','<p>到「通知文字」選場次，複製「開課公告」或「上課前提醒」貼到學院官方 LINE。正式版也會自動寄 Email 提醒。</p>')+
+  step(8,'學員','上課當天簽到','<p>學員到現場按「我到了，簽到」。簽到後不能退款，推薦人的課程分潤業績當下入帳。</p>')+
+  step(9,'行政','名單、改期、退款、候補','<p>到「名單」看每場誰付款、誰簽到。要退款的，人工退完按「標記已退款」，業績會扣回。有人取消就把候補轉成正式報名，再複製「候補遞補通知」給他。</p>')+
+  step(10,'行政','消息和線上課','<p>「最新消息」發公告或推薦；「線上課程」貼影片和講義連結，設定誰可以看。</p>')+
+  step(11,'行政','上課當天：今日簽到','<p>開課前打開「今日簽到」，把<b>簽到碼</b>投影或寫在白板。學員輸入簽到碼才能簽到。名單即時顯示誰簽了、誰還沒簽；還沒簽的按「提醒他」或「複製提醒」貼到 LINE。學員手機沒電或不會操作，確認人在現場後按「幫他簽到」。</p>')+
+  step(12,'學員','小金幣、經驗值、升級','<p>每次簽到 +10 小金幣、+10 經驗（數字在「設定」可以改）。一個月簽到滿 2 次再送 20 小金幣。經驗累積會升級，一共 6 級，每升一級畫面顏色和徽章會變、解鎖新福利。</p><p class="muted">防洗規則：只有上課當天、輸入現場簽到碼才算；每筆報名只給一次，改日期不會重算；報名付款本身不給；簽到後不能退款。行政補發或扣回金幣一定要寫原因，全部留紀錄。</p>')+
+  step(13,'行政','商城兌換','<p>學員用小金幣在「商城」換東西。「商城→兌換單」看待處理的：現場領取的交給學員後按「已交給學員」，寄送的寄出後按「已寄出」。換錯了可以「取消並退回金幣」。商品、價格、庫存、幾級可以換，都在「商城→商品」改。</p>');
+  $('root').innerHTML=h;
+}
+
+function aOpen(){
+  var h=ahead()+'<h2>開通新學員</h2><div class="card"><p class="muted">開通後，學員用 Email 和預設密碼登入（正式版跟積點系統同一組帳號）。</p>'+
+    '<label class="f">姓名</label><input class="t" id="oN" type="text"><label class="f">手機</label><input class="t" id="oP" type="text"><label class="f">Email（登入帳號）</label><input class="t" id="oE" type="text"><label class="f">推薦人（開通後不能改）</label><input class="t" id="oR" type="text">'+
+    '<label class="f">建檔日期</label><input class="t" id="oDt" type="text" value="'+today()+'"><label class="f">備註（可空白）</label><input class="t" id="oNote" type="text">'+
+    '<label class="f">分潤要分給第二個人嗎？</label><div class="seg"><button class="'+(!OPN.ratio?'on':'')+'" onclick="OPN.ratio=\'\';keepOpen()">不用</button><button class="'+(OPN.ratio==='一半'?'on':'')+'" onclick="OPN.ratio=\'一半\';keepOpen()">一半</button><button class="'+(OPN.ratio==='九比一'?'on':'')+'" onclick="OPN.ratio=\'九比一\';keepOpen()">九比一</button><button class="'+(OPN.ratio==='自訂'?'on':'')+'" onclick="OPN.ratio=\'自訂\';keepOpen()">自訂</button></div>'+
+    (OPN.ratio?'<label class="f">第二人姓名</label><input class="t" id="o2" type="text">':'')+(OPN.ratio==='自訂'?'<label class="f">推薦人拿幾成（例如 7 代表七比三）</label><input class="t" id="oC" type="text" inputmode="numeric">':'')+
+    '<button class="btn block" onclick="doOpen()">開通</button></div>';
+  $('root').innerHTML=h;
+}
+function keepOpen(){ ['oN','oP','oE','oR','oDt','oNote','o2','oC'].forEach(function(k){ if($(k)) OPV[k]=$(k).value; }); render(); ['oN','oP','oE','oR','oDt','oNote','o2','oC'].forEach(function(k){ if($(k)&&OPV[k]!=null) $(k).value=OPV[k]; }); }
+function doOpen(){
+  var n=$('oN').value.trim(), e=half($('oE').value).toLowerCase(), r=$('oR').value.trim();
+  if(!n||!e||!r){ toast('姓名、Email、推薦人都要填'); return; }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){ toast('Email 格式不對'); return; }
+  if(S.students.some(function(s){return s.acct===e;})){ toast('這個 Email 已經開通過'); return; }
+  var sec=OPN.ratio&&$('o2')?$('o2').value.trim():''; if(OPN.ratio&&!sec){ toast('請填第二人姓名'); return; }
+  var ratio=OPN.ratio==='自訂'?(half($('oC').value)+'比'+(10-(+half($('oC').value)||0))):OPN.ratio;
+  S.students.push({acct:e,name:n,phone:$('oP').value,email:e,referrer:r,second:sec,ratio:sec?ratio:'',profile:null,pw:'12345',pwSet:false,createdAt:half($('oDt').value)||today(),note:$('oNote').value.trim()});
+  OPN={ratio:''}; OPV={}; ATAB='students'; save(); render(); copyAct(e); toast('已開通 '+n);
+}
+/* 最新消息管理 */
+function aNews(){
+  var h=ahead()+'<h2>最新消息</h2><p class="muted">發公告或推薦，學員一登入就在首頁看到。</p><button class="btn block" onclick="editNews()">發一則新消息</button>';
+  S.news.slice().sort(function(a,b){return a.date<b.date?1:-1;}).forEach(function(n){
+    h+='<div class="card"><div class="row"><span class="chip '+(n.type==='推薦'?'c-warn':'c-blue')+'">'+esc(n.type)+'</span>'+(n.pin?'<span class="chip c-gray">置頂</span>':'')+'<span class="muted">'+dlabel(n.date)+'</span></div><b style="display:block;margin-top:6px">'+esc(n.title)+'</b><div class="row" style="margin-top:8px"><button class="btn gray" onclick="editNews(\''+n.id+'\')">修改</button><button class="btn gray" onclick="delNews(\''+n.id+'\')">刪除</button></div></div>';
+  });
+  $('root').innerHTML=h;
+}
+var NWT='公告', NWP=false, NWL='';
+function editNews(id){
+  var n=id?S.news.find(function(x){return x.id===id;}):{type:NWT,pin:false,title:'',body:'',link:''};
+  NWT=n.type; NWP=!!n.pin; NWL=n.link||'';
+  sheet('<h2>'+(id?'修改消息':'發新消息')+'</h2><label class="f">種類</label><div class="seg"><button id="nwA" class="'+(NWT==='公告'?'on':'')+'" onclick="NWT=\'公告\';this.classList.add(\'on\');$(\'nwB\').classList.remove(\'on\')">公告</button><button id="nwB" class="'+(NWT==='推薦'?'on':'')+'" onclick="NWT=\'推薦\';this.classList.add(\'on\');$(\'nwA\').classList.remove(\'on\')">推薦</button></div>'+
+    '<label class="f">標題</label><input class="t" id="nwT" type="text" value="'+esc(n.title)+'"><label class="f">內容</label><textarea class="t" id="nwC">'+esc(n.body)+'</textarea>'+
+    '<label class="f">要連到哪門課（可不選）</label><select class="t" id="nwL"><option value="">不連</option>'+S.courses.map(function(c){return '<option value="'+c.id+'" '+(NWL===c.id?'selected':'')+'>'+esc(c.name)+'</option>';}).join('')+'</select>'+
+    '<label style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" id="nwP" '+(NWP?'checked':'')+' style="width:22px;height:22px"> 置頂</label>'+
+    '<button class="btn block" onclick="saveNews(\''+(id||'')+'\')">發布</button><button class="btn gray block" onclick="closeSheet()">取消</button>');
+}
+function saveNews(id){
+  var o={type:NWT,title:$('nwT').value.trim(),body:$('nwC').value.trim(),link:$('nwL').value,pin:$('nwP').checked};
+  if(!o.title){ toast('請填標題'); return; }
+  if(id) Object.assign(S.news.find(function(x){return x.id===id;}),o); else { o.id='n'+Date.now(); o.date=today(); S.news.push(o); }
+  save(); closeSheet(); render(); toast('已發布');
+}
+function delNews(id){ S.news=S.news.filter(function(x){return x.id!==id;}); save(); render(); toast('已刪除'); }
+/* 線上課程管理 */
+function aOnline(){
+  var h=ahead()+'<h2>線上課程</h2><p class="muted">影片和講義放雲端，這裡貼連結就好。</p><button class="btn block" onclick="editOnline()">新增線上課程</button>';
+  S.online.forEach(function(o){
+    h+='<div class="card"><b style="font-size:18px">'+esc(o.name)+'</b><p class="muted">開放對象：'+esc(openRule(o))+'・共 '+o.lessons.length+' 堂</p><div class="row"><button class="btn gray" onclick="editOnline(\''+o.id+'\')">修改</button><button class="btn line" onclick="addLesson(\''+o.id+'\')">加一堂</button></div></div>';
+  });
+  $('root').innerHTML=h;
+}
+var OOP='all';
+function editOnline(id){
+  var o=id?S.online.find(function(x){return x.id===id;}):{name:'',intro:'',open:'all',lessons:[]};
+  OOP=o.open.indexOf('course:')===0?'course':o.open.indexOf('list:')===0?'list':'all';
+  sheet('<h2>'+(id?'修改線上課程':'新增線上課程')+'</h2><label class="f">名稱</label><input class="t" id="olN" type="text" value="'+esc(o.name)+'"><label class="f">介紹</label><textarea class="t" id="olI">'+esc(o.intro)+'</textarea>'+
+    '<label class="f">誰可以看</label><select class="t" id="olO"><option value="all" '+(OOP==='all'?'selected':'')+'>全部學員</option>'+S.courses.map(function(c){return '<option value="course:'+c.id+'" '+(o.open==='course:'+c.id?'selected':'')+'>上過「'+esc(c.name)+'」並簽到的學員</option>';}).join('')+'</select>'+
+    '<button class="btn block" onclick="saveOnline(\''+(id||'')+'\')">儲存</button><button class="btn gray block" onclick="closeSheet()">取消</button>');
+}
+function saveOnline(id){
+  var o={name:$('olN').value.trim(),intro:$('olI').value.trim(),open:$('olO').value};
+  if(!o.name){ toast('請填名稱'); return; }
+  if(id) Object.assign(S.online.find(function(x){return x.id===id;}),o); else { o.id='o'+Date.now(); o.lessons=[]; S.online.push(o); }
+  save(); closeSheet(); render(); toast('已儲存');
+}
+function addLesson(id){
+  sheet('<h2>加一堂</h2><label class="f">標題</label><input class="t" id="lsT" type="text"><label class="f">影片連結</label><input class="t" id="lsV" type="text"><label class="f">講義連結（可空白）</label><input class="t" id="lsD" type="text"><button class="btn block" onclick="saveLesson(\''+id+'\')">加入</button><button class="btn gray block" onclick="closeSheet()">取消</button>');
+}
+function saveLesson(id){ var t=$('lsT').value.trim(); if(!t){ toast('請填標題'); return; } S.online.find(function(x){return x.id===id;}).lessons.push({t:t,v:$('lsV').value.trim(),doc:$('lsD').value.trim()}); save(); closeSheet(); render(); toast('已加入'); }
+/* 通知文字 */
+var NS='', NT='open';
+function aNotice(){
+  var all=allSess(); if(!NS&&all.length) NS=all[0].s.id; var o=sessOf(NS);
+  var T={open:'開課公告',remind:'上課前提醒',wait:'候補遞補通知'}; var txt='';
+  if(o){ var c=o.c, s=o.s, ct=S.settings.company;
+    if(NT==='open') txt='【'+ct.name+'｜開課公告】\n'+c.name+'\n上課日期：'+dlabel(s.date)+' '+s.time+'\n地點：'+c.place+'\n講師：'+c.teacher+'\n費用：'+money(c.price)+'\n名額：'+s.seats+' 位（目前剩 '+left(s)+' 位）\n\n'+c.intro+'\n\n報名請登入學員專區，或洽學苑 LINE：'+ct.line+(ct.lineUrl?' '+ct.lineUrl:'');
+    if(NT==='remind') txt='【'+ct.name+'｜上課提醒】\n提醒您：'+c.name+' 將於 '+dlabel(s.date)+' '+s.time+' 上課\n地點：'+c.place+'\n\n上課當天到現場後，請登入學員專區按「簽到」。\n如需改期，請於上課前 '+S.settings.changeDays+' 天在學員專區操作，或聯絡學苑 LINE：'+ct.line+(ct.lineUrl?' '+ct.lineUrl:'');
+    if(NT==='wait') txt='【'+ct.name+'｜候補遞補通知】\n您登記候補的 '+c.name+'（'+dlabel(s.date)+' '+s.time+'）有名額釋出了！\n請在 24 小時內回覆學苑 LINE：'+ct.line+(ct.lineUrl?' '+ct.lineUrl:'')+'，我們會協助您完成報名。'; }
+  var h=ahead()+'<h2>通知文字</h2><p class="muted">選好場次和種類，按「複製」就能貼到學院官方 LINE。</p><select class="t" onchange="NS=this.value;render()">'+all.map(function(x){return '<option value="'+x.s.id+'" '+(x.s.id===NS?'selected':'')+'>'+esc(x.c.name)+'・'+sdate(x.s)+' '+x.s.time+'</option>';}).join('')+'</select>'+
+    '<div class="seg" style="margin-top:10px">'+Object.keys(T).map(function(k){return '<button class="'+(NT===k?'on':'')+'" onclick="NT=\''+k+'\';render()">'+T[k]+'</button>';}).join('')+'</div><div class="copybox" id="ntxt" style="margin-top:12px">'+esc(txt)+'</div><button class="btn block" onclick="copyTxt()">複製</button>'+
+    '<div class="card soft" style="margin-top:16px"><b>Email 會自動寄（正式版）</b><ul style="margin:6px 0;padding-left:1.2em"><li>報名付款成功</li><li>上課前一天提醒</li><li>改日期成功</li><li>候補遞補</li></ul></div>';
+  $('root').innerHTML=h;
+}
+function copyTxt(){
+  var t=$('ntxt').textContent; var done=function(){ toast('已複製，可以貼到 LINE 了'); };
+  var fb=function(){ var a=document.createElement('textarea'); a.value=t; document.body.appendChild(a); a.select(); try{ document.execCommand('copy'); done(); }catch(e){ toast('請長按文字手動複製'); } a.remove(); };
+  try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done,fb); else fb(); }catch(e){ fb(); }
+}
+function aSet(){
+  var s=S.settings;
+  var h=ahead()+'<h2>設定</h2><div class="card"><h3 style="margin-top:0">改日期規則</h3><div class="two"><div><label class="f">上課前幾天截止</label><input class="t" id="xD" type="text" inputmode="numeric" value="'+s.changeDays+'"></div><div><label class="f">最多改幾次</label><input class="t" id="xC" type="text" inputmode="numeric" value="'+s.maxChanges+'"></div></div>'+
+    '<label class="f">額滿時開放候補</label><div class="seg"><button class="'+(s.waitlist?'on':'')+'" onclick="S.settings.waitlist=true;save();render()">開放</button><button class="'+(!s.waitlist?'on':'')+'" onclick="S.settings.waitlist=false;save();render()">不開放</button></div></div>'+
+    '<div class="card"><h3 style="margin-top:0">公司聯絡方式（學員看得到）</h3><label class="f">名稱</label><input class="t" id="kN" type="text" value="'+esc(s.company.name)+'"><label class="f">電話</label><input class="t" id="kP" type="text" value="'+esc(s.company.phone)+'"><label class="f">LINE 名稱／ID</label><input class="t" id="kL" type="text" value="'+esc(s.company.line)+'"><label class="f">LINE 加好友連結</label><input class="t" id="kU" type="text" value="'+esc(s.company.lineUrl||'')+'"><label class="f">地址</label><input class="t" id="kA" type="text" value="'+esc(s.company.addr)+'"></div>'+
+    '<div class="card"><h3 style="margin-top:0">老師聯絡方式（學員看得到）</h3><label class="f">稱呼</label><input class="t" id="tN" type="text" value="'+esc(s.teacher.name)+'"><label class="f">電話</label><input class="t" id="tP" type="text" value="'+esc(s.teacher.phone)+'"><label class="f">LINE 名稱</label><input class="t" id="tL" type="text" value="'+esc(s.teacher.line)+'"><label class="f">LINE 加好友連結</label><input class="t" id="tU" type="text" value="'+esc(s.teacher.lineUrl||'')+'"></div>'+
+    '<div class="card"><h3 style="margin-top:0">小金幣與經驗值</h3><div class="two"><div><label class="f">每次簽到小金幣</label><input class="t" id="rC" type="text" inputmode="numeric" value="'+s.reward.coins+'"></div><div><label class="f">每次簽到經驗</label><input class="t" id="rE" type="text" inputmode="numeric" value="'+s.reward.exp+'"></div><div><label class="f">本月小目標：簽到幾次</label><input class="t" id="rG" type="text" inputmode="numeric" value="'+s.reward.goal+'"></div><div><label class="f">達成送幾個小金幣</label><input class="t" id="rB" type="text" inputmode="numeric" value="'+s.reward.bonus+'"></div></div><p class="muted">等級門檻：'+LV.map(function(l){return 'Lv'+l.n+' '+l.need;}).join('、')+'（正式版可在這裡改）</p></div>'+
+    (window.festCard?festCard():'')+(window.authLogCard?authLogCard():'')+'<button class="btn block" onclick="saveSet()">儲存設定</button><button class="btn gray block" onclick="confirmReset()">把試用資料全部清空</button>';
+  $('root').innerHTML=h;
+}
+function confirmReset(){ sheet('<h2>清空試用資料？</h2><p>這支手機上的試用資料會回到一開始的示範內容。</p><button class="btn block" onclick="S=seed();S.admin=true;save();closeSheet();render();toast(\'已清空\')">清空</button><button class="btn gray block" onclick="closeSheet()">取消</button>'); }
+function saveSet(){
+  var s=S.settings; var d=+half($('xD').value), c=+half($('xC').value);
+  if(!(d>=0)||!(c>=0)){ toast('天數和次數要填數字'); return; }
+  s.changeDays=d; s.maxChanges=c;
+  s.reward.coins=+half($('rC').value)||0; s.reward.exp=+half($('rE').value)||0; s.reward.goal=+half($('rG').value)||1; s.reward.bonus=+half($('rB').value)||0;
+  s.company={name:$('kN').value.trim(),phone:$('kP').value.trim(),line:$('kL').value.trim(),lineUrl:$('kU').value.trim(),addr:$('kA').value.trim()};
+  s.teacher={name:$('tN').value.trim(),phone:$('tP').value.trim(),line:$('tL').value.trim(),lineUrl:$('tU').value.trim()};
+  save(); toast('設定已儲存');
+}
+
+/* =====================================================================
+   小金幣・經驗值・等級・商城（流程試用版）
+   防洗規則：
+   - 只有「簽到」給獎勵；報名、付款本身不給（避免報名→退款→再報名洗）
+   - 每一筆報名只算一次（紀錄用 ci:報名編號 當鑰匙，重複不會再給；改期也不會重算）
+   - 只能在上課當天簽到，而且要輸入現場簽到碼（只有在教室才看得到）
+   - 簽到後不能退款，所以不會有「簽完領獎再退費」
+   - 經驗值只會增加；兌換商品只扣金幣
+   - 行政手動調整金幣一定要寫原因，全部留紀錄
+   ===================================================================== */
+var LV=[
+  {n:1,name:'新生',need:0,badge:'🌱',perk:'開始累積：每次上課簽到 +10 小金幣、+10 經驗'},
+  {n:2,name:'常客',need:30,badge:'🍃',perk:'名字旁出現徽章，首頁換成綠色主題'},
+  {n:3,name:'學長姐',need:80,badge:'🌿',perk:'商城解鎖「學長姐限定」商品，主題換成天藍色'},
+  {n:4,name:'資深學員',need:150,badge:'🌳',perk:'額滿時候補優先，主題換成紫色'},
+  {n:5,name:'學苑之星',need:250,badge:'⭐',perk:'生日當月送 100 小金幣，解鎖一對一諮詢兌換，金色主題'},
+  {n:6,name:'殿堂學員',need:400,badge:'👑',perk:'滿級：名字上學苑榮譽榜、每年一次免費旁聽、專屬金框'}
+];
+function ledgerOf(a){ return (S.ledger||[]).filter(function(x){return x.acct===a;}); }
+function expOf(a){ return ledgerOf(a).reduce(function(t,x){return t+Math.max(0,x.exp||0);},0); }
+function coinsOf(a){ return ledgerOf(a).reduce(function(t,x){return t+(x.coins||0);},0); }
+function lvOf(a){ var e=expOf(a), r=LV[0]; LV.forEach(function(l){ if(e>=l.need) r=l; }); return r; }
+function nextLv(l){ return LV[l.n]||null; }
+/* 發獎勵：同一把鑰匙只會給一次 */
+function award(a,key,coins,exp,why,by){
+  S.ledger=S.ledger||[];
+  if(S.ledger.some(function(x){return x.acct===a&&x.key===key;})) return false;
+  S.ledger.push({id:'L'+Date.now()+Math.random().toString(36).slice(2,5),acct:a,key:key,coins:coins,exp:exp,why:why,date:today(),by:by||''});
+  return true;
+}
+function monthCheckins(a,ym){ return ledgerOf(a).filter(function(x){return x.key.indexOf('ci:')===0&&x.date.slice(0,7)===ym;}).length; }
+/* 簽到成功後：發獎勵＋檢查本月小目標，回傳是否升級 */
+function rewardCheckin(e,by){
+  var R=S.settings.reward, o=sessOf(e.session), before=lvOf(e.acct).n;
+  var ok=award(e.acct,'ci:'+e.id,R.coins,R.exp,o.c.name+' 簽到',by);
+  var ym=today().slice(0,7);
+  if(ok&&monthCheckins(e.acct,ym)>=R.goal) award(e.acct,'mb:'+ym,R.bonus,0,'本月小目標達成（簽到 '+R.goal+' 次）',by);
+  var after=lvOf(e.acct).n;
+  return {ok:ok,up:after>before?LV[after-1]:null};
+}
+/* 簽到碼：每場、每天不同，只在行政「今日簽到」畫面看得到（正式版放在教室螢幕） */
+function codeOf(sid){ var s=sid+today(), h=7; for(var i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))%9000; return String(1000+h); }
+
+/* ---------- 學員端：等級卡 ---------- */
+function lvCard(a){
+  var l=lvOf(a), nx=nextLv(l), e=expOf(a), R=S.settings.reward, ym=today().slice(0,7), mc=monthCheckins(a,ym);
+  var pct=nx?Math.round((e-l.need)/(nx.need-l.need)*100):100;
+  var h='<div class="lvcard lv'+l.n+'"><div class="row" style="justify-content:space-between"><div class="row" style="gap:10px"><span class="lvbadge">'+l.badge+'</span><div><b style="font-size:19px">Lv'+l.n+' '+l.name+'</b><div class="muted">經驗 '+e+'</div></div></div><div class="coins"><i class="coin"></i>'+coinsOf(a)+'<small>小金幣</small></div></div>'+
+    '<div class="xp"><span style="width:'+pct+'%"></span></div>'+
+    (nx?'<p style="margin:6px 0 0">再 <b>'+(nx.need-e)+'</b> 經驗升到 <b>Lv'+nx.n+' '+nx.name+'</b>（約再上 '+Math.ceil((nx.need-e)/R.exp)+' 次課）</p><p class="muted" style="margin:2px 0 0">升級解鎖：'+nx.perk+'</p>'
+       :'<p style="margin:6px 0 0"><b>已經滿級了！</b>你的名字在學苑榮譽榜上。</p>')+
+    '<p class="muted" style="margin:6px 0 0">本月小目標：簽到 '+Math.min(mc,R.goal)+'/'+R.goal+' 次'+(mc>=R.goal?'，已領 '+R.bonus+' 小金幣':'，達成再送 '+R.bonus+' 小金幣')+'</p>'+
+    '<div class="row" style="margin-top:8px"><button class="btn line" onclick="lvGuide()">等級說明</button><button class="btn gray" onclick="go(\'shop\')">去商城</button></div></div>';
+  return h;
+}
+function lvGuide(){
+  var a=S.me, cur=lvOf(a).n;
+  sheet('<h2>等級說明</h2><p class="muted">每次上課簽到 +'+S.settings.reward.exp+' 經驗、+'+S.settings.reward.coins+' 小金幣。經驗只會增加，用來升級；小金幣可以到商城換東西。</p>'+
+    LV.map(function(l){ return '<div class="card lv'+l.n+'" style="'+(l.n===cur?'outline:2px solid var(--brand)':'')+'"><div class="row"><span class="lvbadge sm">'+l.badge+'</span><b>Lv'+l.n+' '+l.name+'</b><span class="muted">經驗 '+l.need+'</span>'+(l.n===cur?'<span class="chip c-blue">你在這裡</span>':l.n<cur?'<span class="chip c-ok">已達成</span>':'')+'</div><p style="margin:6px 0 0">'+l.perk+'</p></div>'; }).join('')+
+    '<p class="muted">只有上課當天在現場簽到才會拿到；改日期、重複按都不會多給。</p><button class="btn gray block" onclick="closeSheet()">關閉</button>');
+}
+function upSheet(l){
+  sheet('<div class="lvcard lv'+l.n+'" style="text-align:center"><div class="lvbadge" style="margin:4px auto 6px;width:64px;height:64px;font-size:36px">'+l.badge+'</div><h2 style="margin:4px 0">升級了！Lv'+l.n+' '+l.name+'</h2><p>'+l.perk+'</p></div><button class="btn block" onclick="closeSheet()">太好了</button>');
+}
+
+/* ---------- 學員端：簽到（含簽到碼） ---------- */
+function askCheckin(eid){
+  sheet('<h2>確認簽到</h2><p>請輸入教室裡公布的 <b>4 位數簽到碼</b>。</p><input class="t" id="ckCode" type="text" inputmode="numeric" maxlength="4" placeholder="例如 1234" style="font-size:24px;letter-spacing:6px;text-align:center">'+
+    '<p class="muted">簽到後這堂課就<b>不能退款</b>了；簽到成功 +'+S.settings.reward.coins+' 小金幣、+'+S.settings.reward.exp+' 經驗。</p><p class="muted">試用版：簽到碼在行政後台「今日簽到」看得到（這一場是 '+codeOf(S.enroll.find(function(x){return x.id===eid;}).session)+'）。</p>'+
+    '<button class="btn ok block" onclick="doCheckin(\''+eid+'\')">確認簽到</button><button class="btn gray block" onclick="closeSheet()">先不要</button>');
+}
+function nowHM(){ var d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+function doCheckin(eid){
+  var e=S.enroll.find(function(x){return x.id===eid;}); var o=sessOf(e.session);
+  if(e.status!=='paid'){ toast('這筆報名不能簽到'); closeSheet(); return; }
+  if(!onDay(o.s)){ toast('只有上課當天可以簽到'); return; }
+  if(half($('ckCode').value).trim()!==codeOf(e.session)){ toast('簽到碼不對，請看教室公布的號碼'); return; }
+  e.status='checked'; e.checkedAt=today()+' '+nowHM(); e.checkedBy='學員';
+  var r=rewardCheckin(e); save(); closeSheet(); render();
+  if(r.up) upSheet(r.up); else toast(r.ok?'簽到完成 +'+S.settings.reward.coins+' 小金幣':'簽到完成');
+}
+
+/* ---------- 學員端：商城 ---------- */
+var SHOP_SUB='items';
+function viewShop(){
+  var a=S.me, c=coinsOf(a), l=lvOf(a);
+  var h=head()+'<div class="row" style="justify-content:space-between"><h2 style="margin:6px 0">商城</h2><div class="coins"><i class="coin"></i>'+c+'<small>小金幣</small></div></div>'+
+    '<div class="seg" style="margin:6px 0 12px"><button class="'+(SHOP_SUB==='items'?'on':'')+'" onclick="SHOP_SUB=\'items\';render()">商品</button><button class="'+(SHOP_SUB==='orders'?'on':'')+'" onclick="SHOP_SUB=\'orders\';render()">我的兌換</button><button class="'+(SHOP_SUB==='log'?'on':'')+'" onclick="SHOP_SUB=\'log\';render()">金幣紀錄</button></div>';
+  if(SHOP_SUB==='items'){
+    h+='<div class="goods">';
+    S.shop.filter(function(it){return it.on;}).forEach(function(it){
+      var lock=l.n<(it.minLv||1), out=it.stock<=0, poor=c<it.coins;
+      h+='<div class="good">'+goodImg(it)+'<b>'+esc(it.name)+'</b><div class="gprice"><i class="coin"></i>'+it.coins+'</div><div class="muted">'+esc(it.pickup)+'・剩 '+it.stock+'</div>'+
+        (lock?'<span class="chip c-gray">Lv'+it.minLv+' 解鎖</span>':out?'<span class="chip c-gray">已換完</span>':'<button class="btn '+(poor?'gray':'')+'" onclick="askRedeem(\''+it.id+'\')">'+(poor?'還差 '+(it.coins-c):'兌換')+'</button>')+'</div>';
+    });
+    h+='</div><p class="muted">商品圖片之後換成實拍照片。小金幣只能換東西，不能換現金。</p>';
+  } else if(SHOP_SUB==='orders'){
+    var os=S.orders.filter(function(o){return o.acct===a;}).reverse();
+    if(!os.length) h+='<div class="card soft">還沒有兌換過。</div>';
+    os.forEach(function(o){ var it=S.shop.find(function(x){return x.id===o.item;})||{name:o.itemName}; h+='<div class="card"><div class="row"><b>'+esc(it.name)+'</b>'+ordChip(o)+'</div><p class="muted">'+o.date+'・<i class="coin"></i>'+o.coins+'・'+esc(o.pickup)+(o.addr?'<br>寄到：'+esc(o.addr):'')+'</p></div>'; });
+  } else {
+    var lg=ledgerOf(a).slice().reverse();
+    h+='<div class="card"><ul class="list-plain">'+lg.map(function(x){ return '<li><div class="row" style="justify-content:space-between"><span>'+esc(x.why)+'</span><b style="color:'+(x.coins<0?'var(--bad)':'var(--ok)')+'">'+(x.coins>0?'+':'')+x.coins+'</b></div><div class="muted">'+x.date+(x.exp?'・經驗 +'+x.exp:'')+'</div></li>'; }).join('')+'</ul></div>';
+  }
+  $('root').innerHTML=h;
+}
+function ordChip(o){ return o.status==='done'?'<span class="chip c-ok">已領取</span>':o.status==='cancel'?'<span class="chip c-gray">已取消・金幣退回</span>':'<span class="chip c-warn">'+(o.pickup==='寄送'?'待寄出':'待領取')+'</span>'; }
+function askRedeem(id){
+  var it=S.shop.find(function(x){return x.id===id;}), c=coinsOf(S.me);
+  if(c<it.coins){ toast('小金幣還差 '+(it.coins-c)+'，多來上課就會有'); return; }
+  var st=meStu();
+  sheet('<h2>兌換 '+esc(it.name)+'</h2><p>'+esc(it.desc)+'</p><p style="font-size:19px;font-weight:700"><i class="coin"></i>'+it.coins+'</p><p class="muted">兌換後剩 '+(c-it.coins)+' 小金幣。</p>'+
+    (it.pickup==='寄送'?'<label class="f">收件人</label><input class="t" id="rN" type="text" value="'+esc(st.name)+'"><label class="f">電話</label><input class="t" id="rP" type="text" value="'+esc(st.phone)+'"><label class="f">地址</label><input class="t" id="rA" type="text">'
+       :'<p class="muted">領取方式：'+esc(it.pickup)+'</p>')+
+    '<button class="btn block" onclick="doRedeem(\''+id+'\')">確認兌換</button><button class="btn gray block" onclick="closeSheet()">取消</button>');
+}
+function doRedeem(id){
+  var it=S.shop.find(function(x){return x.id===id;}), c=coinsOf(S.me);
+  if(c<it.coins||it.stock<=0) { toast('不能兌換'); closeSheet(); return; }
+  var addr=''; if(it.pickup==='寄送'){ addr=($('rN').value+' '+$('rP').value+' '+$('rA').value).trim(); if(!$('rA').value.trim()){ toast('請填地址'); return; } }
+  var oid='o'+Date.now(); it.stock--;
+  S.orders.push({id:oid,acct:S.me,item:id,itemName:it.name,coins:it.coins,date:today(),status:it.pickup==='自動發放'?'done':'wait',pickup:it.pickup,addr:addr});
+  award(S.me,'od:'+oid,-it.coins,0,'兌換 '+it.name);
+  save(); closeSheet(); SHOP_SUB='orders'; render(); toast('兌換成功');
+}
+
+/* ---------- 行政：今日簽到 ---------- */
+function aToday(){
+  var t=today(), list=allSess().filter(function(x){return x.s.date===t;});
+  var h=ahead()+'<h2>今天 '+dlabel(t)+'</h2>'+todoBar()+'<h3>今日簽到</h3><p class="muted">把簽到碼投影或寫在白板上，學員輸入後才能簽到。</p>';
+  if(!list.length){ var nx=allSess().filter(function(x){return daysUntil(x.s.date)>0;})[0]; h+='<div class="card soft">今天沒有課。'+(nx?'下一場：'+esc(nx.c.name)+' '+dlabel(nx.s.date):'')+'</div>'; }
+  list.forEach(function(x){
+    var en=S.enroll.filter(function(e){return e.session===x.s.id&&(e.status==='paid'||e.status==='checked');});
+    var done=en.filter(function(e){return e.status==='checked';}), miss=en.filter(function(e){return e.status==='paid';});
+    h+='<div class="card"><div class="row" style="justify-content:space-between"><div><b style="font-size:19px">'+esc(x.c.name)+'</b><div class="muted">'+esc(x.s.time)+'・'+esc(x.c.place)+'</div></div><div class="code">簽到碼<b>'+codeOf(x.s.id)+'</b></div></div>'+
+      '<div class="row" style="margin:10px 0"><span class="chip c-blue">應到 '+en.length+'</span><span class="chip c-ok">已簽到 '+done.length+'</span><span class="chip c-warn">還沒簽到 '+miss.length+'</span></div>';
+    if(miss.length) h+='<button class="btn line block" onclick="remindAll(\''+x.s.id+'\')">複製提醒（全部還沒簽到的人）</button>';
+    h+='<ul class="list-plain" style="margin-top:8px">';
+    miss.concat(done).forEach(function(e){
+      var st=stuOf(e.acct)||{name:e.acct}, l=lvOf(e.acct);
+      h+='<li><div class="row" style="justify-content:space-between"><span><b>'+esc(st.name)+'</b> <span class="muted">'+l.badge+' Lv'+l.n+'</span></span>'+(e.status==='checked'?'<span class="chip c-ok">已簽到 '+esc((e.checkedAt||'').slice(11))+(e.checkedBy==='行政'?'・行政代簽':'')+'</span>':'<span class="chip c-warn">還沒簽到</span>')+'</div>'+
+        (e.status==='paid'?'<div class="row" style="margin-top:6px"><button class="btn gray" onclick="remindOne(\''+e.id+'\')">提醒他</button><button class="btn ok" onclick="askAdminCheckin(\''+e.id+'\')">幫他簽到</button></div>':'')+'</li>';
+    });
+    h+='</ul></div>';
+  });
+  $('root').innerHTML=h;
+}
+function remindText(names,o){ return '【'+S.settings.company.name+'｜簽到提醒】\n'+(names?names+' 您好，':'')+'今天 '+o.c.name+' '+o.s.time+' 上課，您還沒有簽到喔！\n請登入學員專區 → 我的課 → 按「我到了，簽到」，輸入教室公布的簽到碼。\n簽到成功會拿到 '+S.settings.reward.coins+' 小金幣和 '+S.settings.reward.exp+' 經驗。'; }
+function remindOne(eid){ var e=S.enroll.find(function(x){return x.id===eid;}); var st=stuOf(e.acct);
+  sheet('<h2>提醒 '+esc(st.name)+'</h2><p class="muted">複製貼到他的 LINE。正式版會同時推播／寄 Email。</p><div class="copybox" id="ntxt">'+esc(remindText(st.name,sessOf(e.session)))+'</div><button class="btn block" onclick="copyTxt()">複製</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
+function remindAll(sid){ var o=sessOf(sid); var ns=S.enroll.filter(function(e){return e.session===sid&&e.status==='paid';}).map(function(e){return (stuOf(e.acct)||{}).name;}).join('、');
+  sheet('<h2>提醒還沒簽到的人</h2><p class="muted">'+esc(ns)+'</p><div class="copybox" id="ntxt">'+esc(remindText(ns,o))+'</div><button class="btn block" onclick="copyTxt()">複製</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
+function askAdminCheckin(eid){ var e=S.enroll.find(function(x){return x.id===eid;}); var st=stuOf(e.acct);
+  sheet('<h2>幫 '+esc(st.name)+' 簽到？</h2><p>請確認他<b>人在現場</b>。簽到後不能退款，推薦人的分潤業績會入帳。</p><p class="muted">一樣只會給一次小金幣和經驗，紀錄會註明「行政代簽」。</p><button class="btn ok block" onclick="adminCheckin(\''+eid+'\')">確認，他在現場</button><button class="btn gray block" onclick="closeSheet()">取消</button>'); }
+function adminCheckin(eid){ var e=S.enroll.find(function(x){return x.id===eid;}); if(e.status!=='paid'){ closeSheet(); return; }
+  e.status='checked'; e.checkedAt=today()+' '+nowHM(); e.checkedBy='行政'; rewardCheckin(e,'行政'); save(); closeSheet(); render(); toast('已代簽到'); }
+
+/* ---------- 行政：商城 ---------- */
+var ASH='orders';
+function aShop(){
+  var h=ahead()+'<h2>商城管理</h2><div class="seg" style="margin-bottom:12px"><button class="'+(ASH==='orders'?'on':'')+'" onclick="ASH=\'orders\';render()">兌換單</button><button class="'+(ASH==='items'?'on':'')+'" onclick="ASH=\'items\';render()">商品</button><button class="'+(ASH==='rank'?'on':'')+'" onclick="ASH=\'rank\';render()">等級榜</button></div>';
+  if(ASH==='orders'){
+    var os=S.orders.slice().reverse(); var w=os.filter(function(o){return o.status==='wait';}).length;
+    h+='<p><span class="chip c-warn">待處理 '+w+'</span></p>';
+    if(!os.length) h+='<div class="card soft">還沒有兌換單。</div>';
+    os.forEach(function(o){ var st=stuOf(o.acct)||{name:o.acct};
+      h+='<div class="card"><div class="row"><b>'+esc(o.itemName)+'</b>'+ordChip(o)+'</div><p class="muted">'+esc(st.name)+'・'+o.date+'・<i class="coin"></i>'+o.coins+'・'+esc(o.pickup)+(o.addr?'<br>寄到：'+esc(o.addr):'')+'</p>'+
+        (o.status==='wait'?'<div class="row"><button class="btn ok" onclick="ordDone(\''+o.id+'\')">'+(o.pickup==='寄送'?'已寄出':'已交給學員')+'</button><button class="btn gray" onclick="ordCancel(\''+o.id+'\')">取消並退回金幣</button></div>':'')+'</div>'; });
+  } else if(ASH==='items'){
+    h+='<button class="btn block" onclick="editItem()">新增商品</button>';
+    S.shop.forEach(function(it){ h+='<div class="card"><div class="row"><span class="gsm">'+goodImg(it)+'</span><b>'+esc(it.name)+'</b>'+(it.on?'<span class="chip c-ok">上架中</span>':'<span class="chip c-gray">下架</span>')+'</div><p class="muted"><i class="coin"></i>'+it.coins+'・庫存 '+it.stock+'・'+esc(it.pickup)+(it.minLv>1?'・Lv'+it.minLv+' 以上':'')+'<br>'+esc(it.desc)+'</p><button class="btn line" onclick="editItem(\''+it.id+'\')">編輯</button></div>'; });
+  } else {
+    var all=S.students.slice().sort(function(a,b){return expOf(b.acct)-expOf(a.acct);});
+    h+='<p class="muted">滿級的學員會上學苑榮譽榜。</p><div class="card"><ul class="list-plain">'+all.map(function(s,i){ var l=lvOf(s.acct); return '<li><div class="row" style="justify-content:space-between"><span>'+(i+1)+'. <b>'+esc(s.name)+'</b> '+l.badge+' Lv'+l.n+' '+l.name+'</span><span class="muted">經驗 '+expOf(s.acct)+'・<i class="coin"></i>'+coinsOf(s.acct)+'</span></div></li>'; }).join('')+'</ul></div>';
+  }
+  $('root').innerHTML=h;
+}
+function ordDone(id){ var o=S.orders.find(function(x){return x.id===id;}); o.status='done'; o.doneAt=today(); save(); render(); toast('已完成'); }
+function ordCancel(id){ var o=S.orders.find(function(x){return x.id===id;}); o.status='cancel'; var it=S.shop.find(function(x){return x.id===o.item;}); if(it) it.stock++;
+  award(o.acct,'oc:'+o.id,o.coins,0,'取消兌換 '+o.itemName+'（退回）','行政'); save(); render(); toast('已取消，金幣退回'); }
+var IPK='現場領取', ION=true;
+function editItem(id){
+  var it=id?S.shop.find(function(x){return x.id===id;}):{name:'',coins:100,stock:10,desc:'',pickup:'現場領取',minLv:1,icon:'🎁',on:true};
+  IPK=it.pickup; ION=it.on;
+  var pk=['現場領取','寄送','自動發放'];
+  sheet('<h2>'+(id?'編輯商品':'新增商品')+'</h2><label class="f">名稱</label><input class="t" id="iN" type="text" value="'+esc(it.name)+'">'+
+    '<div class="two"><div><label class="f">需要小金幣</label><input class="t" id="iC" type="text" inputmode="numeric" value="'+it.coins+'"></div><div><label class="f">庫存</label><input class="t" id="iS" type="text" inputmode="numeric" value="'+it.stock+'"></div></div>'+
+    '<label class="f">說明</label><textarea class="t" id="iD">'+esc(it.desc)+'</textarea>'+
+    '<label class="f">領取方式</label><div class="seg" id="iPk">'+pk.map(function(p){return '<button type="button" class="'+(IPK===p?'on':'')+'" onclick="IPK=\''+p+'\';[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'on\')});this.classList.add(\'on\')">'+p+'</button>';}).join('')+'</div>'+
+    '<div class="two"><div><label class="f">幾級以上可換</label><input class="t" id="iL" type="text" inputmode="numeric" value="'+(it.minLv||1)+'"></div><div><label class="f">圖示（正式版改上傳照片）</label><input class="t" id="iI" type="text" value="'+esc(it.icon)+'"></div></div>'+
+    '<label class="f">上架</label><div class="seg"><button type="button" class="'+(ION?'on':'')+'" onclick="ION=true;this.classList.add(\'on\');this.nextSibling.classList.remove(\'on\')">上架</button><button type="button" class="'+(!ION?'on':'')+'" onclick="ION=false;this.classList.add(\'on\');this.previousSibling.classList.remove(\'on\')">下架</button></div>'+
+    '<button class="btn block" onclick="saveItem(\''+(id||'')+'\')">儲存</button><button class="btn gray block" onclick="closeSheet()">取消</button>');
+}
+function saveItem(id){
+  var o={name:$('iN').value.trim(),coins:+half($('iC').value),stock:+half($('iS').value),desc:$('iD').value.trim(),pickup:IPK,minLv:Math.min(6,Math.max(1,+half($('iL').value)||1)),icon:$('iI').value.trim()||'🎁',on:ION};
+  if(!o.name||!(o.coins>0)||!(o.stock>=0)){ toast('名稱、金幣、庫存要填'); return; }
+  if(id) Object.assign(S.shop.find(function(x){return x.id===id;}),o); else { o.id='g'+Date.now(); S.shop.push(o); }
+  save(); closeSheet(); render(); toast('已儲存');
+}
+/* 行政：手動調整金幣（一定要寫原因） */
+function askAdj(a){ var st=stuOf(a);
+  sheet('<h2>調整 '+esc(st.name)+' 的小金幣</h2><p class="muted">目前 <i class="coin"></i>'+coinsOf(a)+'。補發填正數，扣回填負數；經驗值不能手動改。</p><label class="f">數量</label><input class="t" id="adjN" type="text" inputmode="numeric" placeholder="例如 20 或 -10"><label class="f">原因（必填，會留紀錄）</label><input class="t" id="adjW" type="text" placeholder="例如：活動幫忙補發">'+
+    '<button class="btn block" onclick="doAdj(\''+a+'\')">確認</button><button class="btn gray block" onclick="closeSheet()">取消</button>'); }
+function doAdj(a){ var n=parseInt(half($('adjN').value).replace(/[^\d\-]/g,''),10), w=$('adjW').value.trim();
+  if(!n||!w){ toast('數量和原因都要填'); return; } if(coinsOf(a)+n<0){ toast('扣完會變負的'); return; }
+  award(a,'adj:'+Date.now(),n,0,'行政調整：'+w,'行政'); save(); closeSheet(); render(); toast('已調整'); }
+
+/* ---------- 試用資料：10 位學員、今天有一場課、歷史簽到、兌換單 ---------- */
+function seedExtra(s){
+  s.settings.reward={coins:10,exp:10,goal:2,bonus:20,code:true};
+  var P=function(n,sex,cal,y,m,d,tm,hh,mi,sc,ph,em){ return {name:n,sex:sex,phone:ph,email:em,cal:cal,y:y,m:m,d:d,leap:false,timeMode:tm,hh:hh,mi:mi,shichen:sc}; };
+  [['huang@demo.tw','黃怡君','0912-000-006','羅文勳','','',-40,P('黃怡君','F','國','1990','6','12','clock','21','5','','0912-000-006','huang@demo.tw'),'塔羅有興趣'],
+   ['tsai@demo.tw','蔡承恩','0912-000-007','陳彩綺','康瑋齊','九比一',-60,P('蔡承恩','M','國','82','1','30','clock','6','40','','0912-000-007','tsai@demo.tw'),''],
+   ['hsu@demo.tw','許淑芬','0912-000-008','羅文勳','','',-400,P('許淑芬','F','國','1972','9','9','sc','','','9','0912-000-008','hsu@demo.tw'),'老學員，每堂都來'],
+   ['kao@demo.tw','高子晴','0912-000-009','沈佳琪','','',-260,P('高子晴','F','農','1985','4','18','clock','15','20','','0912-000-009','kao@demo.tw'),''],
+   ['cheng@demo.tw','鄭宇翔','0912-000-010','湯雯莉','沈佳琪','自訂 7:3',-5,null,'朋友一起來']
+  ].forEach(function(r){ s.students.push({acct:r[0],name:r[1],phone:r[2],email:r[0],referrer:r[3],second:r[4],ratio:r[5],createdAt:today(r[6]),updatedAt:r[7]?today(r[6]+1):'',note:r[8],profile:r[7]}); });
+  /* 今天這場（八字初階 s1）：林小美、陳大明已在名單；再加 5 位 */
+  var add=function(id,a,c,sid,st,at,by){ s.enroll.push({id:id,acct:a,course:c,session:sid,status:st,changes:0,paidAt:today(-6),checkedAt:at?today()+' '+at:'',checkedBy:by||''}); };
+  add('e9','hsu@demo.tw','c1','s1','checked','13:41','學員');
+  add('e10','kao@demo.tw','c1','s1','checked','13:48','學員');
+  add('e11','huang@demo.tw','c1','s1','paid');
+  add('e12','tsai@demo.tw','c1','s1','paid');
+  add('e13','cheng@demo.tw','c1','s1','checked','13:55','行政');
+  add('e14','huang@demo.tw','c3','p_nov-28','paid');
+  add('e15','kao@demo.tw','c2','p_nov-21','wait');
+  s.enroll.forEach(function(e){ if(e.acct==='chen@demo.tw'&&e.status==='checked') e.checkedBy='學員'; });
+  /* 歷史簽到（過去的課和活動） */
+  s.ledger=[]; var names=['八字初階','塔羅初階','節氣講座','八字進階','讀書會','塔羅進階'], k=0;
+  var hist=function(a,n){ for(var i=0;i<n;i++){ var d=today(-(n-i)*9-3); s.ledger.push({id:'H'+(k++),acct:a,key:'hist:'+a+i,coins:10,exp:10,why:names[i%names.length]+' 簽到',date:d,by:''}); } };
+  hist('lin@demo.tw',6); hist('chen@demo.tw',14); hist('chang@demo.tw',9); hist('huang@demo.tw',2); hist('tsai@demo.tw',4); hist('hsu@demo.tw',40); hist('kao@demo.tw',24);
+  var giv=function(a,key,c,why,d){ s.ledger.push({id:'H'+(k++),acct:a,key:key,coins:c,exp:0,why:why,date:today(d),by:''}); };
+  giv('hsu@demo.tw','mb:old1',20,'本月小目標達成（簽到 2 次）',-40); giv('kao@demo.tw','mb:old1',20,'本月小目標達成（簽到 2 次）',-40);
+  /* 今天已簽到的人：獎勵已經發 */
+  [['e3','chen@demo.tw'],['e9','hsu@demo.tw'],['e10','kao@demo.tw'],['e13','cheng@demo.tw']].forEach(function(x){ s.ledger.push({id:'H'+(k++),acct:x[1],key:'ci:'+x[0],coins:10,exp:10,why:'八字初階 簽到',date:today(),by:x[0]==='e13'?'行政':''}); });
+  s.shop=[
+    {id:'g1',name:'學苑帆布袋',coins:120,stock:20,desc:'上課裝講義剛好的大小。',pickup:'現場領取',minLv:1,icon:'👜',on:true},
+    {id:'g2',name:'命理筆記本',coins:60,stock:50,desc:'內頁印好命盤格，上課抄筆記用。',pickup:'現場領取',minLv:1,icon:'📒',on:true},
+    {id:'g3',name:'課程折價券 500 元',coins:200,stock:99,desc:'下次報名實體課折抵 500 元，兌換後自動發到帳號。',pickup:'自動發放',minLv:1,icon:'🎟️',on:true},
+    {id:'g4',name:'化煞水（小瓶）',coins:200,stock:10,desc:'學苑自製，寄送或上課現場領。',pickup:'寄送',minLv:2,icon:'💧',on:true},
+    {id:'g5',name:'學苑版塔羅牌',coins:300,stock:5,desc:'學長姐限定款。',pickup:'現場領取',minLv:3,icon:'🃏',on:true},
+    {id:'g6',name:'一對一八字諮詢 30 分鐘',coins:600,stock:3,desc:'羅老師親自看盤。',pickup:'現場領取',minLv:5,icon:'🔮',on:true}
+  ];
+  s.orders=[]; var od=function(id,a,g,st,d,addr){ var it=s.shop.find(function(x){return x.id===g;}); s.orders.push({id:id,acct:a,item:g,itemName:it.name,coins:it.coins,date:today(d),status:st,pickup:it.pickup,addr:addr||''}); s.ledger.push({id:'H'+(k++),acct:a,key:'od:'+id,coins:-it.coins,exp:0,why:'兌換 '+it.name,date:today(d),by:''}); };
+  od('o1','hsu@demo.tw','g1','done',-30); od('o2','hsu@demo.tw','g4','wait',-2,'許淑芬 0912-000-008 台中市西屯區（試用）');
+  od('o3','kao@demo.tw','g2','wait',-1); od('o4','chen@demo.tw','g3','done',-12);
+  return s;
+}
+
+/* ---------- 共用 ---------- */
+function sheet(html){ $('sheet').innerHTML=html; $('mask').classList.add('show'); $('sheet').scrollTop=0; }
+function closeSheet(){ $('mask').classList.remove('show'); }
+$('mask').addEventListener('click',function(e){ if(e.target===this) closeSheet(); });
+function render(){
+  if(S.admin){ tabsAdmin(); ({more:aMore,manual:aManual,today:aToday,shop:aShop,students:aStudents,open:aOpen,edit:aEdit,courses:aCourses,roster:aRoster,news:aNews,online:aOnline,notice:aNotice,set:aSet})[ATAB](); return; }
+  if(!S.me||!meStu()){ viewLogin(); return; }
+  tabsStudent(); ({home:viewHome,table:viewTable,mine:viewMine,online:viewOnline,shop:viewShop,me:viewMe})[TAB]();
+}
+function route(){ var h=(location.hash||'').replace('#','');
+  if(h==='admin'){ S.admin=true; }
+  else if(h==='student'){ S.admin=false; if(!S.me) S.me='lin@demo.tw'; }
+}
+route(); window.addEventListener('hashchange',function(){ route(); save(); render(); });
+/* 第一次畫面在最後的新版介面段落裡呼叫 */
+
+/* 手機鍵盤：點到欄位時，把那一格連同標題捲到鍵盤上方的中間 */
+(function(){
+  var vv=window.visualViewport, isTouch=('ontouchstart' in window)||navigator.maxTouchPoints>0;
+  function kbH(){ return vv?Math.max(0,innerHeight-vv.height):0; }
+  function center(el){
+    if(!isTouch&&kbH()<=120) return;
+    var lab=el.previousElementSibling&&el.previousElementSibling.tagName==='LABEL'?el.previousElementSibling:null;
+    var top=(lab||el).getBoundingClientRect().top, bot=el.getBoundingClientRect().bottom;
+    var visH=vv?vv.height:innerHeight, mid=(top+bot)/2, need=mid-visH/2, maxScroll=document.documentElement.scrollHeight-innerHeight;
+    if(need>0&&scrollY+need>maxScroll){ $('__kbSpacer').style.height=Math.min(2000,scrollY+need-maxScroll+20)+'px'; }
+    var sc=el.closest('.sheet'); if(sc){ sc.scrollTop+=need; return; }
+    window.scrollTo(0,scrollY+need);
+  }
+  document.addEventListener('focusin',function(e){ var t=e.target; if(!/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return; setTimeout(function(){center(t);},300); });
+  document.addEventListener('focusout',function(){ setTimeout(function(){ var a=document.activeElement; if(!a||!/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) $('__kbSpacer').style.height='0'; },200); });
+})();
+
+
+/* =====================================================================
+   新版介面（2026-10-31）：藍色為主，「我的」可切換藍／綠／紫
+   插圖是 ChatGPT 生成的專屬插畫（site/img/）
+   這段放在最後：同名函式會取代前面舊版的畫法，流程邏輯不變
+   ===================================================================== */
+var THEMES=[['blue','海軍藍'],['green','墨綠'],['purple','霧紫']];
+var THEME=(function(){ try{ return localStorage.getItem('course_theme')||'blue'; }catch(e){ return 'blue'; } })();
+function applyTheme(){ document.body.className='t-'+THEME; }
+function setTheme(t){ THEME=t; try{ localStorage.setItem('course_theme',t); }catch(e){} applyTheme(); render(); toast('已換成'+THEMES.find(function(x){return x[0]===t;})[1]); }
+function img(n,cls){ return '<img class="'+(cls||'ill')+'" src="img/'+n+'.png" alt="">'; }
+LV.forEach(function(l){ l.badge=''; });
+function badge(l,sm){ return '<span class="lvbadge'+(sm?' sm':'')+' lvb'+l.n+'"><img src="img/chart.png" alt=""><b>'+l.n+'</b></span>'; }
+
+/* ---------- 課表接入口網站行事曆 ----------
+   行政只要在入口網站行事曆排「課程」並勾給學員，這裡的課表就自動出現。
+   價格、分潤、名額在本後台「課程」設定，用課名對起來（八字初階班＝八字初階）。 */
+var PORTAL_URL='https://plgrsxtlaznajzqgcuqr.supabase.co/rest/v1/game_data?id=eq.portal_config_main&select=data';
+var PORTAL_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZ3JzeHRsYXpuYWp6cWdjdXFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5Njg1MDIsImV4cCI6MjA5MDU0NDUwMn0.XyZ0wQbZQ-CInglRpv-MHMuMvkviRovm-o-On_FeyGs';
+var PORTAL_SNAP=[{"hl": "10/21（三）14:00–16:30｜開財庫城・消災補運補庫\n10/22（四）14:00–15:30｜五行姻緣科儀", "id": "ritual-2026-10", "to": {"student": true, "teacher": true}, "end": "2026-10-22", "date": "2026-10-21", "note": "本場有 還陰債，無貴人．小人", "time": "10/21 09:00 開始・10/22 17:30 圓滿", "type": "ritual", "place": "台中靈應壇｜彰化縣芬園鄉彰南路五段616號", "title": "十月法會"}, {"id": "course-202610-1", "to": {"student": true, "teacher": true}, "end": "", "src": "2026年10月課表", "date": "2026-10-02", "note": "羅文勳 院長・線上課", "time": "19:00-20:30", "type": "course", "title": "八字體驗班", "course": "八字體驗班"}, {"id": "course-202610-2", "to": {"student": true, "teacher": true}, "end": "", "src": "2026年10月課表", "date": "2026-10-03", "note": "陳彩綺 講師", "time": "10:00-18:00", "type": "course", "title": "塔羅初階班", "course": "塔羅初階班"}, {"id": "course-202610-3", "to": {"student": true, "teacher": true}, "end": "", "src": "2026年10月課表", "date": "2026-10-04", "note": "學員免費開放・線上課", "time": "17:00-19:00", "type": "course", "title": "命盤解析課", "course": "命盤解析課"}, {"id": "course-202610-4", "to": {"student": true, "teacher": true}, "end": "", "src": "2026年10月課表", "date": "2026-10-16", "note": "羅文勳 院長・線上課", "time": "19:00-20:30", "type": "course", "title": "八字體驗班", "course": "八字體驗班"}, {"id": "course-202610-5", "to": {"student": true, "teacher": true}, "end": "", "src": "2026年10月課表", "date": "2026-10-23", "note": "羅文勳 院長・線上課", "time": "19:00-20:30", "type": "course", "title": "八字體驗班", "course": "八字體驗班"}, {"id": "course-202610-6", "to": {"student": true, "teacher": true}, "end": "2026-10-25", "src": "2026年10月課表", "date": "2026-10-24", "note": "陳彩綺 講師", "time": "13:00-19:00", "type": "course", "title": "塔羅進階班", "course": "塔羅進階班"}, {"id": "course-202610-7", "to": {"student": true, "teacher": true}, "end": "", "src": "2026年10月課表", "date": "2026-10-30", "note": "羅文勳 院長・線上課", "time": "19:00-20:30", "type": "course", "title": "八字體驗班", "course": "八字體驗班"}];
+function normC(n){ return (n||'').replace(/\s/g,'').replace(/[（(].*$/,'').replace(/[班課]$/,''); }
+function findCourse(name){ var k=normC(name); return S.courses.find(function(x){ return normC(x.name)===k||normC(x.alias)===k; }); }
+/* 11 月課表：入口網站的行事曆還沒自動填進去，先照「2026年11月課表」圖片抄進來；行事曆有同一天同一門課時以行事曆為準 */
+var NOV_FROM_IMAGE=[
+  ['nov-12','2026-11-12','19:00-20:30','塔羅體驗班','陳彩綺 講師'],['nov-13','2026-11-13','19:00-20:30','八字體驗班','線上課'],
+  ['nov-14','2026-11-14','14:00-15:30','八字體驗班','線上課'],['nov-15','2026-11-15','15:00-17:00','命盤解析課','線上課・學員免費'],
+  ['nov-20','2026-11-20','19:00-20:30','八字體驗班','線上課'],['nov-21','2026-11-21','10:00-18:30','八字進階班','羅文勳 院長'],
+  ['nov-22','2026-11-22','10:00-18:30','八字進階班','羅文勳 院長'],['nov-27','2026-11-27','19:00-20:30','八字體驗班','線上課'],
+  ['nov-28','2026-11-28','10:00-18:00','塔羅初階班','陳彩綺 講師']
+].map(function(r){ return {id:r[0],date:r[1],time:r[2],type:'course',title:r[3],course:r[3],note:r[4],to:{student:true,teacher:true},src:'2026年11月課表（圖片）'}; });
+function syncPortal(events,from){
+  var list=(events||[]).filter(function(e){ return e.type==='course'&&e.to&&e.to.student; });
+  NOV_FROM_IMAGE.forEach(function(n){ if(!list.some(function(e){ return e.date===n.date&&normC(e.course||e.title)===normC(n.course); })) list.push(n); });
+  list.sort(function(a,b){ return a.date<b.date?-1:1; });
+  /* 同一門課、同一時段、連續兩天＝同一場（例如八字進階班 11/21～11/22） */
+  var merged=[];
+  list.forEach(function(e){
+    var p=merged[merged.length-1];
+    if(p&&normC(p.course||p.title)===normC(e.course||e.title)&&p.time===e.time){
+      var nd=new Date((p.end||p.date)+'T12:00:00'); nd.setDate(nd.getDate()+1);
+      if(e.date===ymdS(nd)){ p.end=e.date; return; }
+    }
+    merged.push(Object.assign({},e));
+  });
+  var miss={}, seen={};
+  merged.forEach(function(e){
+    var name=e.course||e.title, c=findCourse(name);
+    if(!c){ miss[name]=1; return; }
+    var id='p_'+e.id; seen[id]=1;
+    var s=c.sessions.find(function(x){return x.id===id;});
+    if(!s){ s={id:id,seats:c.seats||20}; c.sessions.push(s); }
+    s.date=e.date; s.end=e.end||''; s.time=e.time||''; s.note=e.note||''; s.src='portal';
+  });
+  S.courses.forEach(function(c){ c.sessions=c.sessions.filter(function(s){ return s.src!=='portal'||seen[s.id]||S.enroll.some(function(e){return e.session===s.id;}); }); });
+  S.portalEv=events||[]; S.portalMiss=Object.keys(miss); S.portalAt=from||S.portalAt; save();
+}
+function ymdS(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function loadPortal(){
+  try{
+    fetch(PORTAL_URL,{headers:{apikey:PORTAL_KEY,Authorization:'Bearer '+PORTAL_KEY}}).then(function(r){return r.ok?r.json():null;})
+      .then(function(d){ if(d&&d[0]&&d[0].data){ syncPortal(d[0].data.events,'即時'); render(); } }).catch(function(){});
+  }catch(e){}
+}
+
+/* ---------- 學員端 ---------- */
+var TABICON={
+  home:'<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>',
+  table:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+  mine:'<path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h10"/>',
+  online:'<rect x="3" y="5" width="18" height="12" rx="2"/><path d="M10 9l5 2.5-5 2.5zM8 20h8"/>',
+  shop:'<path d="M4 9l2-5h12l2 5M4 9v11h16V9M4 9h16M10 20v-6h4v6"/>',
+  me:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+  today:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h4"/>',
+  students:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.3-5 6.5-5s5.7 1.5 6.5 5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.5 0 4 1.3 4.5 4"/>',
+  courses:'<path d="M3 6l9-3 9 3-9 3z"/><path d="M7 8v5c0 1.5 2.5 3 5 3s5-1.5 5-3V8"/>',
+  more:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'
+};
+function tabBtn(on,key,label,go){ return '<button class="'+(on?'on':'')+'" onclick="'+go+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+(TABICON[key]||'')+'</svg><span>'+label+'</span></button>'; }
+function tabsStudent(){
+  var t=[['home','首頁'],['table','課表'],['mine','我的課'],['shop','商城'],['me','我的']];
+  $('tabs').style.display='flex';
+  $('tabs').innerHTML=t.map(function(x){ return tabBtn(TAB===x[0]||(TAB==='online'&&x[0]==='home'),x[0],x[1],"go('"+x[0]+"')"); }).join('');
+}
+function head(){ var st=meStu();
+  return '<header class="topbar"><div><b>神奇身心靈學苑</b><span>'+esc(st?st.name:'')+'</span></div><button class="lnk" onclick="logout()">登出</button></header>'; }
+function statusBar(a){
+  var l=lvOf(a), nx=nextLv(l), e=expOf(a), pct=nx?Math.round((e-l.need)/(nx.need-l.need)*100):100;
+  return '<button class="status lv'+l.n+'" onclick="lvGuide()">'+badge(l)+'<span class="st-mid"><b>Lv'+l.n+'　'+l.name+'</b><span class="xp"><span style="width:'+pct+'%"></span></span><small>'+(nx?'再 '+(nx.need-e)+' 經驗升級':'已經滿級')+'</small></span><span class="st-coin">'+img('coin','coinimg')+'<b>'+coinsOf(a)+'</b></span></button>';
+}
+function todayCard(){
+  var mine=S.enroll.filter(function(e){ return e.acct===S.me&&(e.status==='paid'||e.status==='checked'); })
+    .map(function(e){ return {e:e,o:sessOf(e.session)}; }).filter(function(x){ return x.o&&daysUntil(x.o.s.date)>=0; })
+    .sort(function(a,b){ return (a.o.s.date+a.o.s.time)<(b.o.s.date+b.o.s.time)?-1:1; });
+  var x=mine[0];
+  if(!x){
+    var nx=allSess().filter(function(y){return daysUntil(y.s.date)>=0;})[0];
+    return '<div class="today"><div class="td-txt"><span class="td-lab">'+svgI('table')+'近期開課</span>'+(nx?'<b class="td-big">'+sdate(nx.s)+'</b><p>'+esc(nx.c.name)+(nx.s.time?'・'+esc(nx.s.time):'')+'</p>':'<p>目前沒有開課</p>')+'</div>'+img('bazi','td-img')+
+      '<button class="btn block" onclick="'+(nx?"openCourse('"+nx.c.id+"')":"go('table')")+'">看課程・報名</button></div>';
+  }
+  var isT=onDay(x.o.s), d=daysUntil(x.o.s.date);
+  var big=isT?'今天 '+esc((x.o.s.time||'').split('-')[0]):(d===1?'明天 '+esc((x.o.s.time||'').split('-')[0]):sdate(x.o.s));
+  var btn= x.e.status==='checked' ? '<div class="td-done">已簽到 '+esc((x.e.checkedAt||'').slice(11))+'，祝上課愉快</div>'
+    : isT ? '<button class="btn block big" onclick="askCheckin(\''+x.e.id+'\')">我到了，簽到 ›</button>'
+    : '<button class="btn line block" onclick="go(\'mine\')">看我的課</button>';
+  return '<div class="today"><div class="td-txt"><span class="td-lab">'+svgI('table')+(isT?'今天的課':'下一堂課')+'</span><b class="td-big">'+big+'</b><p>'+esc(x.o.c.name)+'・'+esc(x.o.s.note||x.o.c.place)+'</p></div>'+img('bazi','td-img')+btn+'</div>';
+}
+function svgI(k){ return '<svg class="si" viewBox="0 0 24 24" aria-hidden="true">'+TABICON[k]+'</svg>'; }
+function tile(go,ill,t,sub){ return '<button class="tile" onclick="'+go+'">'+img(ill)+'<span><b>'+t+'</b><small>'+sub+'</small></span><i>›</i></button>'; }
+function viewHome(){
+  var h=head()+statusBar(S.me)+todayCard()+
+    '<div class="tiles">'+tile("go('table')",'cal','課表','看上課時間')+tile("go('mine')",'books','我的課','已報名的課')+tile("go('shop')",'shop','商城','金幣換好禮')+tile("ME_SUB='chart';go('me')",'chart','我的命盤','八字排盤')+'</div>'+
+    tile("go('online')",'online','線上課程','影片與講義，隨時複習').replace('class="tile"','class="tile wide"');
+  var list=S.news.slice().sort(function(a,b){ return (b.pin?1:0)-(a.pin?1:0) || (a.date<b.date?1:-1); });
+  h+='<div class="sec-h">'+img('news','sec-ill')+'<b>最新消息</b></div><div class="card news">';
+  if(!list.length) h+='<p class="muted">目前沒有消息。</p>';
+  list.forEach(function(n){ h+='<button class="nrow" onclick="openNews(\''+n.id+'\')"><span class="dot'+(n.type==='推薦'?' rec':'')+'"></span><span><b>'+esc(n.title)+'</b><small>'+esc(n.body.slice(0,30))+(n.body.length>30?'…':'')+'</small></span><i>›</i></button>'; });
+  h+='</div>';
+  $('root').innerHTML=h;
+}
+/* 等級卡、等級說明、升級畫面（換成專屬徽章） */
+function lvCard(a){
+  var l=lvOf(a), nx=nextLv(l), e=expOf(a), R=S.settings.reward, ym=today().slice(0,7), mc=monthCheckins(a,ym);
+  var pct=nx?Math.round((e-l.need)/(nx.need-l.need)*100):100;
+  return '<div class="lvcard lv'+l.n+'"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><div class="row" style="gap:12px;flex-wrap:nowrap">'+badge(l)+'<div><b style="font-size:19px">Lv'+l.n+'　'+l.name+'</b><div class="muted">經驗 '+e+'</div></div></div><div class="coins">'+img('coin','coinimg')+coinsOf(a)+'</div></div>'+
+    '<div class="xp"><span style="width:'+pct+'%"></span></div>'+
+    (nx?'<p>再 <b>'+(nx.need-e)+'</b> 經驗升到 <b>Lv'+nx.n+' '+nx.name+'</b>，約再上 '+Math.ceil((nx.need-e)/R.exp)+' 次課</p><p class="muted">升級解鎖：'+nx.perk+'</p>':'<p><b>已經滿級了！</b>你的名字在學苑榮譽榜上。</p>')+
+    '<p class="muted">本月小目標：簽到 '+Math.min(mc,R.goal)+'/'+R.goal+' 次'+(mc>=R.goal?'，已領 '+R.bonus+' 小金幣':'，達成再送 '+R.bonus+' 小金幣')+'</p>'+
+    '<button class="btn line block" onclick="lvGuide()">看全部等級</button></div>';
+}
+function lvGuide(){
+  var cur=lvOf(S.me).n;
+  sheet('<h2>等級說明</h2><p class="muted">每次上課簽到 +'+S.settings.reward.exp+' 經驗、+'+S.settings.reward.coins+' 小金幣。經驗只會增加，用來升級；小金幣可以到商城換東西。</p>'+
+    LV.map(function(l){ return '<div class="lvrow lv'+l.n+(l.n===cur?' cur':'')+'">'+badge(l,1)+'<div><div class="row"><b>Lv'+l.n+' '+l.name+'</b><span class="muted">經驗 '+l.need+'</span>'+(l.n===cur?'<span class="chip c-blue">你在這裡</span>':l.n<cur?'<span class="chip c-ok">已達成</span>':'')+'</div><p>'+l.perk+'</p></div></div>'; }).join('')+
+    '<p class="muted">只有上課當天在現場簽到才會拿到；改日期、重複按都不會多給。</p><button class="btn gray block" onclick="closeSheet()">關閉</button>');
+}
+function upSheet(l){
+  sheet('<div class="lvcard lv'+l.n+'" style="text-align:center">'+badge(l).replace('lvbadge','lvbadge xl')+'<h2 style="margin:8px 0 4px">升級了！Lv'+l.n+' '+l.name+'</h2><p>'+l.perk+'</p></div><button class="btn block" onclick="closeSheet()">太好了</button>');
+}
+
+/* ---------- 我的：命盤／等級／資料（含換顏色）／聯絡 ---------- */
+function viewMe(){
+  var st=meStu(); var p=st.profile;
+  var h=head();
+  if(!p||PF){ h+=profileForm(st); $('root').innerHTML=h; bindAdv(); return; }
+  var subs=[['chart','我的命盤'],['lv','我的等級'],['info','資料與顏色'],['contact','聯絡我們']];
+  h+='<div class="seg sub">'+subs.map(function(x){return '<button class="'+(ME_SUB===x[0]?'on':'')+'" onclick="ME_SUB=\''+x[0]+'\';render()">'+x[1]+'</button>';}).join('')+'</div>';
+  CHART_FOR=null;
+  if(ME_SUB==='chart'){
+    h+='<div class="card" style="padding:8px"><iframe id="chartFrame" src="chart.html" title="八字命盤" style="width:100%;border:0;height:900px;display:block"></iframe></div>'+(p.timeMode==='none'?'<p class="muted">你沒有填出生時間，時柱先用中午 12 點排，只能參考。</p>':'');
+  } else if(ME_SUB==='lv'){
+    h+=lvCard(S.me);
+  } else if(ME_SUB==='info'){
+    h+='<div class="card"><h3>主題顏色</h3><div class="themes">'+THEMES.map(function(t){ return '<button class="sw sw-'+t[0]+(THEME===t[0]?' on':'')+'" onclick="setTheme(\''+t[0]+'\')"><i></i><span>'+t[1]+'</span></button>'; }).join('')+'</div></div>'+
+       '<div class="card"><h3>我的資料</h3><ul class="list-plain"><li>姓名：'+esc(p.name)+'（'+(p.sex==='M'?'男':'女')+'）</li><li>生日：'+esc(birthText(p))+'</li><li>手機：'+esc(p.phone)+'</li><li>Email：'+esc(p.email)+'</li></ul><button class="btn line block" onclick="PF=JSON.parse(JSON.stringify(meStu().profile));render()">修改我的資料</button></div>';
+  } else {
+    h+=contactView();
+  }
+  $('root').innerHTML=h;
+}
+
+/* ---------- 行政後台 ---------- */
+function tabsAdmin(){
+  var g=AGRP[ATAB]||'today';
+  $('tabs').style.display='flex';
+  $('tabs').innerHTML=AN.map(function(x){ return tabBtn(g===x[0],x[0],x[1],"aGo('"+x[0]+"')"); }).join('');
+}
+function ahead(){
+  var g=AGRP[ATAB], h='<header class="adm-head"><b>學員系統<small>行政後台</small></b><button onclick="logout()">離開</button></header>';
+  if(g==='courses') h+='<div class="seg sub">'+[['courses','開課'],['roster','報名名單'],['notice','通知文字']].map(function(x){return '<button class="'+(ATAB===x[0]?'on':'')+'" onclick="aGo(\''+x[0]+'\')">'+x[1]+'</button>';}).join('')+'</div>';
+  if(g==='more'&&ATAB!=='more') h+='<button class="back" onclick="aGo(\'more\')">‹ 更多</button>';
+  if(ATAB==='open'||ATAB==='edit') h+='<button class="back" onclick="PF=null;PFA=null;aGo(\'students\')">‹ 學員列表</button>';
+  return h;
+}
+function todoBar(){
+  var w=S.orders.filter(function(o){return o.status==='wait';}).length;
+  var np=S.students.filter(function(x){return !x.profile;}).length;
+  var wt=S.enroll.filter(function(e){return e.status==='wait';}).length;
+  var it=function(n,ill,t,go){ return '<button class="todo'+(n?' has':'')+'" onclick="'+go+'">'+img(ill,'todo-ill')+'<b>'+n+'</b><span>'+t+'</span></button>'; };
+  var h='<div class="todos">'+it(w,'order','兌換待處理',"ASH='orders';aGo('shop')")+it(np,'nodata','資料未填',"aGo('students')")+it(wt,'wait','候補中',"aGo('roster')")+'</div>';
+  if((S.portalMiss||[]).length) h+='<button class="alert" onclick="aGo(\'courses\')"><b>入口網站有 '+S.portalMiss.length+' 門課還沒設定價格</b><span>'+esc(S.portalMiss.join('、'))+'</span><i>›</i></button>';
+  return h;
+}
+function aToday(){
+  var t=today(), list=allSess().filter(function(x){return onDay(x.s);});
+  var h=ahead()+'<h2 class="today-h">今天 '+dlabel(t)+'</h2>'+todoBar();
+  if(!list.length){ var nx=allSess().filter(function(x){return daysUntil(x.s.date)>0;})[0]; h+='<div class="card soft">今天沒有課。'+(nx?'下一場：'+esc(nx.c.name)+' '+dlabel(nx.s.date):'')+'</div>'; }
+  list.forEach(function(x){
+    var en=S.enroll.filter(function(e){return e.session===x.s.id&&(e.status==='paid'||e.status==='checked');});
+    var done=en.filter(function(e){return e.status==='checked';}), miss=en.filter(function(e){return e.status==='paid';});
+    h+='<div class="card ck"><div class="ck-top"><div><span class="td-lab">'+svgI('today')+'今日簽到</span><b class="ck-name">'+esc(x.c.name)+'</b><span class="muted">'+esc(x.s.time)+'・'+esc(x.s.note||x.c.place)+'</span></div><div class="code"><span>簽到碼</span><b>'+codeOf(x.s.id)+'</b></div></div>'+
+      '<div class="stat3"><div><span>應到</span><b>'+en.length+'</b></div><div><span>已簽到</span><b class="g">'+done.length+'</b></div><div><span>還沒簽到</span><b class="w">'+miss.length+'</b></div></div>'+
+      (miss.length?'<button class="btn block" onclick="remindAll(\''+x.s.id+'\')">複製提醒（全部還沒簽到的人）</button>':'')+'</div>';
+    h+='<div class="card"><div class="sec-h in">'+svgI('students')+'<b>學員名單（'+en.length+'）</b></div><ul class="roster">';
+    done.concat(miss).forEach(function(e){
+      var st=stuOf(e.acct)||{name:e.acct}, l=lvOf(e.acct);
+      h+='<li><span class="nm"><b>'+esc(st.name)+'</b><span class="lvtag lvt'+l.n+'">Lv'+l.n+'</span></span>'+
+        (e.status==='checked'?'<span class="chip c-ok">已簽到 '+esc((e.checkedAt||'').slice(11))+(e.checkedBy==='行政'?'・代簽':'')+'</span>'
+          :'<span class="acts"><button class="btn line sm" onclick="remindOne(\''+e.id+'\')">提醒他</button><button class="btn sm" onclick="askAdminCheckin(\''+e.id+'\')">幫他簽到</button></span>')+'</li>';
+    });
+    h+='</ul></div>';
+  });
+  $('root').innerHTML=h;
+}
+function aMore(){
+  var ill={news:'news',online:'online',set:'nodata',manual:'books'};
+  var h=ahead()+'<h2>更多</h2><div class="card menu">'+MORE.map(function(x){return '<button onclick="aGo(\''+x[0]+'\')">'+img(ill[x[0]],'m-ill')+'<span><b>'+x[1]+'</b><small>'+x[2]+'</small></span><i>›</i></button>';}).join('')+'</div>';
+  $('root').innerHTML=h;
+}
+/* 商品圖：試用版統一用禮物盒插圖，正式版改上傳實拍照片 */
+function goodImg(it){ return '<div class="gimg">'+img(it.id==='g3'?'order':it.id==='g6'?'chart':'gift')+'</div>'; }
+
+/* ---------- 學員系統・行政後台：學員分類查詢、課程管理分段 ---------- */
+function cSubj(c){ return /^八字/.test(c.name)?'bazi':/^塔羅/.test(c.name)?'tarot':'other'; }
+function cLv(c){ return /體驗/.test(c.name)?'try':/初階/.test(c.name)?'basic':/進階|高階/.test(c.name)?'adv':'other'; }
+var SUBJ={bazi:'八字',tarot:'塔羅',other:'其他'}, LVN={try:'體驗',basic:'初階',adv:'進階'};
+var SF={q:'',subj:'all',lv:'all',m:'all',fill:'all'};
+function stuEnrolls(a){ return S.enroll.filter(function(e){ return e.acct===a&&e.status!=='refunded'; }).map(function(e){ return {e:e,c:course(e.course)}; }).filter(function(x){return x.c;}); }
+function stuMatch(s){
+  var q=SF.q.trim().toLowerCase();
+  if(q && [s.name,s.acct,s.phone,s.referrer,s.second,s.note].join(' ').toLowerCase().indexOf(q)<0) return false;
+  if(SF.fill==='no'&&s.profile) return false;
+  var en=stuEnrolls(s.acct);
+  if(SF.subj!=='all'||SF.lv!=='all'||SF.m!=='all'){
+    en=en.filter(function(x){ var mon=(x.e.paidAt||'').slice(0,7)||(sessOf(x.e.session)||{s:{}}).s.date?.slice(0,7);
+      return (SF.subj==='all'||cSubj(x.c)===SF.subj)&&(SF.lv==='all'||cLv(x.c)===SF.lv)&&(SF.m==='all'||mon===SF.m); });
+    if(!en.length) return false;
+  }
+  return true;
+}
+function sfSet(k,v){ SF[k]=v; if(k==='subj') SF.lv='all'; render(); }
+function aStudents(){
+  var months={}; S.enroll.forEach(function(e){ if(e.paidAt) months[e.paidAt.slice(0,7)]=1; });
+  var ms=Object.keys(months).sort().reverse();
+  var h=ahead()+'<div class="pg-h"><h2>學員</h2><button class="btn sm" onclick="aGo(\'open\')">＋ 開通新學員</button></div>'+
+    '<input class="t search" id="sq" type="search" placeholder="搜尋姓名、手機、Email、推薦人" value="'+esc(SF.q)+'" oninput="SF.q=this.value;drawStuList()">'+
+    '<div class="seg" style="margin-top:10px">'+[['all','全部學員'],['bazi','八字學員'],['tarot','塔羅學員']].map(function(x){return '<button class="'+(SF.subj===x[0]?'on':'')+'" onclick="sfSet(\'subj\',\''+x[0]+'\')">'+x[1]+'</button>';}).join('')+'</div>';
+  if(SF.subj!=='all') h+='<div class="seg sub">'+[['all','全部'],['try','體驗'],['basic','初階'],['adv','進階']].map(function(x){return '<button class="'+(SF.lv===x[0]?'on':'')+'" onclick="sfSet(\'lv\',\''+x[0]+'\')">'+x[1]+'</button>';}).join('')+'</div>';
+  h+='<div class="two"><select class="t" onchange="sfSet(\'m\',this.value)"><option value="all">全部報名月份</option>'+ms.map(function(m){return '<option value="'+m+'" '+(SF.m===m?'selected':'')+'>'+(+m.slice(0,4))+' 年 '+(+m.slice(5))+' 月報名</option>';}).join('')+'</select>'+
+    '<select class="t" onchange="sfSet(\'fill\',this.value)"><option value="all" '+(SF.fill==='all'?'selected':'')+'>資料：全部</option><option value="no" '+(SF.fill==='no'?'selected':'')+'>只看資料未填</option></select></div>'+
+    '<div id="slist"></div>';
+  $('root').innerHTML=h; drawStuList();
+}
+function drawStuList(){
+  var list=S.students.filter(stuMatch).sort(function(a,b){ return (b.createdAt||'')<(a.createdAt||'')?-1:1; });
+  var h='<p class="muted" style="margin:12px 2px 8px">共 '+list.length+' 位'+(SF.subj!=='all'?'・'+SUBJ[SF.subj]+(SF.lv!=='all'?LVN[SF.lv]:''):'')+(SF.m!=='all'?'・'+(+SF.m.slice(5))+' 月報名':'')+'</p>';
+  if(!list.length) h+='<div class="card soft">沒有符合的學員。</div>';
+  list.forEach(function(s){
+    var ok=!!s.profile, l=lvOf(s.acct);
+    var tags=stuEnrolls(s.acct).map(function(x){ return '<span class="ctag ct-'+cSubj(x.c)+'">'+esc(x.c.name.replace(/班$|課$/,''))+(x.e.status==='checked'?' ✓':x.e.status==='wait'?'（候補）':'')+'</span>'; }).join('');
+    h+='<div class="card stu"><div class="stu-top"><b>'+esc(s.name)+'</b><span class="lvtag lvt'+l.n+'">Lv'+l.n+'</span><span class="chip '+(ok?'c-ok':'c-warn')+'">'+(ok?'資料已填':'資料未填')+'</span></div>'+
+      (tags?'<div class="ctags">'+tags+'</div>':'<div class="muted">還沒報名課程</div>')+
+      '<div class="muted stu-meta">'+'<span class="nw">'+esc(s.phone||'')+'</span>・<span class="nw">推薦人 '+esc(s.referrer)+(s.second?'＋'+esc(s.second):'')+'</span>'+'・<span class="nw">建檔 '+esc((s.createdAt||'').slice(5).replace('-','/'))+'</span></div>'+
+      '<div class="stu-acts">'+(ok?'<button class="btn sm" onclick="adminChart(\''+s.acct+'\')">看命盤／列印</button>':'<button class="btn sm" onclick="adminFill(\''+s.acct+'\')">幫他填資料</button>')+'<button class="btn line sm" onclick="stuMore(\''+s.acct+'\')">更多</button></div></div>';
+  });
+  $('slist').innerHTML=h;
+}
+function stuMore(a){ var s=stuOf(a), ok=!!s.profile, l=lvOf(a);
+  sheet('<h2>'+esc(s.name)+'</h2><ul class="list-plain"><li>帳號：'+esc(s.acct)+'</li><li>手機：'+esc(s.phone||'—')+'</li><li>推薦人：'+esc(s.referrer)+(s.second?'；第二人 '+esc(s.second)+'（'+esc(s.ratio)+'）':'')+'</li><li>建檔 '+esc(s.createdAt||'—')+(s.updatedAt?'・資料更新 '+esc(s.updatedAt):'')+'</li>'+(ok?'<li>生日：'+esc(birthText(s.profile))+'</li>':'')+'<li>Lv'+l.n+' '+l.name+'・經驗 '+expOf(a)+'・<i class="coin"></i>'+coinsOf(a)+'</li>'+(s.note?'<li>備註：'+esc(s.note)+'</li>':'')+'</ul>'+
+    '<button class="btn gray block" onclick="closeSheet();adminFill(\''+a+'\')">'+(ok?'修改資料':'幫他填資料')+'</button><button class="btn line block" onclick="copyAct(\''+a+'\')">複製開通通知</button><button class="btn gray block" onclick="askAdj(\''+a+'\')">調整金幣</button><button class="btn gray block" onclick="resetPw(\''+a+'\')">重設密碼為 12345</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
+
+function aCourses(){
+  var h=ahead()+'<div class="pg-h"><h2>課程管理</h2><button class="btn sm" onclick="editCourse()">＋ 新增課程</button></div><p class="muted" style="margin:-4px 2px 12px">日期從入口網站行事曆自動帶入；這裡管價格、分潤、名額。</p>';
+  (S.portalMiss||[]).forEach(function(n){ h+='<div class="card miss"><div class="row" style="justify-content:space-between"><span><b>'+esc(n)+'</b><br><span class="muted">入口網站有排課，還沒設定價格</span></span><button class="btn sm" onclick="editCourse(null,\''+esc(n).replace(/'/g,'')+'\')">設定這門課</button></div></div>'; });
+  [['bazi','八字課程'],['tarot','塔羅課程'],['other','免費體驗・命盤解析']].forEach(function(g){
+    var cs=S.courses.filter(function(c){ return (g[0]==='other') ? (c.price<=0||cSubj(c)==='other') : (cSubj(c)===g[0]&&c.price>0); });
+    if(!cs.length) return;
+    h+='<div class="grp grp-'+g[0]+'"><span>'+g[1]+'</span></div>';
+    cs.forEach(function(c){
+      var up=c.sessions.filter(function(s){return (s.end||s.date)>=today();}).sort(function(a,b){return a.date<b.date?-1:1;});
+      var past=c.sessions.length-up.length;
+      h+='<div class="card crs crs-'+cSubj(c)+'"><div class="crs-h"><div><b>'+esc(c.name)+'</b>'+(c.alias?'<small>'+esc(c.alias)+'</small>':'')+'</div><span class="chip c-gray">'+esc(c.mode||'')+'</span></div>'+
+        '<div class="muted">'+esc(c.teacher)+'</div>';
+      if(c.price>0) h+='<div class="kv3"><div><span>匯款價</span><b>'+(+c.price).toLocaleString('en-US')+'</b></div><div><span>刷卡價</span><b>'+(+((c.pay||[])[1]||c.price)).toLocaleString('en-US')+'</b></div><div class="sh"><span>推薦分潤</span><b>'+(+c.share).toLocaleString('en-US')+'</b></div></div>'+
+        (c.combo?'<div class="combo">'+esc(c.combo.name.replace(/（.*）/,''))+'：匯款 '+c.combo.pay[0].toLocaleString('en-US')+'・分潤 '+c.combo.share.toLocaleString('en-US')+'</div>':'');
+      else h+='<div class="kv3 one"><div><span>費用</span><b>免費</b></div></div>';
+      h+='<div class="sess-h">即將開課'+(past?'<span>（已結束 '+past+' 場不顯示）</span>':'')+'</div>';
+      if(!up.length) h+='<p class="muted" style="margin:4px 0">目前沒有排課</p>';
+      up.forEach(function(s){ h+='<div class="srow"><span class="sd">'+sdate(s)+'<small>'+esc(s.time)+(s.src==='portal'?'・入口網站':'')+'</small></span><span class="chip c-blue">'+taken(s.id)+'/'+s.seats+'</span><button class="btn gray sm" onclick="editSess(\''+c.id+'\',\''+s.id+'\')">改</button></div>'; });
+      h+='<div class="row" style="margin-top:10px"><button class="btn line sm" onclick="editSess(\''+c.id+'\')">加場次</button><button class="btn gray sm" onclick="editCourse(\''+c.id+'\')">改課程資料</button></div></div>';
+    });
+  });
+  h+=rulesCard();
+  $('root').innerHTML=h;
+}
+
+/* ---------- 學員：課表、我的課、聯絡我們（字級分層更清楚） ---------- */
+var TF='all';
+function dateBlock(s){ var d=new Date(s.date+'T12:00:00'); return '<div class="dblk"><b>'+d.getDate()+'</b><span>'+(d.getMonth()+1)+' 月</span><span>週'+'日一二三四五六'[d.getDay()]+'</span></div>'; }
+function subjTag(c){ var k=c.price>0?cSubj(c):'free'; return '<span class="stag st-'+k+'">'+(k==='bazi'?'八字':k==='tarot'?'塔羅':'免費')+'</span>'; }
+function sessCard(x,mine){
+  var n=left(x.s), past=(x.s.end||x.s.date)<today();
+  var tag= past?'<span class="chip c-gray">已結束</span>': mine?'<span class="chip c-ok">'+(mine.status==='wait'?'候補中':'已報名')+'</span>': n>0?'<span class="chip c-blue">剩 '+n+' 位</span>':'<span class="chip c-warn">額滿</span>';
+  return '<button class="scard" onclick="openCourse(\''+x.c.id+'\')">'+dateBlock(x.s)+'<span class="sc-body"><span class="sc-top">'+subjTag(x.c)+tag+'</span><b class="sc-name">'+esc(x.c.name)+'</b><span class="sc-time">'+(x.s.end&&x.s.end!==x.s.date?sdate(x.s)+'　':'')+esc(x.s.time)+'</span><span class="sc-sub">'+esc(x.s.note||x.c.teacher)+'</span></span></button>';
+}
+function sessRow(x){ var mine=S.enroll.find(function(e){return e.acct===S.me&&e.session===x.s.id&&e.status!=='refunded';}); return sessCard(x,mine); }
+function viewTable(){
+  var h=head()+'<div class="pg-h"><h2>課表</h2></div><div class="seg sub">'+[['all','全部'],['bazi','八字'],['tarot','塔羅'],['free','免費課']].map(function(x){return '<button class="'+(TF===x[0]?'on':'')+'" onclick="TF=\''+x[0]+'\';render()">'+x[1]+'</button>';}).join('')+'</div>';
+  var last='', any=false;
+  allSess().filter(function(x){ return (x.s.end||x.s.date)>=today(); }).filter(function(x){
+    return TF==='all'||(TF==='free'?!(x.c.price>0):(x.c.price>0&&cSubj(x.c)===TF)); }).forEach(function(x){
+    var ym=x.s.date.slice(0,7); if(ym!==last){ last=ym; h+='<div class="grp"><span>'+(+ym.slice(5))+' 月</span></div>'; }
+    h+=sessRow(x); any=true;
+  });
+  if(!any) h+='<div class="card soft">這個分類目前沒有排課。</div>';
+  $('root').innerHTML=h;
+}
+function viewMine(){
+  var h=head()+'<div class="pg-h"><h2>我的課</h2></div>';
+  var list=S.enroll.filter(function(e){return e.acct===S.me;}).map(function(e){return {e:e,o:sessOf(e.session)};}).filter(function(x){return x.o;});
+  var upc=list.filter(function(x){return (x.o.s.end||x.o.s.date)>=today()&&x.e.status!=='refunded';}).sort(function(a,b){return a.o.s.date<b.o.s.date?-1:1;});
+  var done=list.filter(function(x){return upc.indexOf(x)<0;});
+  if(!list.length) h+='<div class="card soft"><p>你還沒有報名任何課程。</p><button class="btn" onclick="go(\'table\')">看課表</button></div>';
+  if(upc.length) h+='<div class="grp"><span>即將上課</span></div>';
+  upc.forEach(function(x){ var e=x.e,o=x.o, st=ST[e.status]||['',''];
+    h+='<div class="card mc">'+'<div class="mc-top">'+dateBlock(o.s)+'<div class="sc-body"><span class="sc-top">'+subjTag(o.c)+'<span class="chip '+st[1]+'">'+st[0]+'</span></span><b class="sc-name">'+esc(o.c.name)+'</b><span class="sc-time">'+(o.s.end&&o.s.end!==o.s.date?sdate(o.s)+'　':'')+esc(o.s.time)+'</span><span class="sc-sub">'+esc(o.s.note||o.c.place)+'</span></div></div>';
+    if(e.status==='paid'&&onDay(o.s)) h+='<button class="btn block big" onclick="askCheckin(\''+e.id+'\')">我到了，簽到 ›</button>';
+    else if(e.status==='paid') h+='<p class="hint">上課當天這裡會出現「簽到」按鈕</p>';
+    if(e.status==='paid'){
+      if(canChange(e,o)) h+='<div class="mc-act"><button class="btn line sm" onclick="askChange(\''+e.id+'\')">改上課日期</button><span class="muted">還可以改 '+(S.settings.maxChanges-(e.changes||0))+' 次</span></div>';
+      else if(daysUntil(o.s.date)>0) h+='<p class="hint">改日期期限已過或次數用完，要調整請聯絡行政</p>';
+    }
+    h+='</div>';
+  });
+  if(done.length){ h+='<div class="grp"><span>上過・已處理</span></div>';
+    done.forEach(function(x){ var st=ST[x.e.status]||['',''];
+      h+='<div class="card mc past"><div class="mc-top">'+dateBlock(x.o.s)+'<div class="sc-body"><span class="sc-top">'+subjTag(x.o.c)+'<span class="chip '+st[1]+'">'+st[0]+'</span></span><b class="sc-name">'+esc(x.o.c.name)+'</b>'+(x.e.checkedAt?'<span class="sc-sub">簽到 '+esc(x.e.checkedAt)+'</span>':'')+'</div></div></div>'; }); }
+  $('root').innerHTML=h;
+}
+function lineBtn(url,label){ return url?'<a class="btn line-g block" href="'+esc(url)+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.6 1.1-.5 6-3.5 8.2-6C21.4 14.4 22 12.8 22 11c0-4.4-4.5-8-10-8z"/></svg>'+label+'</a>':''; }
+function contactView(){
+  var c=S.settings.company, t=S.settings.teacher;
+  return '<div class="card"><h3>'+esc(c.name)+'</h3><ul class="list-plain"><li><span class="lb">電話</span>'+esc(c.phone)+'</li><li><span class="lb">地址</span>'+esc(c.addr)+'</li><li><span class="lb">LINE</span>'+esc(c.line)+'</li></ul>'+lineBtn(c.lineUrl,'加入學苑官方 LINE')+'</div>'+
+    '<div class="card"><h3>'+esc(t.name)+'</h3>'+(t.phone?'<ul class="list-plain"><li><span class="lb">電話</span>'+esc(t.phone)+'</li></ul>':'')+lineBtn(t.lineUrl,'加入羅老師官方 LINE')+'</div><p class="muted">要改日期、退款或其他問題，都可以直接聯絡學苑官方 LINE。</p>';
+}
+
+/* ---------- 登入：學員用 Email＋密碼（第一次要改密碼）；行政另一個入口、另一組帳號 ---------- */
+function route(){ var h=(location.hash||'').replace('#',''); S.side=(h==='admin')?'admin':'student'; }
+function render(){
+  if(S.side==='admin'){
+    if(!S.admin){ $('tabs').style.display='none'; viewAdminLogin(); return; }
+    tabsAdmin(); ({more:aMore,manual:aManual,today:aToday,shop:aShop,students:aStudents,open:aOpen,edit:aEdit,courses:aCourses,roster:aRoster,news:aNews,online:aOnline,notice:aNotice,set:aSet})[ATAB](); return;
+  }
+  if(!S.me||!meStu()){ $('tabs').style.display='none'; viewLogin(); return; }
+  if(!meStu().pwSet){ $('tabs').style.display='none'; viewSetPw(); return; }
+  tabsStudent(); ({home:viewHome,table:viewTable,mine:viewMine,online:viewOnline,shop:viewShop,me:viewMe})[TAB]();
+}
+function logout(){ if(S.side==='admin'){ S.admin=false; S.adminWho=null; } else S.me=null; save(); render(); scrollTo(0,0); }
+function viewLogin(){
+  var c=S.settings.company;
+  $('root').innerHTML='<div class="login lg-stu"><div class="lg-in">'+
+    '<div class="lg-brand"><span class="lg-emb">'+img('chart')+'</span><h1>神奇身心靈學苑</h1><p>學員專區</p></div>'+
+    '<div class="lg-card"><label class="f">Email／帳號</label><input class="t" id="lu" type="text" autocomplete="username" autocapitalize="none" placeholder="跟積點系統同一組帳號">'+
+    '<label class="f">密碼</label><input class="t" id="lp" type="password" autocomplete="current-password" placeholder="第一次登入是預設密碼">'+
+    '<button class="btn block big" onclick="doLogin()">登入</button><button class="lnk lg-forgot" onclick="forgotPw()">忘記密碼？</button></div>'+
+    '<div class="lg-foot"><p>還沒有帳號？加入學苑官方 LINE 留下 Email，<br>行政會幫你開通。</p>'+(c.lineUrl?'<a class="lg-line" href="'+esc(c.lineUrl)+'" target="_blank" rel="noopener">加入學苑官方 LINE</a>':'')+'</div>'+
+    '<p class="lg-demo">試用：lin@demo.tw／1234（已改過密碼）・wu@demo.tw／12345（第一次登入）</p></div></div>';
+  bindEnter('lp',doLogin);
+}
+function bindEnter(id,fn){ var el=$(id); if(el) el.addEventListener('keydown',function(e){ if(e.key==='Enter') fn(); }); }
+function doLogin(){
+  var u=half($('lu').value).trim().toLowerCase(), p=$('lp').value;
+  var st=S.students.find(function(x){return x.acct===u;});
+  if(!u||!p){ toast('請輸入 Email 和密碼'); return; }
+  if(!st||st.pw!==p){ toast('Email 或密碼不對'); return; }
+  S.me=u; TAB=st.profile?'home':'me'; save(); render(); scrollTo(0,0);
+}
+function forgotPw(){ var c=S.settings.company;
+  sheet('<h2>忘記密碼</h2><p>請私訊學苑官方 LINE，告訴我們你的 Email，行政會幫你把密碼重設成預設密碼，登入後再自己改。</p>'+(c.lineUrl?'<a class="btn line-g block" href="'+esc(c.lineUrl)+'" target="_blank" rel="noopener">私訊學苑官方 LINE</a>':'')+'<button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
+function viewSetPw(){
+  var st=meStu();
+  $('root').innerHTML='<div class="login lg-stu"><div class="lg-in"><div class="lg-brand"><span class="lg-emb">'+img('chart')+'</span><h1>歡迎，'+esc(st.name)+'</h1><p>第一次登入，請先設定自己的密碼</p></div>'+
+    '<div class="lg-card"><label class="f">新密碼（至少 6 碼）</label><input class="t" id="np1" type="password" autocomplete="new-password">'+
+    '<label class="f">再輸入一次</label><input class="t" id="np2" type="password" autocomplete="new-password">'+
+    '<button class="btn block big" onclick="doSetPw()">設定好了，開始使用</button><button class="lnk lg-forgot" onclick="logout()">先登出</button></div></div></div>';
+  bindEnter('np2',doSetPw);
+}
+function doSetPw(){ var a=$('np1').value, b=$('np2').value;
+  if(a.length<6){ toast('密碼至少 6 碼'); return; } if(a==='12345'||a==='123456'){ toast('請不要用預設密碼'); return; } if(a!==b){ toast('兩次輸入的不一樣'); return; }
+  var st=meStu(); st.pw=a; st.pwSet=true; TAB=st.profile?'home':'me'; save(); render(); if(!st.profile) toast('密碼設好了，接著填你的基本資料'); else toast('密碼設好了'); }
+function resetPw(a){ var s=stuOf(a); s.pw='12345'; s.pwSet=false; save(); closeSheet(); toast('已把 '+s.name+' 的密碼重設成 12345'); }
+/* 行政登入：不同入口、不同帳號，每位行政一組 */
+function viewAdminLogin(){
+  $('root').innerHTML='<div class="login lg-adm"><div class="lg-in">'+
+    '<div class="lg-brand"><span class="lg-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></span><h1>學員系統</h1><p>行政後台・限學苑行政人員</p></div>'+
+    '<div class="lg-card"><label class="f">行政帳號</label><input class="t" id="au" type="text" autocomplete="username" autocapitalize="none">'+
+    '<label class="f">密碼</label><input class="t" id="ap" type="password" autocomplete="current-password">'+
+    '<button class="btn block big" onclick="doAdminLogin()">登入後台</button></div>'+
+    '<p class="lg-demo">試用：admin／admin1234</p></div></div>';
+  bindEnter('ap',doAdminLogin);
+}
+function doAdminLogin(){ var u=half($('au').value).trim().toLowerCase(), p=$('ap').value;
+  var a=(S.admins||[]).find(function(x){return x.acct===u&&x.pw===p;});
+  if(!a){ toast('帳號或密碼不對'); return; }
+  S.admin=true; S.adminWho=a.name; ATAB='today'; save(); render(); scrollTo(0,0); }
+
+/* ---------- 登入安全（試用版也照正式規則做）----------
+   - 學員和行政用同一個登入頁；行政帳號登入就進後台，頁面上不顯示行政帳號
+   - 密碼只存「雜湊值」（打亂後的指紋），不存原本的密碼
+   - 同一個帳號連錯 5 次鎖 15 分鐘
+   - 行政 12 小時沒操作自動登出；學員 30 天
+   - 每次登入、改密碼、重設密碼都留紀錄（行政設定頁看得到）
+   正式版：這些全部改在伺服器做，網頁端只拿到登入通行證 */
+function hex(buf){ return [].map.call(new Uint8Array(buf),function(b){return ('0'+b.toString(16)).slice(-2);}).join(''); }
+function hashPw(p){ try{ return crypto.subtle.digest('SHA-256',new TextEncoder().encode('miiragic|'+p)).then(hex); }catch(e){ return Promise.resolve('x'+p.split('').reverse().join('')); } }
+function migratePw(){ var all=(S.students||[]).concat(S.admins||[]), jobs=[];
+  all.forEach(function(x){ if(x.pw!==undefined){ jobs.push(hashPw(x.pw).then(function(h){ x.pwHash=h; delete x.pw; })); } });
+  return Promise.all(jobs).then(function(){ save(); }); }
+function logIt(who,what){ S.authLog=S.authLog||[]; S.authLog.unshift({t:today()+' '+nowHM(),who:who,what:what}); S.authLog=S.authLog.slice(0,60); }
+function locked(k){ var f=(S.fails||{})[k]; return f&&f.until&&Date.now()<f.until ? Math.ceil((f.until-Date.now())/60000) : 0; }
+function failed(k){ S.fails=S.fails||{}; var f=S.fails[k]||{n:0}; f.n++; if(f.n>=5){ f.until=Date.now()+15*60000; f.n=0; } S.fails[k]=f; save(); }
+function route(){}
+function sessionOk(){
+  var now=Date.now();
+  if(S.admin&&S.adminAt&&now-S.adminAt>12*3600000){ S.admin=false; S.adminWho=null; toast('閒置太久，請重新登入'); }
+  if(S.me&&S.meAt&&now-S.meAt>30*86400000){ S.me=null; }
+  if(S.admin) S.adminAt=now; if(S.me) S.meAt=now;
+}
+function render(){
+  sessionOk();
+  if(S.admin){ tabsAdmin(); ({more:aMore,manual:aManual,today:aToday,shop:aShop,students:aStudents,open:aOpen,edit:aEdit,courses:aCourses,roster:aRoster,news:aNews,online:aOnline,notice:aNotice,set:aSet})[ATAB](); return; }
+  if(!S.me||!meStu()){ $('tabs').style.display='none'; viewLogin(); return; }
+  if(!meStu().pwSet){ $('tabs').style.display='none'; viewSetPw(); return; }
+  tabsStudent(); ({home:viewHome,table:viewTable,mine:viewMine,online:viewOnline,shop:viewShop,me:viewMe})[TAB]();
+}
+function logout(){ if(S.admin){ logIt(S.adminWho,'行政登出'); S.admin=false; S.adminWho=null; } S.me=null; save(); render(); scrollTo(0,0); }
+function sparkles(){ var h='<div class="lg-spk" aria-hidden="true">';
+  for(var i=0;i<26;i++){ var x=(i*37+11)%100, y=(i*53+7)%92, sz=5+(i*7%6), d=(i*0.47%6).toFixed(2), t=(4+(i*13%5)).toFixed(1);
+    h+='<i style="left:'+x+'%;top:'+y+'%;width:'+sz+'px;height:'+sz+'px;animation-delay:-'+d+'s;animation-duration:'+t+'s"></i>'; }
+  return h+'</div>'; }
+function viewLogin(){
+  var c=S.settings.company;
+  var F=festNow(); $('root').innerHTML='<div class="login lg-stu'+(F?' fest-'+F.k:'')+'"'+(F&&F.k!=='none'?' style="background:'+F.bg+';--fa:'+F.acc+';--fi:'+F.ink+'"':'')+'><div class="lg-in">'+'<div class="lg-hero"><img src="'+heroSrc()+'" alt="" onerror="this.src=\'img/hero.jpg\'">'+sparkles()+'</div>'+
+    '<div class="lg-brand"><h1>神奇身心靈學苑</h1><p>學員專區</p></div>'+
+    '<div class="lg-card"><label class="f">Email／帳號</label><input class="t" id="lu" type="text" autocomplete="username" autocapitalize="none" placeholder="跟積點系統同一組帳號">'+
+    '<label class="f">密碼</label><input class="t" id="lp" type="password" autocomplete="current-password" placeholder="第一次登入是預設密碼">'+
+    '<button class="btn block big" id="lgo" onclick="doLogin()">登入</button><button class="lnk lg-forgot" onclick="forgotPw()">忘記密碼？</button></div>'+
+    '<div class="lg-foot lg-foot1">還沒有帳號？'+(c.lineUrl?'<a href="'+esc(c.lineUrl)+'" target="_blank" rel="noopener">加官方 LINE 開通</a>':'請洽行政開通')+'</div>'+
+    '</div></div>';
+  bindEnter('lp',doLogin);
+}
+function doLogin(){
+  var u=half($('lu').value).trim().toLowerCase(), p=$('lp').value;
+  if(!u||!p){ toast('請輸入帳號和密碼'); return; }
+  S.fails=S.fails||{}; var m=locked(u); if(m){ toast('錯太多次，請 '+m+' 分鐘後再試'); return; }
+  $('lgo').disabled=true;
+  migratePw().then(function(){ return hashPw(p); }).then(function(h){
+    var ad=(S.admins||[]).find(function(x){return x.acct===u&&x.pwHash===h;});
+    var st=S.students.find(function(x){return x.acct===u&&x.pwHash===h;});
+    if(ad){ S.fails[u]={n:0}; S.admin=true; S.adminWho=ad.name; S.adminAt=Date.now(); ATAB='today'; logIt(ad.name,'行政登入'); save(); render(); scrollTo(0,0); return; }
+    if(st){ (S.fails||{})[u]={n:0}; S.me=u; S.meAt=Date.now(); TAB=st.profile?'home':'me'; logIt(st.name,'學員登入'); save(); render(); scrollTo(0,0); return; }
+    failed(u); logIt(u,'登入失敗'); save(); toast('帳號或密碼不對'); var b=$('lgo'); if(b) b.disabled=false;
+  });
+}
+function doSetPw(){ var a=$('np1').value, b=$('np2').value;
+  if(a.length<6){ toast('密碼至少 6 碼'); return; } if(/^(12345|123456|000000|111111)$/.test(a)){ toast('這個密碼太好猜了'); return; } if(a!==b){ toast('兩次輸入的不一樣'); return; }
+  var st=meStu(); hashPw(a).then(function(h){ st.pwHash=h; delete st.pw; st.pwSet=true; logIt(st.name,'設定密碼'); TAB=st.profile?'home':'me'; save(); render(); toast(st.profile?'密碼設好了':'密碼設好了，接著填你的基本資料'); }); }
+function resetPw(a){ var s=stuOf(a); hashPw('12345').then(function(h){ s.pwHash=h; delete s.pw; s.pwSet=false; logIt(S.adminWho||'行政','重設 '+s.name+' 的密碼'); save(); closeSheet(); toast('已把 '+s.name+' 的密碼重設成 12345，他登入後要重新設定'); }); }
+function authLogCard(){ var l=(S.authLog||[]).slice(0,15);
+  return '<div class="card"><h3>登入紀錄（最近 15 筆）</h3>'+(l.length?'<ul class="list-plain">'+l.map(function(x){return '<li><span class="nw">'+esc(x.t.slice(5))+'</span>　'+esc(x.who)+'・'+esc(x.what)+'</li>';}).join('')+'</ul>':'<p class="muted">還沒有紀錄。</p>')+'<p class="muted" style="margin:6px 0 0">同一帳號連錯 5 次會鎖 15 分鐘；行政 12 小時沒操作自動登出。</p></div>'; }
+
+/* ---------- 節慶主視覺：依日期自動換登入頁插圖與底色 ----------
+   行政可在「設定」裡強制指定（測試或提早換） */
+/* 每個月一個主題；過年依農曆日期蓋過 1～2 月。bg＝整頁漸層、ink＝標題字色、acc＝按鈕色 */
+var FESTS=[
+  {k:'caishen',lunar:[3,15],pre:10,post:3,name:'武財神聖誕',greet:'恭祝武財神聖誕',bg:'linear-gradient(180deg,#7a1414 0%,#b8312a 38%,#f1c36a 72%,#fff6e1 100%)',ink:'#fff3cf',acc:'#a8261f'},
+  {k:'yuelao',lunar:[8,15],pre:10,post:3,name:'月老聖誕・中秋',greet:'恭祝月老聖誕・中秋快樂',bg:'linear-gradient(180deg,#141f4a 0%,#2b3a78 38%,#e6c98a 74%,#fff6e4 100%)',ink:'#fff3d0',acc:'#c0392b'},
+  {k:'cny',name:'新春',greet:'新春快樂',bg:'linear-gradient(180deg,#b3202a 0%,#d8452f 40%,#f6c58a 75%,#fff4e2 100%)',ink:'#fff7e0',acc:'#c0392b'},
+  {k:'m1',m:1,name:'元旦新年',greet:'新年快樂',bg:'linear-gradient(180deg,#1b2a5c 0%,#3a4f93 40%,#c9d6f2 78%,#f2f5fc 100%)',ink:'#fff',acc:'#2c4b80'},
+  {k:'m2',m:2,name:'情人節',greet:'情人節快樂',bg:'linear-gradient(180deg,#e8638f 0%,#f39ab6 40%,#fbd3df 75%,#fff1f5 100%)',ink:'#fff',acc:'#d6497a'},
+  {k:'m3',m:3,name:'櫻花春日',greet:'春天來了',bg:'linear-gradient(180deg,#f1a7c0 0%,#f7c6d6 40%,#fde4ec 75%,#fff6f9 100%)',ink:'#6b2440',acc:'#d0577f'},
+  {k:'m4',m:4,name:'春日花園',greet:'春日好時光',bg:'linear-gradient(180deg,#7fbf8f 0%,#b5dcb4 40%,#e4f3df 75%,#f6fbf3 100%)',ink:'#1f4a2e',acc:'#3f8a55'},
+  {k:'m5',m:5,name:'母親節',greet:'母親節快樂',bg:'linear-gradient(180deg,#e77f8f 0%,#f2aab3 40%,#fbd8dc 75%,#fff3f4 100%)',ink:'#fff',acc:'#cf5468'},
+  {k:'m6',m:6,name:'端午',greet:'端午安康',bg:'linear-gradient(180deg,#1f7a6d 0%,#3ea18c 40%,#bfe5d8 75%,#eff9f5 100%)',ink:'#fff',acc:'#1f7a6d'},
+  {k:'m7',m:7,name:'夏日星空',greet:'夏日愉快',bg:'linear-gradient(180deg,#0f3d6e 0%,#2a76b0 40%,#a9d8f0 75%,#ecf8fd 100%)',ink:'#fff',acc:'#1f6aa5'},
+  {k:'m8',m:8,name:'七夕',greet:'七夕快樂',bg:'linear-gradient(180deg,#2b2160 0%,#5a49a8 40%,#cbbff0 75%,#f4f1fd 100%)',ink:'#fff',acc:'#5a49a8'},
+  {k:'m9',m:9,name:'教師節',greet:'謝謝老師',bg:'linear-gradient(180deg,#2c4b80 0%,#5b7fb8 40%,#d9e4f5 75%,#f5f8fd 100%)',ink:'#fff',acc:'#2c4b80'},
+  {k:'m10',m:10,name:'萬聖節',greet:'萬聖節快樂',bg:'linear-gradient(180deg,#2a1546 0%,#4f2a7a 38%,#a979c9 70%,#f3e8fb 100%)',ink:'#fff',acc:'#e07b24'},
+  {k:'m11',m:11,name:'秋楓',greet:'秋天好',bg:'linear-gradient(180deg,#b3542a 0%,#d98a4a 40%,#f3d2a9 75%,#fff6ec 100%)',ink:'#fff',acc:'#b3542a'},
+  {k:'m12',m:12,name:'聖誕節',greet:'聖誕快樂',bg:'linear-gradient(180deg,#a51f2d 0%,#d14a4a 30%,#f6dede 65%,#ffffff 100%)',ink:'#fff',acc:'#b8323a'}
+];
+var LNY={2026:'02-17',2027:'02-06',2028:'01-26',2029:'02-13',2030:'02-03'};
+function md(d){ return d.slice(5); }
+function lunarWin(x,t){ var y=+t.slice(0,4), out=false;
+  [y-1,y].forEach(function(yy){ try{ var s=lunar2solar(yy,x.lunar[0],x.lunar[1],false); if(!s) return; var b=new Date(Date.UTC(s.y,s.m-1,s.d,12)), a=new Date(b), c=new Date(b);
+    a.setUTCDate(a.getUTCDate()-x.pre); c.setUTCDate(c.getUTCDate()+x.post); var f=function(d){return d.toISOString().slice(0,10);}; if(t>=f(a)&&t<=f(c)) out=true; }catch(e){} });
+  return out; }
+function festNow(){
+  var f=S.settings.fest; if(f&&f!=='auto') return f==='none'?null:(FESTS.find(function(x){return x.k===f;})||null);
+  var t=today();
+  var g=FESTS.find(function(x){ return x.lunar&&lunarWin(x,t); }); if(g) return g;   /* 神明聖誕最優先 */
+  var md=t.slice(5);
+  if(!(md>='02-10'&&md<='02-15')&&lunarWin({lunar:[1,1],pre:21,post:15},t)) return FESTS.find(function(x){return x.k==='cny';});
+  var m=+t.slice(5,7); return FESTS.find(function(x){return x.m===m;})||null;
+}
+function heroSrc(){ var f=festNow(); return 'img/hero'+(f?'-'+f.k:'')+'.jpg'; }
+function festCard(){ var cur=S.settings.fest||'auto';
+  return '<div class="card"><h3>登入頁節慶主視覺</h3><p class="muted" style="margin-top:0">每個月自動換一次主題。武財神聖誕（農曆三月十五）、月老聖誕（農曆八月十五，和中秋同一天）前 10 天起換成神明聖誕版；過年從除夕前三週到元宵換成新春版（情人節 2/10–2/15 優先）。</p><select class="t" onchange="S.settings.fest=this.value;save();toast(\'已設定，登出就看得到\')">'+
+    '<option value="auto"'+(cur==='auto'?' selected':'')+'>自動（依日期）</option><option value="none"'+(cur==='none'?' selected':'')+'>固定平常版</option>'+FESTS.map(function(x){return '<option value="'+x.k+'"'+(cur===x.k?' selected':'')+'>固定 '+(x.m?x.m+' 月・':'')+x.name+'</option>';}).join('')+'</select></div>'; }
+
+/* ---------- 課程介紹與報名（價格、刷卡分期照入口網站的價格表） ---------- */
+var PAYN=['ATM 轉帳／匯款','刷卡一次付清','刷卡分 6 期','刷卡分 12 期','無卡分期 12 期','無卡分期 24 期'];
+function payTable(pay){ return '<ul class="paylist">'+pay.map(function(v,i){ return '<li><span>'+PAYN[i]+'</span><b>'+money(v)+'</b></li>'; }).join('')+'</ul>'; }
+function openCourse(cid){
+  var c=course(cid);
+  var h='<span class="chip c-blue">'+esc(c.mode||'')+'</span><h2 style="margin-top:8px">'+esc(c.name)+'</h2><p>'+esc(c.intro)+'</p><p class="muted">講師：'+esc(c.teacher)+'</p>';
+  if(c.price>0){ h+='<h3>費用</h3>'+payTable(c.pay||[c.price]); if(c.combo) h+='<div class="card soft"><b>'+esc(c.combo.name)+'</b>'+payTable(c.combo.pay)+'<p class="muted" style="margin:0">兩階一起報名請私訊學苑官方 LINE。</p></div>'; }
+  else h+='<p style="font-size:19px;font-weight:700">免費</p>';
+  h+='<h3>可以選的日期</h3>';
+  var ss=c.sessions.slice().sort(function(a,b){return a.date<b.date?-1:1;});
+  if(!ss.length) h+='<p class="muted">目前還沒排課，行政排進行事曆後就會出現。</p>';
+  ss.forEach(function(s){
+    var n=left(s), past=(s.end||s.date)<today();
+    var mine=S.enroll.find(function(e){return e.acct===S.me&&e.session===s.id&&e.status!=='refunded';});
+    var btn= past?'<span class="chip c-gray">已結束</span>': mine?'<span class="chip c-ok">你已報名</span>': n>0?'<button class="btn" onclick="askEnroll(\''+s.id+'\')">'+(c.price>0?'報名這天':'免費報名')+'</button>': S.settings.waitlist?'<button class="btn line" onclick="askEnroll(\''+s.id+'\',true)">登記候補</button>':'<span class="chip c-warn">額滿</span>';
+    h+='<div class="sess"><div class="row"><b>'+sdate(s)+' '+esc(s.time)+'</b>'+(past||mine?'':'<span class="muted">剩 '+n+' 位</span>')+'</div>'+(s.note?'<div class="muted">'+esc(s.note)+'</div>':'')+'<div style="margin-top:8px">'+btn+'</div></div>';
+  });
+  h+='<button class="btn gray block" onclick="closeSheet()">關閉</button>';
+  sheet(h);
+}
+var PAYSEL=0;
+function askEnroll(sid,wait){
+  var o=sessOf(sid);
+  var already=S.enroll.find(function(e){return e.acct===S.me&&e.course===o.c.id&&e.status!=='refunded'&&e.status!=='wait';});
+  if(already&&!wait){ toast('這門課你已經報名了，要換日期請到「我的課」'); return; }
+  PAYSEL=0;
+  var free=!(o.c.price>0);
+  var h='<h2>'+(wait?'登記候補':free?'免費報名':'確認報名')+'</h2><p><b>'+esc(o.c.name)+'</b><br>'+sdate(o.s)+' '+esc(o.s.time)+'</p>';
+  if(wait) h+='<p class="muted">有人取消時，行政會依候補順序通知你，確認後再付款。</p>';
+  else if(!free){
+    h+='<h3>付款方式</h3><div class="paysel">'+(o.c.pay||[o.c.price]).slice(0,4).map(function(v,i){ return '<button class="'+(i===0?'on':'')+'" onclick="PAYSEL='+i+';[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'on\')});this.classList.add(\'on\')"><span>'+PAYN[i]+'</span><b>'+money(v)+'</b></button>'; }).join('')+'</div>'+
+      '<p class="muted">無卡分期請私訊學苑官方 LINE。還沒簽到前都可以改日期或申請退款；上課當天簽到後就不能退款。送出後請私訊學苑官方 LINE 付款，行政確認收到款項就完成報名。</p>';
+  }
+  h+='<button class="btn block" onclick="doEnroll(\''+sid+'\','+(!!wait)+')">'+(wait?'登記候補':free?'確認報名':'前往付款')+'</button><button class="btn gray block" onclick="closeSheet()">取消</button>';
+  sheet(h);
+}
+function doEnroll(sid,wait){
+  var o=sessOf(sid), free=!(o.c.price>0), pay=o.c.pay||[o.c.price];
+  S.enroll.push({id:'e'+Date.now(),acct:S.me,course:o.c.id,session:sid,status:wait?'wait':'paid',changes:0,paidAt:wait?'':today(),payBy:wait||free?'':PAYN[PAYSEL],amount:wait||free?0:pay[PAYSEL]});
+  save(); closeSheet(); TAB='mine'; render(); toast(wait?'已登記候補':free?'報名完成':'付款成功，已完成報名');
+}
+/* 行政：開課頁加上價格表與分潤規則 */
+var RULES=['學員推薦必須依照個人上過的課程，才能推薦那堂課（例：A 上過塔羅初階、八字初階，推薦 B 報了八字初階和進階，A 只能領八字初階分潤）。','在培訓班以外時間成功推薦人上課（依初次上課時間），須先報名下一期培訓班才有該課程分潤資格。','被推薦學員依照初次上課，若當期培訓班有報名，即保有課程分潤資格。','學員報名完款並上完（實體／線上）課程簽到後，隔月 10 號發放獎金分潤。','主分潤 A（50%）歸推薦人；副分潤 B（50%）歸協助推薦者或收單者。線上體驗班課後直接報名、不經院長諮詢命盤：A＋B 全歸推薦人。線下體驗班／初階班結業當天：推薦人在場 A＋B 全歸推薦人；不在場，結業當天或隔天晚上 10 點前付款，B 歸現場協助推薦者，超過時間 A＋B 全歸推薦人。'];
+function rulesCard(){ return '<div class="card"><h3>課程分潤規則（2026/8/1 版）</h3><ol class="rules">'+RULES.map(function(r){return '<li>'+esc(r)+'</li>';}).join('')+'</ol><p class="muted" style="margin:0">來源：入口網站老師區「課程分潤規則」。</p></div>'; }
+
+var _aSet=null;
+applyTheme();
+if(!S.admins) S.admins=[{acct:'admin',name:'學苑行政',pw:'admin1234'}];
+S.students.forEach(function(s){ if(s.pw===undefined&&!s.pwHash){ var fresh=['wu@demo.tw','lee@demo.tw','cheng@demo.tw'].indexOf(s.acct)>=0; s.pw=fresh?'12345':'1234'; s.pwSet=!fresh; } });
+route();
+if(!S.settings.reward) S.settings.reward={coins:10,exp:10,goal:2,bonus:20};
+syncPortal(PORTAL_SNAP,'快照');
+render();
+loadPortal();
+
+/* =====================================================================
+   正式版：資料存在學苑資料庫（跟積點系統同一個），帳號跟積點系統共用
+   - 登入用積點系統的 mg_login，通行證存在 miiragic_token（積點系統同網域共用，登入一次兩邊都通）
+   - 讀資料 st_load；存資料 st_put（伺服器檢查：學員只能改自己的資料、不能自己改付款狀態）
+   - 簽到 st_checkin、兌換 st_redeem、簽到碼 st_codes 都在伺服器算，網頁改不了
+   ===================================================================== */
+var API_URL='https://plgrsxtlaznajzqgcuqr.supabase.co', API_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZ3JzeHRsYXpuYWp6cWdjdXFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5Njg1MDIsImV4cCI6MjA5MDU0NDUwMn0.XyZ0wQbZQ-CInglRpv-MHMuMvkviRovm-o-On_FeyGs';
+var POINTS_URL='/miiragic-points/';
+var TOKEN=null; try{ TOKEN=localStorage.getItem('miiragic_token')||sessionStorage.getItem('miiragic_token'); }catch(e){}
+function setTok(t){ TOKEN=t; ['localStorage','sessionStorage'].forEach(function(k){ try{ if(t) window[k].setItem('miiragic_token',t); else window[k].removeItem('miiragic_token'); }catch(e){} }); }
+function rpc(fn,body){
+  return fetch(API_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:API_KEY,Authorization:'Bearer '+API_KEY,'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer'})
+    .then(function(r){ return r.text().then(function(t){ var j=null; try{ j=t?JSON.parse(t):null; }catch(e){} if(!r.ok) return {ok:false,error:{message:(j&&(j.message||j.error))||('HTTP '+r.status)}}; return j||{ok:false,error:{message:'EMPTY'}}; }); })
+    .catch(function(){ return {ok:false,error:{message:'NETWORK'}}; });
+}
+function errMsg(r){ var m=(r&&r.error&&r.error.message)||(r&&r.msg)||''; if(m==='NETWORK') return '網路不穩，請稍後再試'; if(/AUTH/.test(m)) return '登入已過期，請重新登入'; if(/FORBIDDEN/.test(m)) return '沒有權限做這件事'; return m||'系統忙碌，請稍後再試'; }
+function authLost(){ setTok(null); S.me=null; S.admin=false; render(); toast('登入已過期，請重新登入'); }
+
+/* 本機只留「共用設定」的預設值，學員資料一律從資料庫來 */
+var SHARED=['settings','courses','news','shop','online'];
+var BASE=seed();
+BASE.courses.forEach(function(c){ c.sessions=(c.sessions||[]).filter(function(s){return s.id!=='s1';}); });
+BASE.news=[{id:'n1',type:'公告',pin:true,title:'學員專區正式上線',body:'報名、改日期、上課簽到、看命盤、小金幣換好禮都在這裡。帳號密碼跟積點系統同一組。有問題請私訊學苑官方 LINE。',date:today(0)}];
+var PORTAL_LIVE=null; var _syncPortal0=syncPortal; syncPortal=function(ev,from){ if(from==='即時') PORTAL_LIVE=ev; return _syncPortal0(ev,from); }; S=JSON.parse(JSON.stringify(BASE)); S.students=[]; S.enroll=[]; S.orders=[]; S.ledger=[]; S.me=null; S.admin=false;
+function save(){ sync(); }   /* 原本存手機，正式版改成送資料庫 */
+var SNAP={}, SYNCING=null, LASTPW='', MUSTPW=false, CODES={}, BOOTED=false;
+try{ MUSTPW=localStorage.getItem('st_mustpw')==='1'; }catch(e){}
+function snapKey(k,id){ return k+'|'+id; }
+function curDocs(){
+  var m={};
+  if(S.admin) SHARED.forEach(function(k){ m[snapKey('shared',k)]={kind:'shared',id:k,data:S[k]}; });
+  (S.students||[]).forEach(function(s){ var d=Object.assign({},s); delete d.pid; delete d.refId; delete d.atype; m[snapKey('student',s.acct)]={kind:'student',id:s.acct,data:d}; });
+  (S.enroll||[]).forEach(function(e){ if(e.anon) return; m[snapKey('enroll',e.id)]={kind:'enroll',id:e.id,data:e}; });
+  if(S.admin){ (S.orders||[]).forEach(function(o){ m[snapKey('order',o.id)]={kind:'order',id:o.id,data:o}; }); (S.ledger||[]).forEach(function(x){ m[snapKey('ledger',x.id)]={kind:'ledger',id:x.id,data:x}; }); }
+  return m;
+}
+function takeSnap(){ SNAP={}; var m=curDocs(); Object.keys(m).forEach(function(k){ SNAP[k]=JSON.stringify(m[k].data); }); }
+function sync(){
+  if(!TOKEN||!BOOTED) return Promise.resolve();
+  var m=curDocs(), rows=[];
+  Object.keys(m).forEach(function(k){ var j=JSON.stringify(m[k].data); if(SNAP[k]!==j) rows.push({kind:m[k].kind,id:m[k].id,data:m[k].data}); });
+  Object.keys(SNAP).forEach(function(k){ if(!m[k]){ var p=k.split('|'); if(p[0]!=='shared') rows.push({kind:p[0],id:p.slice(1).join('|'),data:null}); } });
+  if(!S.admin) rows=rows.filter(function(r){ return (r.kind==='student'&&r.id===S.me)||(r.kind==='enroll'&&r.data&&r.data.acct===S.me); });
+  if(!rows.length) return Promise.resolve();
+  Object.keys(m).forEach(function(k){ SNAP[k]=JSON.stringify(m[k].data); });
+  return rpc('st_put',{p_token:TOKEN,p_rows:rows}).then(function(r){
+    if(r&&r.ok) return;
+    if(/AUTH/.test(errMsg(r))){ authLost(); return; }
+    toast('沒有存成功：'+errMsg(r)); reload();
+  });
+}
+/* 讀資料庫 → 組成畫面用的資料 */
+function apply(d){
+  var sh=d.shared||{};
+  SHARED.forEach(function(k){ S[k]=sh[k]!=null?sh[k]:JSON.parse(JSON.stringify(BASE[k])); });
+  S.settings=Object.assign(JSON.parse(JSON.stringify(BASE.settings)),S.settings); if(!S.settings.reward) S.settings.reward=BASE.settings.reward;
+  S.refs=d.refs||[];
+  S.students=(d.roster||[]).map(function(p){ var doc=p.doc||{};
+    return Object.assign({acct:p.username,name:p.name,email:p.username,phone:'',referrer:p.ref_name||'',second:'',ratio:'',profile:null,createdAt:'',note:''},doc,{acct:p.username,pid:p.sid,refId:p.ref_id,atype:p.type,name:(doc.profile&&doc.profile.name)||doc.name||p.name,referrer:p.ref_name||doc.referrer||''}); });
+  S.enroll=(d.enroll||[]).map(function(x){ return Object.assign({},x.data,{id:x.id,acct:x.acct}); }).concat((d.seats||[]).map(function(x,i){ return {id:'anon'+i,anon:true,acct:'',course:x.course,session:x.session,status:x.status}; }));
+  S.orders=(d.orders||[]).map(function(x){ return Object.assign({},x.data,{id:x.id,acct:x.acct}); });
+  S.ledger=(d.ledger||[]).map(function(x){ return Object.assign({},x.data,{id:x.id,acct:x.acct}); });
+  S.me=d.me&&d.me.student?d.me.username:null; S.admin=!!(d.me&&d.me.admin); S.adminWho=d.me&&d.me.admin?(d.me.name||'學苑行政'):null; S.myType=d.me&&d.me.type;
+  if(S.me&&!S.students.some(function(s){return s.acct===S.me;})) S.students.push({acct:S.me,name:d.me.name||'',email:S.me,profile:null,referrer:''});
+  if(typeof PORTAL_SNAP!=='undefined') _syncPortal0(PORTAL_SNAP,'快照'); if(PORTAL_LIVE) _syncPortal0(PORTAL_LIVE,'即時');
+  takeSnap(); BOOTED=true;
+}
+function reload(){ if(!TOKEN){ BOOTED=true; render(); return Promise.resolve(); }
+  return rpc('st_load',{p_token:TOKEN}).then(function(r){
+    if(r&&r.ok){ apply(r.data); if(S.admin) loadCodes(); render(); return; }
+    if(/AUTH/.test(errMsg(r))){ setTok(null); BOOTED=true; render(); return; }
+    BOOTED=true; render(); toast(errMsg(r));
+  }); }
+function loadCodes(){ var t=today(), ids=allSess().filter(function(x){return onDay(x.s);}).map(function(x){return x.s.id;});
+  if(!ids.length) return; rpc('st_codes',{p_token:TOKEN,p_sids:ids}).then(function(r){ if(r&&r.ok){ CODES=r.codes||{}; if(S.admin&&ATAB==='today') render(); } }); }
+function codeOf(sid){ return CODES[sid]||'····'; }
+
+/* ---------- 登入／登出／密碼 ---------- */
+function render(){
+  if(!BOOTED){ $('tabs').style.display='none'; $('root').innerHTML='<div class="boot"><div class="spin"></div><p>載入中…</p></div>'; return; }
+  if(S.admin){ tabsAdmin(); ({more:aMore,manual:aManual,today:aToday,shop:aShop,students:aStudents,open:aOpen,edit:aEdit,courses:aCourses,roster:aRoster,news:aNews,online:aOnline,notice:aNotice,set:aSet})[ATAB](); return; }
+  if(TOKEN&&S.myType==='ref'){ $('tabs').style.display='none'; viewNotStudent(); return; }
+  if(!S.me||!meStu()){ $('tabs').style.display='none'; viewLogin(); return; }
+  if(MUSTPW){ $('tabs').style.display='none'; viewSetPw(); return; }
+  tabsStudent(); ({home:viewHome,table:viewTable,mine:viewMine,online:viewOnline,shop:viewShop,me:viewMe,points:viewPoints})[TAB]();
+}
+function viewNotStudent(){
+  $('root').innerHTML='<div class="login lg-stu"><div class="lg-in" style="padding-top:60px"><div class="lg-brand"><h1 style="color:var(--ink)">這是老師帳號</h1><p>學員專區給學員使用，老師請到積點系統或業績系統。</p></div>'+
+    '<div class="lg-card" style="padding:18px"><a class="btn block big" href="'+POINTS_URL+'">打開積點系統</a><button class="btn gray block" style="margin-top:10px" onclick="logout()">登出，換學員帳號</button></div></div></div>';
+}
+function doLogin(){
+  var u=half($('lu').value).trim(), p=$('lp').value;
+  if(!u||!p){ toast('請輸入帳號和密碼'); return; }
+  var b=$('lgo'); b.disabled=true; b.textContent='登入中…';
+  rpc('mg_login',{p_user:u,p_pass:p}).then(function(r){
+    if(!r||!r.ok||!r.token){ b.disabled=false; b.textContent='登入';
+      toast(r&&r.locked?'錯太多次，帳號暫時鎖住，請 '+(r.wait_min||10)+' 分鐘後再試':(r&&r.error)?errMsg(r):'帳號或密碼不對'); return; }
+    setTok(r.token); LASTPW=p;
+    var acc=r.account||{};
+    MUSTPW=!!r.weak&&acc.type!=='super'; try{ localStorage.setItem('st_mustpw',MUSTPW?'1':'0'); }catch(e){}
+    BOOTED=false; render();
+    reload().then(function(){ TAB=(meStu()&&meStu().profile)?'home':'me'; ATAB='today'; render(); scrollTo(0,0); });
+  });
+}
+function viewSetPw(){
+  var st=meStu()||{};
+  $('root').innerHTML='<div class="login lg-stu"><div class="lg-in" style="padding-top:40px"><div class="lg-brand"><h1 style="color:var(--ink)">歡迎，'+esc(st.name||'')+'</h1><p>第一次登入，請先設定自己的密碼</p></div>'+
+    '<div class="lg-card">'+(LASTPW?'':'<label class="f">目前的密碼（預設 12345）</label><input class="t" id="np0" type="password" autocomplete="current-password">')+
+    '<label class="f">新密碼（至少 6 碼）</label><input class="t" id="np1" type="password" autocomplete="new-password">'+
+    '<label class="f">再輸入一次</label><input class="t" id="np2" type="password" autocomplete="new-password">'+
+    '<p class="muted" style="margin:8px 0 0">積點系統也是用這組密碼。</p>'+
+    '<button class="btn block big" id="spb" onclick="doSetPw()">設定好了，開始使用</button><button class="lnk lg-forgot" onclick="logout()">先登出</button></div></div></div>';
+  bindEnter('np2',doSetPw);
+}
+function doSetPw(){
+  var o=LASTPW||($('np0')?$('np0').value:''), a=$('np1').value, b=$('np2').value;
+  if(!o){ toast('請輸入目前的密碼'); return; }
+  if(a.length<6){ toast('密碼至少 6 碼'); return; }
+  if(/^(\d)\1+$/.test(a)||['123456','1234567','12345678','123456789','654321','password','abc123','qwerty'].indexOf(a.toLowerCase())>=0){ toast('這個密碼太好猜了，請換一個'); return; }
+  if(a!==b){ toast('兩次輸入的不一樣'); return; }
+  $('spb').disabled=true;
+  rpc('mg_exec',{p_token:TOKEN,p_op:{table:'accounts',op:'update',values:{password:a,_old:o},filters:[{col:'username',op:'eq',val:meAcctName()}]}}).then(function(r){
+    $('spb').disabled=false;
+    if(!r||!r.ok){ toast(/OLD_PW/.test(errMsg(r))?'目前的密碼不對':errMsg(r)); return; }
+    MUSTPW=false; LASTPW=''; try{ localStorage.setItem('st_mustpw','0'); }catch(e){}
+    var st=meStu(); TAB=st&&st.profile?'home':'me'; render(); toast(st&&st.profile?'密碼設好了':'密碼設好了，接著填你的基本資料');
+  });
+}
+function meAcctName(){ return S.me; }
+function resetPw(a){
+  rpc('mg_exec',{p_token:TOKEN,p_op:{table:'accounts',op:'update',values:{password:'12345'},filters:[{col:'username',op:'eq',val:a}]}}).then(function(r){
+    closeSheet(); if(r&&r.ok){ var s=stuOf(a); toast('已把 '+(s?s.name:a)+' 的密碼重設成 12345，他登入後要重新設定'); } else toast(errMsg(r)); });
+}
+function logout(){ var t=TOKEN; if(t) rpc('mg_logout',{p_token:t}); setTok(null); LASTPW=''; S.me=null; S.admin=false; S.myType=null; S.students=[]; S.enroll=[]; S.orders=[]; S.ledger=[]; SNAP={}; render(); scrollTo(0,0); }
+function authLogCard(){ return '<div class="card"><h3>帳號安全</h3><p class="muted" style="margin:0">帳號密碼跟積點系統同一組，由伺服器檢查：連錯多次會暫時鎖住，太久沒用會自動登出。行政帳號就是積點系統的管理員帳號。</p></div>'; }
+
+/* ---------- 報名：付費課先「待付款」，行政確認收款才算正式報名 ---------- */
+function doEnroll(sid,wait){
+  var o=sessOf(sid), free=!(o.c.price>0), pay=o.c.pay||[o.c.price];
+  S.enroll.push({id:'e'+Date.now()+Math.random().toString(36).slice(2,5),acct:S.me,course:o.c.id,session:sid,status:wait?'wait':free?'paid':'pending',changes:0,paidAt:free&&!wait?today():'',payBy:wait||free?'':PAYN[PAYSEL],amount:wait||free?0:pay[PAYSEL],at:today()+' '+nowHM()});
+  save(); closeSheet(); TAB='mine'; render();
+  if(wait) toast('已登記候補'); else if(free) toast('報名完成'); else payInfo();
+}
+function payInfo(){ var c=S.settings.company;
+  sheet('<h2>已送出報名</h2><p>這堂課<b>付款後才算報名完成</b>。請私訊學苑官方 LINE，行政會給你付款方式；收到款項後，「我的課」就會變成「已付款」。</p>'+
+    (c.lineUrl?'<a class="btn line-g block" href="'+esc(c.lineUrl)+'" target="_blank" rel="noopener">私訊學苑官方 LINE 付款</a>':'')+'<button class="btn gray block" onclick="closeSheet()">知道了</button>'); }
+function confirmPaid(id){ var e=S.enroll.find(function(x){return x.id===id;}); if(!e) return;
+  sheet('<h2>確認已收款？</h2><p>'+esc((stuOf(e.acct)||{}).name||e.acct)+'・'+esc(course(e.course).name)+'<br>'+esc(e.payBy||'')+' '+money(e.amount||0)+'</p><label class="f">實收金額</label><input class="t" id="cpA" type="text" inputmode="numeric" value="'+(e.amount||'')+'">'+
+    '<button class="btn ok block" onclick="doConfirmPaid(\''+id+'\')">確認收到了</button><button class="btn gray block" onclick="closeSheet()">取消</button>'); }
+function doConfirmPaid(id){ var e=S.enroll.find(function(x){return x.id===id;}); var n=+half($('cpA').value).replace(/[^\d]/g,'');
+  e.status='paid'; e.paidAt=today(); e.got=n||e.amount||0; e.paidBy=S.adminWho||'行政'; save(); closeSheet(); render(); toast('已確認收款'); }
+function cancelPending(id){ var e=S.enroll.find(function(x){return x.id===id;}); if(!e) return; e.status='refunded'; e.cancelAt=today(); save(); closeSheet(); render(); toast('已取消這筆報名'); }
+
+/* ---------- 簽到：伺服器檢查簽到碼、發金幣 ---------- */
+function askCheckin(eid){
+  sheet('<h2>確認簽到</h2><p>請輸入教室裡公布的 <b>4 位數簽到碼</b>。</p><input class="t" id="ckCode" type="text" inputmode="numeric" maxlength="4" placeholder="例如 1234" style="font-size:24px;letter-spacing:6px;text-align:center">'+
+    '<p class="muted">簽到後這堂課就<b>不能退款</b>了；簽到成功 +'+S.settings.reward.coins+' 小金幣、+'+S.settings.reward.exp+' 經驗。</p>'+
+    '<button class="btn ok block" id="ckb" onclick="doCheckin(\''+eid+'\')">確認簽到</button><button class="btn gray block" onclick="closeSheet()">先不要</button>');
+}
+function checkinVia(eid,code){
+  var e=S.enroll.find(function(x){return x.id===eid;}); var before=lvOf(e.acct).n; var o=sessOf(e.session);
+  return rpc('st_checkin',{p_token:TOKEN,p_eid:eid,p_code:code,p_name:o.c.name}).then(function(r){
+    if(!r||!r.ok){ var m=(r&&r.msg)||errMsg(r); toast(m==='CODE'?'簽到碼不對，請看教室公布的號碼':m==='STATUS'?'這筆報名還不能簽到（要先付款）':m); return null; }
+    return reload().then(function(){ var after=lvOf(e.acct).n; return {ok:true,up:after>before?LV[after-1]:null}; });
+  });
+}
+function doCheckin(eid){
+  var e=S.enroll.find(function(x){return x.id===eid;}); var o=sessOf(e.session);
+  if(!onDay(o.s)){ toast('只有上課當天可以簽到'); return; }
+  var c=half($('ckCode').value).trim(); if(c.length!==4){ toast('請輸入 4 位數簽到碼'); return; }
+  $('ckb').disabled=true;
+  checkinVia(eid,c).then(function(r){ if($('ckb')) $('ckb').disabled=false; if(!r) return; closeSheet(); if(r.up) upSheet(r.up); else toast('簽到完成 +'+S.settings.reward.coins+' 小金幣'); });
+}
+function adminCheckin(eid){ checkinVia(eid,'').then(function(r){ closeSheet(); if(r) toast('已代簽到'); }); }
+
+/* ---------- 商城兌換：伺服器扣金幣、扣庫存 ---------- */
+function doRedeem(id){
+  var it=S.shop.find(function(x){return x.id===id;});
+  var addr=''; if(it.pickup==='寄送'){ if(!$('rA').value.trim()){ toast('請填地址'); return; } addr=($('rN').value+' '+$('rP').value+' '+$('rA').value).trim(); }
+  rpc('st_redeem',{p_token:TOKEN,p_item:id,p_addr:addr}).then(function(r){
+    if(!r||!r.ok){ var m=(r&&r.msg)||errMsg(r); toast(m==='COINS'?'小金幣不夠':m==='STOCK'?'已經換完了':m==='LEVEL'?'等級還不夠':m); return; }
+    closeSheet(); SHOP_SUB='orders'; reload().then(function(){ toast('兌換成功'); });
+  });
+}
+
+/* ---------- 行政：開通新學員＝同時在積點系統建帳號（推薦人用選的） ---------- */
+var _aOpen0=aOpen;
+aOpen=function(){ _aOpen0();
+  var r=$('oR'); if(!r) return; var v=OPV.oR||'';
+  var sel=document.createElement('select'); sel.className='t'; sel.id='oR';
+  sel.innerHTML='<option value="">請選推薦人</option>'+(S.refs||[]).slice().sort(function(a,b){return a.name<b.name?-1:1;}).map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===v?' selected':'')+'>'+esc(x.name)+'</option>';}).join('');
+  r.parentNode.replaceChild(sel,r);
+  var p=document.querySelector('#root .card p.muted'); if(p) p.textContent='開通後會同時建立積點系統帳號：學員用 Email 和預設密碼 12345 登入，第一次登入要自己改密碼。推薦人可以在積點系統審核他。';
+};
+function doOpen(){
+  var n=$('oN').value.trim(), e=half($('oE').value).trim().toLowerCase(), rid=$('oR').value;
+  if(!n||!e||!rid){ toast('姓名、Email、推薦人都要填'); return; }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){ toast('Email 格式不對'); return; }
+  if(S.students.some(function(s){return s.acct.toLowerCase()===e;})){ toast('這個 Email 已經開通過'); return; }
+  var sec=OPN.ratio&&$('o2')?$('o2').value.trim():''; if(OPN.ratio&&!sec){ toast('請填第二人姓名'); return; }
+  var ratio=OPN.ratio==='自訂'?(half($('oC').value)+'比'+(10-(+half($('oC').value)||0))):OPN.ratio;
+  var ref=(S.refs||[]).find(function(x){return x.id===rid;})||{name:''};
+  var sid='s'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  var doc={acct:e,name:n,phone:$('oP').value,email:e,referrer:ref.name,second:sec,ratio:sec?ratio:'',profile:null,createdAt:half($('oDt').value)||today(),note:$('oNote').value.trim()};
+  var ex=function(op){ return rpc('mg_exec',{p_token:TOKEN,p_op:op}); };
+  ex({table:'students',op:'insert',values:{id:sid,name:n,admin_id:rid,role:0,redeemable_pts:0},filters:[]}).then(function(r1){
+    if(!r1||!r1.ok){ toast('開通失敗（學員資料）：'+errMsg(r1)); return; }
+    return ex({table:'accounts',op:'insert',values:{username:e,password:'12345',type:'student',linked_id:sid},filters:[]}).then(function(r2){
+      if(!r2||!r2.ok){ ex({table:'students',op:'delete',filters:[{col:'id',op:'eq',val:sid}]}); toast('開通失敗（帳號）：'+errMsg(r2)); return; }
+      return rpc('st_put',{p_token:TOKEN,p_rows:[{kind:'student',id:e,data:doc}]}).then(function(){
+        OPN={ratio:''}; OPV={}; ATAB='students'; reload().then(function(){ copyAct(e); toast('已開通 '+n+'，積點系統也建好了'); });
+      });
+    });
+  });
+}
+
+/* ---------- 積點系統入口（學員「我的」裡、首頁磚塊） ---------- */
+function viewPoints(){
+  var h=head()+'<h2>積點系統</h2><div class="card"><p style="margin-top:0">積點、兌換、推薦審核都在積點系統。帳號密碼跟學員專區同一組，<b>不用再登入</b>。</p><a class="btn block big" href="'+POINTS_URL+'">打開積點系統</a></div>';
+  $('root').innerHTML=h;
+}
+function goPoints(){ location.href=POINTS_URL; }
+
+/* 首頁、我的、行政「更多」都放積點系統入口 */
+function pointsCard(){ return '<a class="card ptcard" href="'+POINTS_URL+'"><span class="ptic">'+img('coin')+'</span><span><b>積點系統</b><small>積點、推薦審核・同一組帳號不用再登入</small></span><span class="ptgo">›</span></a>'; }
+var _vh0=viewHome; viewHome=function(){ _vh0(); var r=$('root'); if(r) r.insertAdjacentHTML('beforeend',pointsCard()); };
+var _vm0=viewMe; viewMe=function(){ _vm0(); var r=$('root'); if(r) r.insertAdjacentHTML('beforeend',pointsCard()); };
+var _am0=aMore; aMore=function(){ _am0(); var r=$('root'); if(r) r.insertAdjacentHTML('beforeend','<a class="card ptcard" href="'+POINTS_URL+'"><span class="ptic">'+img('coin')+'</span><span><b>積點系統（管理員）</b><small>同一組帳號，點了直接進去</small></span><span class="ptgo">›</span></a>'); };
+
+/* 啟動：先顯示載入中，有通行證就讀資料庫 */
+reload();
+
+</script>
+</body>
+</html>
