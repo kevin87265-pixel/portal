@@ -553,7 +553,7 @@ function theme(el,i){const r=RANKS[i];el.style.setProperty('--main',r.main);el.s
 function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.remove(),300);},2600);}
 
 /* ====== 狀態 ====== */
-const S={cust:{},token:'',name:'',role:'',tab:'month',month:nowMonth(),me:null,all:null,busy:false,net:false,timer:null,req:0,cfg:null,pend:null};
+const S={cust:{},token:'',name:'',role:'',tab:(['month','cust','rank','fill','info'].indexOf(location.hash.slice(1))>=0?location.hash.slice(1):'month'),month:nowMonth(),me:null,all:null,busy:false,net:false,timer:null,req:0,cfg:null,pend:null};
 try{const o=JSON.parse(sessionStorage.getItem('perf3')||'null');if(o&&o.token){S.token=o.token;S.name=o.name;S.role=o.role;}}catch(e){}
 
 /* ====== 後端 ====== */
@@ -625,8 +625,8 @@ const CORE=['陳捷容','羅文勳','蕭竣方','陳彩綺'];
 const STEPS=[{t:100000,p:2},{t:200000,p:5},{t:300000,p:8},{t:400000,p:10}];
 const TEAMP=[0,2,3,4,5]; /* 推薦人團隊業績抽成：依自己當月 PV 級距 */
 const RANKP=[60,68,75,82,90,97,105,112,120,127]; /* 聘階 %（依正式老師獎金規則；總裁以上為暫定） */
-function tabsHTML(){const admin=S.role==='管理';const T=[['month','業績'],['cust','客戶'],['rank','團隊'],['fill','填單'],['info','資料']];if(S.me&&S.me.dash)T.push(['dash','儀表台']);else if(admin)T.push(['all','全公司']);
-  return `<div class="seg" style="grid-template-columns:repeat(${T.length},1fr)">${T.map(([k,n])=>`<button data-t="${k}" class="${S.tab===k?'on':''}">${n}</button>`).join('')}</div>`;}
+function tabsHTML(){const admin=S.role==='管理';const T=[['month','業績'],['cust','客戶'],['rank','團隊'],['fill','填單'],['info','資料']];if((S.me&&S.me.dash)||VIEW==='dash')T.push(['dash','儀表台']);else if(admin)T.push(['all','全公司']);
+  return `<div class="seg" style="grid-template-columns:repeat(${T.length},1fr)">${T.map(([k,n])=>`<button data-t="${k}" class="${(VIEW==='dash'?k==='dash':S.tab===k)?'on':''}">${n}</button>`).join('')}</div>`;}
 function greetHTML(){const d=S.me,ri=d?rankOf(d.rank,d.cum):-1,r=ri>=0?RANKS[ri]:null;
   const c=r?r.dark:'#3f2c0d';return `<span class="greet" style="--gc:${c}"><em class="gname">${esc(S.name)}</em>${r?`<em class="gname">${r.k}</em>`:''}<span class="ghi">您好</span></span>`;}
 function shell(inner){
@@ -1162,7 +1162,8 @@ function dashView(){
     <p class="muted" style="margin:8px 0 0">報名人數等學員系統接上後會顯示在這裡</p></details>`;}
 function dashShell(inner){return `<div class="app fade">
   <header class="top"><div class="who">${crest()}<div><b>${S.dashOk?'老師儀表台':'業績總覽'}</b><span class="greet"><em class="gname" style="--gc:#3f2c0d">${esc(S.name)}</em><span class="ghi">您好</span></span></div></div>
-  <div class="hdate">${hdateHTML()}</div>${S.dashOk?`<a class="back-round" href="./" aria-label="回業績總覽">${IC.left}<small>業績</small></a>`:''}<button class="ghost" id="out">登出</button></header>
+  <div class="hdate">${hdateHTML()}</div><button class="ghost" id="out">登出</button></header>
+  ${S.dashOk?tabsHTML():''}
   ${S.net?`<div class="net">${IC.alert}<span>網路不通，資料可能不是最新的</span><button id="retry">重試</button></div>`:''}
   ${inner}</div>`;}
 function renderDash(){
@@ -1170,6 +1171,7 @@ function renderDash(){
   const inner=dashView();
   $('#root').innerHTML=dashShell(inner);
   $('#out').onclick=logout;
+  document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{if(b.dataset.t==='dash')return;location.href=location.pathname+'#'+b.dataset.t;});
   const pm=$('#pm'),nm=$('#nm');
   if(pm)pm.onclick=()=>{S.month=shift(S.month,-1);load(true);};
   if(nm)nm.onclick=()=>{if(S.month>=nowMonth())return;S.month=shift(S.month,1);load(true);};
@@ -1191,7 +1193,7 @@ async function loadDash(clear){
 }
 
 /* 有新版就自動換新（GitHub 會快取 10 分鐘） */
-const BUILD='20261031150358';
+const BUILD='20261031151053';
 (function(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname.replace(/[^/]*$/,'')+'version.txt?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=(v||'').trim();
   if(v&&v!==BUILD){const k='perfReload_'+v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,1);}catch(e){}
     const q=new URLSearchParams(location.search);q.set('_v',v);location.replace(location.pathname+'?'+q.toString());}}).catch(()=>{});})();
