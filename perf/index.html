@@ -620,7 +620,7 @@ const CORE=['陳捷容','羅文勳','蕭竣方','陳彩綺'];
 const STEPS=[{t:100000,p:2},{t:200000,p:5},{t:300000,p:8},{t:400000,p:10}];
 const TEAMP=[0,2,3,4,5]; /* 推薦人團隊業績抽成：依自己當月 PV 級距 */
 const RANKP=[60,68,75,82,90,97,105,112,120,127]; /* 聘階 %（依正式老師獎金規則；總裁以上為暫定） */
-function tabsHTML(){const admin=S.role==='管理';const T=[['month','業績'],['cust','客戶'],['rank','團隊'],['fill','填單'],['info','資料']];if(admin)T.push(['all','全公司']);
+function tabsHTML(){const admin=S.role==='管理';const T=[['month','業績'],['cust','客戶'],['rank','團隊'],['fill','填單'],['info','資料']];if(S.me&&S.me.dash)T.push(['dash','儀表台']);else if(admin)T.push(['all','全公司']);
   return `<div class="seg" style="grid-template-columns:repeat(${T.length},1fr)">${T.map(([k,n])=>`<button data-t="${k}" class="${S.tab===k?'on':''}">${n}</button>`).join('')}</div>`;}
 function greetHTML(){const d=S.me,ri=d?rankOf(d.rank,d.cum):-1,r=ri>=0?RANKS[ri]:null;
   const c=r?r.dark:'#3f2c0d';return `<span class="greet" style="--gc:${c}"><em class="gname">${esc(S.name)}</em>${r?`<em class="gname">${r.k}</em>`:''}<span class="ghi">您好</span></span>`;}
@@ -937,7 +937,7 @@ function render(){
   countUp();
   requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.c-bar i').forEach(i=>i.style.width=i.dataset.w+'%')));
   $('#out').onclick=logout;
-  document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{if(S.tab===b.dataset.t)return;S.tab=b.dataset.t;firstPaint=true;load(true);scrollTo({top:0});});
+  document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{if(b.dataset.t==='dash'){location.href=location.pathname+'?view=dash';return;}if(S.tab===b.dataset.t)return;S.tab=b.dataset.t;firstPaint=true;load(true);scrollTo({top:0});});
   const pm=$('#pm'),nm=$('#nm');
   if(pm)pm.onclick=()=>{S.month=shift(S.month,-1);S.me=null;S.all=null;load(true);};
   if(nm)nm.onclick=()=>{if(S.month>=nowMonth())return;S.month=shift(S.month,1);S.me=null;S.all=null;load(true);};
@@ -1011,7 +1011,7 @@ async function demo(b){
   if(b.action==='perfMe'){const a=dAmt(s.name,b.month);const w=[.3,.25,.2,.15,.1],ks=['補財','還陰債','年斗','祭改','普桌'],pr=[3000,6000,10000,3000,2000];
     const items=a?ks.map((k,i)=>({k,n:Math.max(1,Math.round(a*w[i]/pr[i])),a:Math.round(a*w[i])})):[];
     const down=[];(function walk(n){Object.keys(DSP).forEach(c=>{if(DSP[c]===n&&!down.find(x=>x.name===c)){down.push({name:c,rank:dRank(c),amount:dAmt(c,b.month)});walk(c);}});})(s.name);
-    return{ok:true,name:s.name,role:s.role,rank:dRank(s.name),cum:DCUM[s.name],asof:'2026.09',mine:{amount:a,priced:true,items},down,team:a+down.reduce((x,y)=>x+y.amount,0),serverTime:now};}
+    return{ok:true,dash:s.role==='管理',name:s.name,role:s.role,rank:dRank(s.name),cum:DCUM[s.name],asof:'2026.09',mine:{amount:a,priced:true,items},down,team:a+down.reduce((x,y)=>x+y.amount,0),serverTime:now};}
 
   if(b.action==='perfCustomers'){const seed=[...s.name].reduce((a,c)=>a+c.charCodeAt(0),0);let x=seed;const rnd=()=>{x=(x*9301+49297)%233280;return x/233280;};
     const F='王李張劉陳楊黃趙吳周徐孫馬朱胡郭何林羅高',G='淑芬美玲雅婷怡君志明俊傑家豪佳慧秀英建宏文雄麗華惠珍宗翰冠廷';
@@ -1159,7 +1159,7 @@ function dashShell(inner){return `<div class="app fade">
   <header class="top"><div class="who">${crest()}<div><b>${S.dashOk?'老師儀表台':'業績總覽'}</b><span class="greet"><em class="gname" style="--gc:#3f2c0d">${esc(S.name)}</em><span class="ghi">您好</span></span></div></div>
   <div class="hdate">${hdateHTML()}</div><button class="ghost" id="out">登出</button></header>
   ${S.net?`<div class="net">${IC.alert}<span>網路不通，資料可能不是最新的</span><button id="retry">重試</button></div>`:''}
-  ${inner}<p class="foot"><a href="./" style="color:inherit">回業績總覽</a></p></div>`;}
+  ${inner}<a class="go-fill" href="./" style="text-decoration:none">回業績總覽</a></div>`;}
 function renderDash(){
   if(S.dashDeny){location.replace(location.pathname);return;}
   const inner=dashView();
