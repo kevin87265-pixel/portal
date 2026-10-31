@@ -362,6 +362,8 @@ nav.tabs button.on svg{stroke-width:2.2}
 .roster .nm.nm2 b{white-space:nowrap}.roster .nm.nm2 small{font-size:14px;line-height:1.4}
 .srow .sd small.okc{color:#1f6f43;font-weight:700}.srow .sd small.warnc{color:#b26a00;font-weight:700}
 .ol-btn{background:#1f6f43!important;border-color:#1f6f43!important;margin-top:10px;text-decoration:none;text-align:center}
+.month-sw{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 12px}.month-sw b{font-size:18px}
+.card>.stat3:first-child{border-top:0;margin-top:0;padding-top:0}
 </style>
 </head>
 <body class="t-blue">
@@ -1897,7 +1899,7 @@ function codeOf(sid){ return CODES[sid]||'····'; }
 /* ---------- 登入／登出／密碼 ---------- */
 function render(){
   if(!BOOTED){ $('tabs').style.display='none'; $('root').innerHTML='<div class="boot"><div class="spin"></div><p>載入中…</p></div>'; return; }
-  if(S.admin){ tabsAdmin(); ({more:aMore,manual:aManual,today:aToday,shop:aShop,students:aStudents,open:aOpen,edit:aEdit,courses:aCourses,roster:aRoster,news:aNews,online:aOnline,notice:aNotice,set:aSet})[ATAB](); return; }
+  if(S.admin){ tabsAdmin(); ({more:aMore,manual:aManual,today:aToday,shop:aShop,students:aStudents,open:aOpen,edit:aEdit,courses:aCourses,roster:aRoster,news:aNews,online:aOnline,notice:aNotice,set:aSet,share:aShare})[ATAB](); return; }
   if(TOKEN&&S.myType==='ref'){ $('tabs').style.display='none'; viewNotStudent(); return; }
   if(!S.me||!meStu()){ $('tabs').style.display='none'; viewLogin(); return; }
   if(MUSTPW){ $('tabs').style.display='none'; viewSetPw(); return; }
@@ -2255,6 +2257,33 @@ doRetake=function(sid){ var o=sessOf(sid), on=isOnline(sid);
   if(on){ reload().then(function(){ render(); toast('報名成功，上課連結在「我的課」'); }); } else { render(); payInfo(); } };
 /* 提醒文字：線上課附上課連結 */
 var _rt0=remindText; remindText=function(names,o){ var t=_rt0(names,o); if(o&&isOnline(o.s.id)){ var ln=(S.sess[o.s.id]||{}).link; t=t.replace(/請登入學員專區[^\n]*\n?/,'')+'\n線上上課連結：'+(ln||'（請行政補上）')+'\n也可以在學員專區「我的課」直接點「進入線上教室」。'; } return t; };
+
+
+/* =====================================================================
+   課程分潤明細：簽到＝分潤依據（隔月 10 號發），行政不用再對簽到表
+   業績系統之後直接讀伺服器 st_course_perf 同一份資料
+   ===================================================================== */
+AGRP.share='more';
+var SHM='';
+function aShare(){ if(!SHM) SHM=today().slice(0,7);
+  var rows=S.enroll.filter(function(e){ return e.status==='checked'&&(e.checkedAt||'').slice(0,7)===SHM; }).map(function(e){ var s=stuOf(e.acct)||{name:e.acct}, c=course(e.course)||{name:e.course,share:0};
+    return {e:e,s:s,c:c,share:e.retake?0:(+c.share||0)}; });
+  var by={}; rows.forEach(function(r){ var k=r.s.referrer||'（未填推薦人）'; (by[k]=by[k]||{n:0,t:0,list:[]}); by[k].n++; by[k].t+=r.share; by[k].list.push(r); });
+  var tot=rows.reduce(function(a,r){return a+r.share;},0);
+  var ym=SHM.split('-'), prev=new Date(+ym[0],+ym[1]-2,1), next=new Date(+ym[0],+ym[1],1), f=function(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');};
+  var h=ahead()+'<div class="pg-h"><h2>課程分潤明細</h2></div><p class="muted" style="margin:-4px 2px 10px">學員上課簽到就算進來，隔月 10 號發分潤。不用再對簽到表。</p>'+
+    '<div class="month-sw"><button class="btn line sm" onclick="SHM=\''+f(prev)+'\';render()">‹ 上個月</button><b>'+(+ym[0])+' 年 '+(+ym[1])+' 月</b><button class="btn line sm" onclick="SHM=\''+f(next)+'\';render()"'+(SHM>=today().slice(0,7)?' disabled':'')+'>下個月 ›</button></div>'+
+    '<div class="card"><div class="stat3"><div><span>簽到人次</span><b>'+rows.length+'</b></div><div><span>推薦人</span><b>'+Object.keys(by).length+'</b></div><div><span>分潤合計</span><b class="g">'+tot.toLocaleString('en-US')+'</b></div></div></div>';
+  if(!rows.length) h+='<div class="card soft">這個月還沒有人簽到。</div>';
+  Object.keys(by).sort(function(a,b){return by[b].t-by[a].t;}).forEach(function(k){ var g=by[k];
+    h+='<div class="card"><div class="row" style="justify-content:space-between"><b style="font-size:18px">'+esc(k)+'</b><b class="nw">'+g.t.toLocaleString('en-US')+'</b></div><ul class="list-plain">'+g.list.map(function(r){
+      return '<li><b>'+esc(r.s.name)+'</b>・'+esc(r.c.name)+(r.e.retake?'（複訓・不計分潤）':'')+(r.s.second?'<br><span class="muted">第二人 '+esc(r.s.second)+'（'+esc(r.s.ratio)+'）</span>':'')+'<br><span class="muted">簽到 '+esc((r.e.checkedAt||'').slice(5))+(r.e.checkedBy==='行政'?'・行政代簽':'')+'・分潤 '+r.share.toLocaleString('en-US')+'</span></li>'; }).join('')+'</ul></div>'; });
+  if(rows.length) h+='<button class="btn block" onclick="copyShare()">複製這個月的明細</button>';
+  $('root').innerHTML=h; }
+function copyShare(){ var rows=S.enroll.filter(function(e){ return e.status==='checked'&&(e.checkedAt||'').slice(0,7)===SHM; });
+  var t='【'+SHM+' 課程分潤明細】\n'+rows.map(function(e){ var s=stuOf(e.acct)||{name:e.acct}, c=course(e.course)||{}; return (s.referrer||'未填')+'｜'+s.name+'｜'+(c.name||'')+(e.retake?'（複訓）':'')+'｜'+(e.retake?0:(+c.share||0))+(s.second?'｜第二人 '+s.second+' '+s.ratio:''); }).join('\n');
+  sheet('<h2>複製明細</h2><div class="copybox" id="ntxt">'+esc(t)+'</div><button class="btn block" onclick="copyTxt()">複製</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
+var _am1=aMore; aMore=function(){ _am1(); var m=document.querySelector('#root .card.menu'); if(m) m.insertAdjacentHTML('afterbegin','<button onclick="aGo(\'share\')">'+img('chart','m-ill')+'<span><b>課程分潤明細</b><small>誰簽到了、每位推薦人分潤多少</small></span><i>›</i></button>'); };
 
 /* 啟動：先顯示載入中，有通行證就讀資料庫 */
 reload();
