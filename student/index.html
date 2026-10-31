@@ -421,7 +421,7 @@ function today(off){ var d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate
 function seed(){
   return seedExtra({
     settings:{changeDays:3,maxChanges:2,waitlist:true,
-      company:{name:'神奇身心靈學苑',phone:'04-22544917（13:00-22:00）',line:'神奇學苑官方 LINE（@792edykw）',lineUrl:'https://lin.ee/n2N8qhh',addr:'台中市西屯區市政路 386 號 11 樓之 8'},
+      company:{name:'神奇身心靈學苑',phone:'04-22544917（13:00-22:00）',line:'神奇學苑官方 LINE（@799iqupz）',lineUrl:'https://line.me/R/ti/p/@799iqupz',addr:'台中市南屯區大墩四街 263 號'},
       teacher:{name:'羅文勳 院長',phone:'',line:'羅老師官方 LINE',lineUrl:'https://lin.ee/ocCkqfn'}},
     news:[
       {id:'n1',type:'公告',pin:true,title:'學員專區上線試用',body:'之後報名、改日期、上課簽到、看命盤都在這裡。有問題請聯絡學苑行政。',date:today(0)},
@@ -1873,6 +1873,11 @@ function apply(d){
   var sh=d.shared||{};
   SHARED.forEach(function(k){ S[k]=sh[k]!=null?sh[k]:JSON.parse(JSON.stringify(BASE[k])); });
   S.settings=Object.assign(JSON.parse(JSON.stringify(BASE.settings)),S.settings); if(!S.settings.reward) S.settings.reward=BASE.settings.reward;
+  (function(c){ if(!c) return; /* 2026-10-31 官方 LINE、地址更正：舊值一律換新 */
+    if(!c.lineUrl||/n2N8qhh/.test(c.lineUrl)) c.lineUrl='https://line.me/R/ti/p/@799iqupz';
+    if(!c.line||/792edykw/.test(c.line)) c.line='神奇學苑官方 LINE（@799iqupz）';
+    if(!c.addr||/市政路/.test(c.addr)) c.addr='台中市南屯區大墩四街 263 號'; })(S.settings.company);
+  (S.courses||[]).forEach(function(c){ if(c.place&&/市政路/.test(c.place)) c.place=c.place.replace(/台中市?西屯區?市政路[^，,）)]*/,'台中市南屯區大墩四街 263 號'); });
   S.refs=d.refs||[];
   S.students=(d.roster||[]).map(function(p){ var doc=p.doc||{};
     return Object.assign({acct:p.username,name:p.name,email:p.username,phone:'',referrer:p.ref_name||'',second:'',ratio:'',profile:null,createdAt:'',note:''},doc,{acct:p.username,pid:p.sid,refId:p.ref_id,atype:p.type,name:(doc.profile&&doc.profile.name)||doc.name||p.name,referrer:p.ref_name||doc.referrer||''}); });
