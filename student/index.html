@@ -6,6 +6,7 @@
 <meta name="color-scheme" content="light only">
 <title>神奇身心靈學苑・學員專區（試用版）</title>
 <style>
+
 :root,body.t-blue{--pri:#1d3461;--pri2:#2c4b80;--pri-soft:#eaf0f8;--bg:#f3f5f9;--line:#e1e6ef;--ink:#1a2233;--quiet:#667085;--acc:#c6a15b;--acc-soft:#fbf6ea;--accd:#9a7631}
 body.t-green{--pri:#1f4a3a;--pri2:#2f6a53;--pri-soft:#e8f1ec;--bg:#f2f5f3;--line:#dce6e0;--ink:#17241e;--quiet:#617068;--acc:#c6a15b;--acc-soft:#fbf6ea;--accd:#9a7631}
 body.t-purple{--pri:#46395f;--pri2:#655285;--pri-soft:#efebf6;--bg:#f6f3f8;--line:#e6e0ee;--ink:#221c2e;--quiet:#6c6478;--acc:#c6a15b;--acc-soft:#fbf6ea;--accd:#9a7631}
@@ -365,6 +366,15 @@ nav.tabs button.on svg{stroke-width:2.2}
 .month-sw{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 12px}.month-sw b{font-size:18px}
 .card>.stat3:first-child{border-top:0;margin-top:0;padding-top:0}
 .card.claim{border:2px dashed #f0b54a;background:#fffaf0}
+.tn-row{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line,#e6e8ee)}
+.tn-row:first-of-type{border-top:0}
+.tn-no{flex:0 0 28px;height:28px;border-radius:50%;background:#f39aa6;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.tn-main{flex:1;min-width:0}
+.tn-t{font-size:14px;color:var(--muted,#6b7280)}
+.tn-n{font-size:20px;margin:2px 0}
+.tn-n b{font-size:26px}
+.tn-how{font-size:13px;word-break:break-all}
+
 </style>
 </head>
 <body class="t-blue">
@@ -2357,6 +2367,40 @@ openLesson=function(oid,i){
   var o=S.online.find(function(x){return x.id===oid;}), l=o&&o.lessons[i]; if(!l) return;
   sheet('<h2>'+esc(l.t)+'</h2>'+(l.v?'<a class="btn block" style="text-decoration:none" href="'+esc(l.v)+'" target="_blank" rel="noopener">看影片</a>':'<div class="card soft" style="text-align:center;padding:28px 10px">影片建置中</div>')+
     (l.doc?'<a class="btn line block" style="text-decoration:none" href="'+esc(l.doc)+'" target="_blank" rel="noopener">下載講義</a>':'')+'<button class="btn gray block" onclick="closeSheet()">關閉</button>');
+};
+
+/* ---------- 塔羅靈數：報了塔羅課（體驗班／初階／進階，已報名或已上課）的學員，「我的」多一個分頁（2026-10-31） ---------- */
+var TAROT=['愚者','魔術師','女祭司','皇后','國王','教皇','戀人','戰車','力量','隱者','命運之輪','正義','吊人','死神','節制','惡魔','高塔','星星','月亮','太陽','審判','世界'];
+var ZOD=[['摩羯座',1,19,10],['水瓶座',2,18,17],['雙魚座',3,20,18],['牡羊座',4,19,4],['金牛座',5,20,5],['雙子座',6,21,6],['巨蟹座',7,22,7],['獅子座',8,22,8],['處女座',9,22,9],['天秤座',10,23,11],['天蠍座',11,22,1],['射手座',12,21,14],['摩羯座',12,31,10]];
+function hasTarot(a){ return S.enroll.some(function(e){ var c=course(e.course); return e.acct===a&&c&&/塔羅/.test(c.name)&&(e.status==='paid'||e.status==='checked'); }); }
+function digSum(s){ return String(s).split('').reduce(function(t,d){ return t+(+d||0); },0); }
+function tarotNums(y,m,d){
+  var ds=String(y)+String(m).padStart(2,'0')+String(d).padStart(2,'0');
+  var total=digSum(ds), n1=total, chain=[total]; while(n1>9){ n1=digSum(n1); chain.push(n1); }
+  var n2=total-d, n2raw=n2; while(n2>=22) n2-=22; while(n2<0) n2+=22;
+  var z=ZOD.find(function(x){ return m<x[1]||(m===x[1]&&d<=x[2]); });
+  return {ds:ds,total:total,chain:chain,n1:n1,n2:n2,n2raw:n2raw,zName:z[0],n3:z[3]};
+}
+function tarotCard(p){
+  var s=solarOf(p); if(!s) return '<div class="card soft">生日資料不完整，請到「資料與顏色」補上生日。</div>';
+  var r=tarotNums(+s.y,+s.m,+s.d), row=function(no,t,n,how){ return '<div class="tn-row"><span class="tn-no">'+no+'</span><div class="tn-main"><div class="tn-t">'+t+'</div><div class="tn-n"><b>'+n+'</b>　'+TAROT[n]+'</div><div class="muted tn-how">'+how+'</div></div></div>'; };
+  return '<div class="card"><h3>我的塔羅靈數</h3><p class="muted">國曆生日 '+s.y+'/'+s.m+'/'+s.d+'</p>'+
+    row(1,'生日數字總和，加到剩一位數',r.n1,r.ds.split('').join('＋')+'＝'+r.chain.join(' → '))+
+    row(2,'總和減出生日期',r.n2,r.total+' − '+s.d+'＝'+r.n2raw+(r.n2raw!==r.n2?(r.n2raw>=22?'，超過 22 要減 22，得 '+r.n2:'，小於 0 加 22，得 '+r.n2):''))+
+    row(3,'星座靈數',r.n3,r.zName)+
+    '<p class="muted" style="margin:10px 0 0">上課時老師會教你怎麼看這三張牌。也可以幫身邊朋友算算看，驗證他的個性！</p></div>';
+}
+var _viewMeT=viewMe;
+viewMe=function(){
+  var st=meStu(), p=st&&st.profile;
+  if(!p||PF||!hasTarot(S.me)){ if(ME_SUB==='tarot') ME_SUB='chart'; return _viewMeT(); }
+  if(ME_SUB!=='tarot'){ _viewMeT(); var sg=document.querySelector('#root .seg.sub'); if(sg) sg.insertAdjacentHTML('beforeend','<button onclick="ME_SUB=\'tarot\';render()">塔羅靈數</button>'); return; }
+  ME_SUB='chart'; _viewMeT(); ME_SUB='tarot';
+  var sg=document.querySelector('#root .seg.sub'); if(!sg) return;
+  sg.querySelectorAll('button').forEach(function(b){ b.className=''; });
+  sg.insertAdjacentHTML('beforeend','<button class="on" onclick="ME_SUB=\'tarot\';render()">塔羅靈數</button>');
+  var n=sg.nextSibling; while(n){ var nx=n.nextSibling; n.remove(); n=nx; }
+  sg.insertAdjacentHTML('afterend',tarotCard(p));
 };
 
 </script>
