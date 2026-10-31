@@ -394,7 +394,6 @@ nav.tabs button.on svg{stroke-width:2.2}
 .tn-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
 .tn-foot .btn{margin:0}.tn-foot .muted{font-size:12px}
 .tn-how-list{padding-left:20px;line-height:1.8}.tn-how-list li{margin-bottom:8px;word-break:break-all}
-.wrap:has(.tn-card){padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 .tn-card{margin-bottom:0}
 .tn-res{color:#d9677a}
 
@@ -2417,16 +2416,12 @@ function tarotHow(){ var p=meStu().profile, s=solarOf(p), r=tarotNums(+s.y,+s.m,
     '<li><b>總和減出生日期</b><br>'+r.total+' − '+s.d+'＝'+r.n2raw+(r.n2raw!==r.n2?(r.n2raw>=22?'，超過 22 要減 22':'，小於 0 加 22'):'')+'<br><b class="tn-res">'+r.n2+' '+TAROT[r.n2]+'</b></li>'+
     '<li><b>星座靈數</b><br>'+r.zName+'<br><b class="tn-res">'+r.n3+' '+TAROT[r.n3]+'</b></li></ol><p class="muted">上課時老師會教你怎麼看這三張牌，也可以幫朋友算算看！</p><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
 var _viewMeT=viewMe;
-viewMe=function(){
-  var st=meStu(), p=st&&st.profile;
-  if(!p||PF||!hasTarot(S.me)){ if(ME_SUB==='tarot') ME_SUB='chart'; return _viewMeT(); }
-  if(ME_SUB!=='tarot'){ _viewMeT(); var sg=document.querySelector('#root .seg.sub'); if(sg) sg.insertAdjacentHTML('beforeend','<button onclick="ME_SUB=\'tarot\';render()">塔羅靈數</button>'); return; }
-  ME_SUB='chart'; _viewMeT(); ME_SUB='tarot';
-  var sg=document.querySelector('#root .seg.sub'); if(!sg) return;
-  sg.querySelectorAll('button').forEach(function(b){ b.className=''; });
-  sg.insertAdjacentHTML('beforeend','<button class="on" onclick="ME_SUB=\'tarot\';render()">塔羅靈數</button>');
-  var n=sg.nextSibling; while(n){ var nx=n.nextSibling; n.remove(); n=nx; }
-  sg.insertAdjacentHTML('afterend',tarotCard(p));
+viewMe=function(){ if(ME_SUB==='tarot') ME_SUB='chart';
+  _viewMeT();
+  var st=meStu(), p=st&&st.profile; if(!p||PF||ME_SUB!=='chart') return;
+  var fr=document.querySelector('#chartFrame'); var c=fr&&fr.closest('.card'); if(!c) return;
+  var nx=c.nextElementSibling, at=(nx&&nx.tagName==='P')?nx:c;
+  at.insertAdjacentHTML('afterend',tarotCard(p));
 };
 
 /* ---------- 幸運色主題：海軍藍／墨綠／霧紫免費，五行幸運色到商城用小金幣換（2026-10-31） ---------- */
