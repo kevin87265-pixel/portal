@@ -1234,14 +1234,19 @@ function pvView(){
   const stg=PV_STAGE[p.role],ok=p.recs.filter(x=>x.status==='approved'),pend=p.recs.filter(x=>x.status==='pending');
   const cum=ok.reduce((s,x)=>s+(+x.pv||0),0),gap=Math.max(0,stg.goal-cum),M=nowMonth();
   const mon=k=>ok.filter(x=>ymOf(x.date)===shift(M,-k)).reduce((s,x)=>s+(+x.pv||0),0);
-  const thisM=mon(0),avg3=Math.round((mon(1)+mon(2)+mon(3))/3),avg=avg3||thisM;
+  const thisM=mon(0);
+  /* 速度＝這一階開始有業績的那個月到本月，平均每月多少（含本月） */
+  const firstM=ok.map(x=>ymOf(x.date)).filter(Boolean).sort()[0]||M;
+  const nMon=Math.max(1,(+M.slice(0,4)-+firstM.slice(0,4))*12+(+M.slice(5)-+firstM.slice(5))+1);
+  const avg=Math.round(cum/nMon);
   const span=S.pvSpan||3,target=gap?Math.ceil(gap/span/100)*100:0,leftM=Math.max(0,target-thisM);
   const pendPV=pend.reduce((s,x)=>s+(+x.pv||0),0);
   const when=n=>{const d=new Date();d.setMonth(d.getMonth()+n);return `${d.getFullYear()} 年 ${d.getMonth()+1} 月`;};
   let est1='',est2='';
-  if(avg>0){const m1=Math.max(0,Math.ceil(gap/avg));est1=gap?`照最近的速度（每月約 ${money(avg)} PV），大約 <b>${when(m1)}</b> 可以升${stg.next}`:`已達門檻，可以請推薦人幫你升${stg.next}`;
-    if(p.role===1){const m2=m1+Math.ceil(PV_STAGE[2].goal/avg);est2=`再往上到正式老師（1260），大約 <b>${when(m2)}</b>`;}}
-  else est1='最近還沒有審核通過的業績，從這個月開始衝吧！';
+  if(avg>0){const m1=Math.max(0,Math.ceil(gap/avg));
+    est1=`<p class="muted" style="margin-bottom:4px">目前平均每月約 ${money(avg)} PV</p>`+(gap?`<p>預估 <b>${when(m1)}</b> 升${stg.next}</p>`:`<p>已達門檻，可以請推薦人幫你升${stg.next}</p>`);
+    if(p.role===1){const m2=m1+Math.ceil(PV_STAGE[2].goal/avg);est2=`預估 <b>${when(m2)}</b> 升正式老師`;}}
+  else est1='<p>最近還沒有審核通過的業績，從這個月開始衝吧！</p>';
   const det=ok.filter(x=>ymOf(x.date)===M).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
   return `<section class="pane ink">
     <div class="kpi-lab">${stg.name}（${stg.price}）・晉升進度</div>
@@ -1254,7 +1259,7 @@ function pvView(){
   <section class="pane"><div class="pane-h"><h2>本月目標</h2><small>${+M.split('.')[1]} 月</small></div>
     <div class="span-pick">幾個月升級？${[3,6,12].map(n=>`<button data-span="${n}" class="${span===n?'on':''}">${n}個月</button>`).join('')}</div>
     <div class="cstat c3" style="margin-top:12px"><div><b class="num">${wan(target)}</b><span>本月目標</span></div><div><b class="num">${wan(thisM)}</b><span>本月已審核</span></div><div><b class="num" style="${leftM?'color:#a8473b':''}">${leftM?wan(leftM):'達標'}</b><span>本月還差</span></div></div>
-    <div class="est"><p>${est1}</p>${est2?`<p>${est2}</p>`:''}</div></section>
+    <div class="est">${est1}${est2?`<p>${est2}</p>`:''}</div></section>
   <section class="pane"><div class="pane-h"><h2>本月審核通過的業績</h2><small>${det.length} 筆</small></div>
     ${det.length?det.map(x=>`<div class="ord-r"><b>${String(x.date).slice(5,10).replace('-','/')}</b><span>${esc(x.item)} × ${x.qty}</span><span class="num" style="margin-left:auto">${money(x.pv)}</span></div>`).join(''):'<div class="empty">這個月還沒有審核通過的業績</div>'}
     <a class="go-fill" href="https://kevin87265-pixel.github.io/miiragic-points/" style="text-decoration:none">去積點系統申報業績${IC.right}</a></section>`;}
@@ -1267,7 +1272,7 @@ function renderPV(){
   document.querySelectorAll('[data-span]').forEach(b=>b.onclick=()=>{S.pvSpan=+b.dataset.span;renderPV();});}
 
 /* 有新版就自動換新（GitHub 會快取 10 分鐘） */
-const BUILD='20261031222138';
+const BUILD='20261031225112';
 (function(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname.replace(/[^/]*$/,'')+'version.txt?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=(v||'').trim();
   if(v&&v!==BUILD){const k='perfReload_'+v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,1);}catch(e){}
     const q=new URLSearchParams(location.search);q.set('_v',v);location.replace(location.pathname+'?'+q.toString());}}).catch(()=>{});})();
