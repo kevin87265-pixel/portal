@@ -490,6 +490,9 @@ details.cust summary::-webkit-details-marker{display:none}
 .ord-r{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}.ord-r b{font-family:var(--num);white-space:nowrap;min-width:3.4em}
 @media (max-width:380px){.rk-d{grid-template-columns:repeat(2,1fr);margin-left:0}.comp{flex-direction:column;align-items:stretch}.donut{margin:0 auto}}
 .back-perf{display:inline-flex;align-items:center;gap:2px;margin:0 0 10px 2px;padding:6px 12px 6px 6px;border-radius:999px;background:rgba(255,251,241,.88);border:1px solid #e3cd98;color:#6b5530;font-size:13px;text-decoration:none}.back-perf svg{width:16px;height:16px}
+.back-round{flex:none;width:46px;height:46px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#2a4b72,#16314f);color:#f3dfa6;text-decoration:none;box-shadow:0 6px 14px -8px rgba(13,29,48,.7)}
+.back-round svg{width:16px;height:16px;margin-bottom:-2px}.back-round small{font-size:11px;line-height:1.1;letter-spacing:.05em}
+@media (max-width:400px){.top:has(.back-round) .hdate span{display:none}}
 </style>
 </head>
 <body>
@@ -1159,8 +1162,7 @@ function dashView(){
     <p class="muted" style="margin:8px 0 0">報名人數等學員系統接上後會顯示在這裡</p></details>`;}
 function dashShell(inner){return `<div class="app fade">
   <header class="top"><div class="who">${crest()}<div><b>${S.dashOk?'老師儀表台':'業績總覽'}</b><span class="greet"><em class="gname" style="--gc:#3f2c0d">${esc(S.name)}</em><span class="ghi">您好</span></span></div></div>
-  <div class="hdate">${hdateHTML()}</div><button class="ghost" id="out">登出</button></header>
-  <a class="back-perf" href="./">${IC.left}回業績總覽</a>
+  <div class="hdate">${hdateHTML()}</div>${S.dashOk?`<a class="back-round" href="./" aria-label="回業績總覽">${IC.left}<small>業績</small></a>`:''}<button class="ghost" id="out">登出</button></header>
   ${S.net?`<div class="net">${IC.alert}<span>網路不通，資料可能不是最新的</span><button id="retry">重試</button></div>`:''}
   ${inner}</div>`;}
 function renderDash(){
@@ -1189,7 +1191,7 @@ async function loadDash(clear){
 }
 
 /* 有新版就自動換新（GitHub 會快取 10 分鐘） */
-const BUILD='20261031145944';
+const BUILD='20261031150358';
 (function(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname.replace(/[^/]*$/,'')+'version.txt?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=(v||'').trim();
   if(v&&v!==BUILD){const k='perfReload_'+v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,1);}catch(e){}
     const q=new URLSearchParams(location.search);q.set('_v',v);location.replace(location.pathname+'?'+q.toString());}}).catch(()=>{});})();
