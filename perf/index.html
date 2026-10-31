@@ -493,6 +493,10 @@ details.cust summary::-webkit-details-marker{display:none}
 .back-round{flex:none;width:46px;height:46px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#2a4b72,#16314f);color:#f3dfa6;text-decoration:none;box-shadow:0 6px 14px -8px rgba(13,29,48,.7)}
 .back-round svg{width:16px;height:16px;margin-bottom:-2px}.back-round small{font-size:11px;line-height:1.1;letter-spacing:.05em}
 @media (max-width:400px){.top:has(.back-round) .hdate span{display:none}}
+.span-pick{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14px;color:#5d4a26}
+.span-pick button{height:34px;padding:0 10px;border-radius:999px;border:1px solid #e3cd98;background:#fffaf0;color:#6b5530;font-family:inherit;font-size:13px}
+.span-pick button.on{background:linear-gradient(180deg,#2a4b72,#16314f);color:#f3dfa6;border-color:#0d1d30}
+.est{margin-top:12px;padding:10px 12px;border-radius:12px;background:#fbf4e3;font-size:14px;line-height:1.7}.est p{margin:0}.est b{color:#a8473b;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -554,7 +558,7 @@ function toast(msg){const t=document.createElement('div');t.className='toast';t.
 
 /* ====== 狀態 ====== */
 const S={cust:{},token:'',name:'',role:'',tab:(['month','cust','rank','fill','info'].indexOf(location.hash.slice(1))>=0?location.hash.slice(1):'month'),month:nowMonth(),me:null,all:null,busy:false,net:false,timer:null,req:0,cfg:null,pend:null};
-try{const o=JSON.parse(sessionStorage.getItem('perf3')||'null');if(o&&o.token){S.token=o.token;S.name=o.name;S.role=o.role;}}catch(e){}
+try{const o=JSON.parse(sessionStorage.getItem('perf3')||'null');if(o&&o.token){S.token=o.token;S.name=o.name;S.role=o.role;S.mode=o.mode||'';}}catch(e){}
 
 /* ====== 後端 ====== */
 async function api(body){
@@ -611,7 +615,11 @@ async function doLogin(ev){
   showErr('');S.busy=true;const b=$('#go');b.disabled=true;b.innerHTML='<i class="spin"></i><span>驗證中</span>';
   try{
     const r=await api({action:'perfLogin',name:acc,pw});
-    if(!r||!r.ok){showErr((r&&r.err)||'帳號或密碼不對');return;}
+    if(!r||!r.ok){
+      if(r&&r.err&&/太多次/.test(r.err)){showErr(r.err);return;}
+      const q=await pvTryLogin(acc,pw);
+      if(q.ok){S.mode='pv';S.token=q.token;S.pv=q.pv;S.name=q.pv.name;try{sessionStorage.setItem('perf3',JSON.stringify({mode:'pv',token:q.token,name:S.name}));}catch(e){}S.busy=false;renderPV();loadPV();return;}
+      showErr(q.err||(q.locked?`錯誤次數太多，請 ${q.wait||10} 分鐘後再試`:(r&&r.err)||'帳號或密碼不對'));return;}
     S.token=r.token;S.name=r.name||acc;S.role=r.role==='管理'?'管理':'老師';S.tab='month';S.month=nowMonth();S.me=null;S.all=null;S.cust={};
     try{sessionStorage.setItem('perf3',JSON.stringify({token:S.token,name:S.name,role:S.role}));}catch(e){}
     if(VIEW==='dash'){location.replace(location.pathname);return;}
@@ -933,6 +941,7 @@ function allView(d){
 }
 function render(){
   if(!S.token){renderLogin();return;}
+  if(S.mode==='pv'){renderPV();return;}
   if(VIEW==='dash'){renderDash();return;}
   const d=S.tab==='all'?S.all:S.me;
   let inner=S.tab==='cust'?custView():S.tab==='info'?infoView():S.tab==='fill'?fillView():d?(S.tab==='all'?allView(d):S.tab==='rank'?rankView(d):monthView(d)):(S.net?`<section class="pane"><div class="empty"><b>目前無法取得業績</b>請檢查網路後按「重試」。</div></section>`:skeleton());
@@ -961,7 +970,7 @@ function lcGet(k){try{const o=JSON.parse(localStorage.getItem(lcKey())||'{}');re
 function lcPut(k,v){try{const o=JSON.parse(localStorage.getItem(lcKey())||'{}');o[k]=v;localStorage.setItem(lcKey(),JSON.stringify(o));}catch(e){}}
 function lcClear(){try{Object.keys(localStorage).filter(k=>k.indexOf('perfc_')===0).forEach(k=>localStorage.removeItem(k));}catch(e){}}
 async function load(clear){
-  if(!S.token)return;if(VIEW==='dash'){return loadDash(clear);}const id=++S.req;
+  if(!S.token)return;if(S.mode==='pv'){return loadPV();}if(VIEW==='dash'){return loadDash(clear);}const id=++S.req;
   const tab=S.tab,month=S.month;
   if(clear){S.net=false;
     if(tab==='all'){if(!S.all)S.all=lcGet('all_'+month)||null;}else if(!S.me){S.me=lcGet('me_'+month)||null;}
@@ -1192,8 +1201,73 @@ async function loadDash(clear){
   }catch(e){if(id!==S.req)return;S.net=true;renderDash();}
 }
 
+/* ====================== 考核／實習老師（積點系統帳號）晉升進度 ====================== */
+const PV_STAGE={1:{name:'考核老師',price:1680,goal:168000,next:'實習老師'},2:{name:'實習老師',price:1470,goal:147000,next:'正式老師'}};
+async function mgRpc(fn,body){
+  if(!API_URL)return pvDemo(fn,body);
+  try{const r=await fetch(SUPA+'/rest/v1/rpc/'+fn,{method:'POST',cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',headers:{apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const t=await r.text();let j=null;try{j=t?JSON.parse(t):null;}catch(e){}if(!r.ok)return {ok:false,error:{message:(j&&(j.message||j.error))||'HTTP'}};return j||{ok:false};}
+  catch(e){return {ok:false,error:{message:'NETWORK'}};}}
+function pvDemo(fn,b){const today=new Date(),ym=(k)=>{const d=new Date(today.getFullYear(),today.getMonth()-k,5);return d.toISOString().slice(0,10);};
+  if(fn==='mg_login'&&b.p_user!=='示範考核')return {ok:false};
+  const recs=[];[[0,12],[0,6],[1,15],[2,14],[3,11]].forEach(([k,q],i)=>recs.push({id:'p'+i,sid:'s1',item:'法會金紙',cost:1680,qty:q,pv:1680*q,status:'approved',date:ym(k)}));
+  recs.push({id:'px',sid:'s1',item:'還陰債',cost:2880,qty:3,pv:8640,status:'pending',date:ym(0)});
+  return {ok:true,token:'demo',account:{type:'student',linked_id:'s1',username:'示範考核'},data:{students:[{id:'s1',name:'林示範',role:1}],pv_records:recs}};}
+function pvSid(acc){return acc?(acc.type==='both'?acc.linked_student_id:(acc.type==='student'?acc.linked_id:null)):null;}
+function pvApply(r){const acc=r.account||{},d=r.data||{},sid=pvSid(acc),st=(d.students||[]).find(x=>x.id===sid);
+  if(!st)return {err:'找不到你的學員資料，請找推薦人確認'};
+  const role=+st.role;if(!PV_STAGE[role])return {err:role>=3?'正式老師請用填單系統的帳號密碼登入':'學員請用學員系統登入',role};
+  return {ok:true,name:st.name,role,recs:(d.pv_records||[]).filter(x=>x.sid===sid)};}
+async function pvTryLogin(acc,pw){const r=await mgRpc('mg_login',{p_user:acc,p_pass:pw});
+  if(!r||!r.ok)return {ok:false,locked:r&&r.locked,wait:r&&r.wait_min};
+  const a=pvApply(r);if(!a.ok)return {ok:false,err:a.err};
+  try{localStorage.setItem('miiragic_token',r.token);}catch(e){}
+  return {ok:true,token:r.token,pv:a};}
+async function loadPV(){
+  const tok=(()=>{try{return localStorage.getItem('miiragic_token')||'';}catch(e){return '';}})()||S.token;
+  const r=await mgRpc('mg_load',{p_token:tok});
+  if(!r||!r.ok){if(r&&r.error&&/AUTH|token|登入/i.test(r.error.message||'')){expire();return;}S.net=true;renderPV();return;}
+  const a=pvApply(r);if(a.ok){S.pv=a;S.name=a.name;S.net=false;}renderPV();}
+const ymOf=d=>{const m=String(d||'').replace(/\//g,'-').match(/^(\d{4})-(\d{1,2})/);return m?m[1]+'.'+m[2].padStart(2,'0'):'';};
+function pvView(){
+  const p=S.pv;if(!p)return `<div class="sk" style="height:260px"></div><div class="sk gap" style="height:200px"></div>`;
+  const stg=PV_STAGE[p.role],ok=p.recs.filter(x=>x.status==='approved'),pend=p.recs.filter(x=>x.status==='pending');
+  const cum=ok.reduce((s,x)=>s+(+x.pv||0),0),gap=Math.max(0,stg.goal-cum),M=nowMonth();
+  const mon=k=>ok.filter(x=>ymOf(x.date)===shift(M,-k)).reduce((s,x)=>s+(+x.pv||0),0);
+  const thisM=mon(0),avg3=Math.round((mon(1)+mon(2)+mon(3))/3),avg=avg3||thisM;
+  const span=S.pvSpan||3,target=gap?Math.ceil(gap/span/100)*100:0,leftM=Math.max(0,target-thisM);
+  const pendPV=pend.reduce((s,x)=>s+(+x.pv||0),0);
+  const when=n=>{const d=new Date();d.setMonth(d.getMonth()+n);return `${d.getFullYear()} 年 ${d.getMonth()+1} 月`;};
+  let est1='',est2='';
+  if(avg>0){const m1=Math.max(0,Math.ceil(gap/avg));est1=gap?`照最近的速度（每月約 ${money(avg)} PV），大約 <b>${when(m1)}</b> 可以升${stg.next}`:`已達門檻，可以請推薦人幫你升${stg.next}`;
+    if(p.role===1){const m2=m1+Math.ceil(PV_STAGE[2].goal/avg);est2=`再往上到正式老師（1260），大約 <b>${when(m2)}</b>`;}}
+  else est1='最近還沒有審核通過的業績，從這個月開始衝吧！';
+  const det=ok.filter(x=>ymOf(x.date)===M).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  return `<section class="pane ink">
+    <div class="kpi-lab">${stg.name}（${stg.price}）・晉升進度</div>
+    <div class="kpi num"><small>PV</small><span>${money(cum)}</span></div>
+    <div class="th" style="margin-top:12px"><div class="th-top"><span>升${stg.next}門檻 ${money(stg.goal)} PV</span><span class="th-now">${Math.min(100,Math.floor(cum/stg.goal*100))}%</span></div>
+      <div class="th-bar" style="margin:10px 0 8px"><i style="width:${Math.min(100,cum/stg.goal*100).toFixed(1)}%"></i></div>
+      <div class="th-msg">${gap?`還差 <b class="num">${money(gap)}</b> PV 升${stg.next}`:`<b>已達門檻！</b>請推薦人幫你晉升${stg.next}`}</div></div>
+    ${pendPV?`<div class="th-remind" style="margin-top:10px">${IC.alert}<span>還有 <b>${money(pendPV)}</b> PV 等推薦人審核，通過就會加上去</span></div>`:''}
+  </section>
+  <section class="pane"><div class="pane-h"><h2>本月目標</h2><small>${+M.split('.')[1]} 月</small></div>
+    <div class="span-pick">幾個月升級？${[3,6,12].map(n=>`<button data-span="${n}" class="${span===n?'on':''}">${n}個月</button>`).join('')}</div>
+    <div class="cstat c3" style="margin-top:12px"><div><b class="num">${wan(target)}</b><span>本月目標</span></div><div><b class="num">${wan(thisM)}</b><span>本月已審核</span></div><div><b class="num" style="${leftM?'color:#a8473b':''}">${leftM?wan(leftM):'達標'}</b><span>本月還差</span></div></div>
+    <div class="est"><p>${est1}</p>${est2?`<p>${est2}</p>`:''}</div></section>
+  <section class="pane"><div class="pane-h"><h2>本月審核通過的業績</h2><small>${det.length} 筆</small></div>
+    ${det.length?det.map(x=>`<div class="ord-r"><b>${String(x.date).slice(5,10).replace('-','/')}</b><span>${esc(x.item)} × ${x.qty}</span><span class="num" style="margin-left:auto">${money(x.pv)}</span></div>`).join(''):'<div class="empty">這個月還沒有審核通過的業績</div>'}
+    <a class="go-fill" href="https://kevin87265-pixel.github.io/miiragic-points/" style="text-decoration:none">去積點系統申報業績${IC.right}</a></section>`;}
+function renderPV(){
+  $('#root').innerHTML=`<div class="app fade"><header class="top"><div class="who">${crest()}<div><b>晉升進度</b><span class="greet"><em class="gname" style="--gc:#3f2c0d">${esc(S.name)}</em><span class="ghi">您好</span></span></div></div>
+  <div class="hdate">${hdateHTML()}</div><button class="ghost" id="out">登出</button></header>
+  ${S.net?`<div class="net">${IC.alert}<span>網路不通，資料可能不是最新的</span><button id="retry">重試</button></div>`:''}${pvView()}</div>`;
+  $('#out').onclick=()=>{try{localStorage.removeItem('miiragic_token');}catch(e){}S.mode='';S.pv=null;logout();};
+  const rt=$('#retry');if(rt)rt.onclick=loadPV;
+  document.querySelectorAll('[data-span]').forEach(b=>b.onclick=()=>{S.pvSpan=+b.dataset.span;renderPV();});}
+
 /* 有新版就自動換新（GitHub 會快取 10 分鐘） */
-const BUILD='20261031151053';
+const BUILD='20261031222138';
 (function(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname.replace(/[^/]*$/,'')+'version.txt?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=(v||'').trim();
   if(v&&v!==BUILD){const k='perfReload_'+v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,1);}catch(e){}
     const q=new URLSearchParams(location.search);q.set('_v',v);location.replace(location.pathname+'?'+q.toString());}}).catch(()=>{});})();
