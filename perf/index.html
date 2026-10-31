@@ -575,7 +575,7 @@ function renderLogin(msg){
     ${whenHTML()}
     <div class="login-head">
       <div class="org">靈應壇 × 神奇身心靈學苑</div>
-      <h1 class="foil">${VIEW==='dash'?'老師儀表台':'業績總覽'}</h1>
+      <h1 class="foil">業績總覽</h1>
       <div class="rule"><i></i></div>
     </div>
     <form class="pane" id="lf" autocomplete="off" novalidate>
@@ -1095,7 +1095,7 @@ function trendSvg(tr){const max=Math.max(1,...tr.map(x=>x.total)),W=320,H=150,bw
     <text x="${X+bw*.3}" y="${H+20}" text-anchor="middle" class="tm">${+x.m.split('.')[1]}月</text>`;}).join('')}</svg>`;}
 function dashView(){
   const d=dashData();
-  if(!d)return monthBar()+`<div class="sk" style="height:260px"></div><div class="sk gap" style="height:200px"></div><p class="muted" style="text-align:center">第一次打開要算全公司資料，請稍等…</p>`;
+  if(!d)return (S.dashOk?monthBar():'')+`<div class="sk" style="height:260px"></div><div class="sk gap" style="height:200px"></div>`+(S.dashOk?`<p class="muted" style="text-align:center">第一次打開要算全公司資料，請稍等…</p>`:'');
   const rows=d.rows||[],tot=rows.reduce((s,r)=>s+(+r.amount||0),0),prevTot=rows.reduce((s,r)=>s+(+r.prev||0),0);
   const goal=rows.reduce((s,r)=>s+(+r.goal||0),0),active=rows.filter(r=>+r.amount>0).length;
   const fa=rows.reduce((s,r)=>s+fahuiN(r.items),0),cur=S.month>=nowMonth(),od=cur?nextOrderDays():null,p=pct(tot,prevTot);
@@ -1156,12 +1156,13 @@ function dashView(){
     ${courses.map(e=>`<div class="ord-r"><b>${+e.date.split('-')[1]}/${+e.date.split('-')[2]}</b><span>${esc(e.title||'課程')}${e.time?'・'+esc(e.time):''}${e.note?'<br><small class="muted">'+esc(e.note)+'</small>':''}</span></div>`).join('')||'<div class="empty">這個月行事曆沒有課程</div>'}
     <p class="muted" style="margin:8px 0 0">報名人數等學員系統接上後會顯示在這裡</p></details>`;}
 function dashShell(inner){return `<div class="app fade">
-  <header class="top"><div class="who">${crest()}<div><b>老師儀表台</b><span class="greet"><em class="gname" style="--gc:#3f2c0d">${esc(S.name)}</em><span class="ghi">您好</span></span></div></div>
+  <header class="top"><div class="who">${crest()}<div><b>${S.dashOk?'老師儀表台':'業績總覽'}</b><span class="greet"><em class="gname" style="--gc:#3f2c0d">${esc(S.name)}</em><span class="ghi">您好</span></span></div></div>
   <div class="hdate">${hdateHTML()}</div><button class="ghost" id="out">登出</button></header>
   ${S.net?`<div class="net">${IC.alert}<span>網路不通，資料可能不是最新的</span><button id="retry">重試</button></div>`:''}
   ${inner}<p class="foot"><a href="./" style="color:inherit">回業績總覽</a></p></div>`;}
 function renderDash(){
-  const inner=S.dashDeny?`<section class="pane"><div class="empty"><b>這一頁只有管理身分能看</b>請用管理帳號登入，或回業績總覽。</div></section>`:dashView();
+  if(S.dashDeny){location.replace(location.pathname);return;}
+  const inner=dashView();
   $('#root').innerHTML=dashShell(inner);
   $('#out').onclick=logout;
   const pm=$('#pm'),nm=$('#nm');
@@ -1173,14 +1174,14 @@ function renderDash(){
 }
 async function loadDash(clear){
   const id=++S.req,month=S.month;S.dash=S.dash||{};
-  if(clear){S.net=false;if(!S.dash[month])S.dash[month]=lcGet('dash_'+month)||null;renderDash();}
+  if(clear){S.net=false;if(!S.dash[month])S.dash[month]=lcGet('dash_'+month)||null;if(S.dash[month])S.dashOk=true;renderDash();}
   loadCfg();
   if(!S.dpend){const go=()=>window.MiiragicPending&&MiiragicPending.byReferrer().then(r=>{S.dpend=r||{};renderDash();}).catch(()=>{});
     if(window.MiiragicPending)go();else{const sc=document.createElement('script');sc.src='https://kevin87265-pixel.github.io/portal/pending.js';sc.onload=go;document.head.appendChild(sc);}}
   try{const r=await api({action:'perfDash',token:S.token,month});
     if(id!==S.req)return;if(r&&r.relogin){expire();return;}
     if(r&&r.ok===false&&/權限/.test(r.error||'')){S.dashDeny=true;renderDash();return;}
-    if(!r||!r.ok)throw 0;S.dashDeny=false;S.dash[month]=r;lcPut('dash_'+month,r);S.net=false;renderDash();
+    if(!r||!r.ok)throw 0;S.dashDeny=false;S.dashOk=true;S.dash[month]=r;lcPut('dash_'+month,r);S.net=false;renderDash();
   }catch(e){if(id!==S.req)return;S.net=true;renderDash();}
 }
 
