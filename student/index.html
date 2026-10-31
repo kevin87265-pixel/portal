@@ -1866,6 +1866,7 @@ function apply(d){
   if(S.me&&!S.students.some(function(s){return s.acct===S.me;})) S.students.push({acct:S.me,name:d.me.name||'',email:S.me,profile:null,referrer:''});
   if(typeof PORTAL_SNAP!=='undefined') _syncPortal0(PORTAL_SNAP,'快照'); if(PORTAL_LIVE) _syncPortal0(PORTAL_LIVE,'即時');
   takeSnap(); BOOTED=true;
+  if(S.admin){ var miss=SHARED.filter(function(k){return sh[k]==null;}); if(miss.length){ miss.forEach(function(k){ delete SNAP[snapKey('shared',k)]; }); sync(); } }
 }
 function reload(){ if(!TOKEN){ BOOTED=true; render(); return Promise.resolve(); }
   return rpc('st_load',{p_token:TOKEN}).then(function(r){
