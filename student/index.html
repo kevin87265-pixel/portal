@@ -350,6 +350,14 @@ nav.tabs button.on svg{stroke-width:2.2}
 .ptcard .ptic img{width:100%;height:100%}
 .ptcard b{display:block;font-size:17px}.ptcard small{display:block;color:var(--quiet);font-size:13px;margin-top:2px}
 .ptcard .ptgo{margin-left:auto;font-size:26px;color:var(--pri)}
+/* 已繳費課程、示範帳號 */
+.card.pre{border:2px solid #cfe9d8;background:#f6fcf8}
+.pre-top{display:flex;align-items:center;gap:8px}.pre-top b{font-size:18px}
+.pre-s{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid #e3efe7}
+.ck-list{display:flex;flex-direction:column;gap:6px;margin:6px 0 4px}
+.ck-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.ck-row input{width:20px;height:20px}.ck-row span{flex:1;font-weight:600}.ck-row small{color:var(--quiet)}
+.demo-bar{background:#fff4d6;color:#7a5a00;font-size:13px;text-align:center;padding:7px 10px;border-radius:10px;margin:0 0 8px}
 </style>
 </head>
 <body class="t-blue">
@@ -2011,8 +2019,9 @@ function doOpen(){
     if(!r1||!r1.ok){ toast('開通失敗（學員資料）：'+errMsg(r1)); return; }
     return ex({table:'accounts',op:'insert',values:{username:e,password:'12345',type:'student',linked_id:sid},filters:[]}).then(function(r2){
       if(!r2||!r2.ok){ ex({table:'students',op:'delete',filters:[{col:'id',op:'eq',val:sid}]}); toast('開通失敗（帳號）：'+errMsg(r2)); return; }
-      return rpc('st_put',{p_token:TOKEN,p_rows:[{kind:'student',id:e,data:doc}]}).then(function(){
-        OPN={ratio:''}; OPV={}; ATAB='students'; reload().then(function(){ copyAct(e); toast('已開通 '+n+'，積點系統也建好了'); });
+      var ids=window._OPEN_IDS||[]; var rowsP=[{kind:'student',id:e,data:doc}]; S.students.push(doc); grantPrepaid(e,ids,''); S.enroll.filter(function(x){return x.acct===e&&!x.session;}).forEach(function(x){ rowsP.push({kind:'enroll',id:x.id,data:x}); });
+      return rpc('st_put',{p_token:TOKEN,p_rows:rowsP}).then(function(){
+        OPN={ratio:''}; OPV={}; ATAB='students'; reload().then(function(){ copyAct(e); toast('已開通 '+n+(ids.length?'，已登記 '+ids.length+' 門已繳費課程':'')+'，積點系統也建好了'); });
       });
     });
   });
@@ -2031,6 +2040,84 @@ var _vh0=viewHome; viewHome=function(){ _vh0(); var r=$('root'); if(r) r.insertA
 var _vm0=viewMe; viewMe=function(){ _vm0(); var r=$('root'); if(r) r.insertAdjacentHTML('beforeend',pointsCard()); };
 var _am0=aMore; aMore=function(){ _am0(); var r=$('root'); if(r) r.insertAdjacentHTML('beforeend','<a class="card ptcard" href="'+POINTS_URL+'"><span class="ptic">'+img('coin')+'</span><span><b>積點系統（管理員）</b><small>同一組帳號，點了直接進去</small></span><span class="ptgo">›</span></a>'); };
 
+
+/* =====================================================================
+   已繳費課程（行政幫學員登記、不用再付款）：學員進來只要選上課日期
+   ===================================================================== */
+function prepaidOf(a){ return S.enroll.filter(function(e){ return e.acct===a&&!e.session&&e.status==='paid'&&course(e.course); }); }
+function nextSess(cid,n){ var c=course(cid); if(!c) return [];
+  return c.sessions.filter(function(s){ return (s.date>=today())&&left(s)>0; }).sort(function(a,b){return a.date<b.date?-1:1;}).slice(0,n||3); }
+function prepaidCard(e,full){ var c=course(e.course), ss=nextSess(e.course,full?6:2);
+  var h='<div class="card pre"><div class="pre-top"><span class="chip c-ok">已繳費</span><b>'+esc(c.name)+'</b></div><p class="muted" style="margin:6px 0 8px">不用再付款，選一天來上課就好。最近的上課時間：</p>';
+  if(!ss.length) h+='<p class="hint">目前還沒排課，排好會出現在這裡。</p>';
+  ss.forEach(function(s){ h+='<div class="pre-s"><span><b>'+sdate(s)+'</b> '+esc(s.time)+'<br><span class="muted">剩 '+left(s)+' 位</span></span><button class="btn sm" onclick="pickSess(\''+e.id+'\',\''+s.id+'\')">選這天</button></div>'; });
+  return h+'</div>'; }
+function pickSess(eid,sid){ var e=S.enroll.find(function(x){return x.id===eid;}), o=sessOf(sid); if(!e||!o) return;
+  sheet('<h2>選這天上課？</h2><p><b>'+esc(o.c.name)+'</b><br>'+sdate(o.s)+' '+esc(o.s.time)+'</p><p class="muted">已經繳過費，不用再付款。之後要換日期可以到「我的課」改。</p><button class="btn block" onclick="doPick(\''+eid+'\',\''+sid+'\')">確定</button><button class="btn gray block" onclick="closeSheet()">再看看</button>'); }
+function doPick(eid,sid){ var e=S.enroll.find(function(x){return x.id===eid;}); e.session=sid; e.pickedAt=today(); save(); closeSheet(); TAB='mine'; render(); toast('已選好上課日期'); }
+var _vmine0=viewMine; viewMine=function(){ _vmine0(); var pp=prepaidOf(S.me); if(!pp.length) return;
+  var g=document.querySelector('#root .pg-h'); var html='<div class="grp"><span>已繳費・請選上課日期</span></div>'+pp.map(function(e){return prepaidCard(e,true);}).join('');
+  if(g) g.insertAdjacentHTML('afterend',html); var soft=document.querySelector('#root .card.soft'); if(soft&&/還沒報名/.test(soft.innerText)) soft.remove(); };
+var _vh1=viewHome; viewHome=function(){ _vh1(); var pp=prepaidOf(S.me); if(!pp.length) return;
+  var st=document.querySelector('#root button.status'); var html='<div class="sec-h"><b>你已繳費的課</b></div>'+pp.map(function(e){return prepaidCard(e,false);}).join('');
+  if(st) st.insertAdjacentHTML('afterend',html); };
+var _oc0=openCourse; openCourse=function(cid){ _oc0(cid); var e=prepaidOf(S.me).find(function(x){return x.course===cid;}); if(!e) return;
+  document.querySelectorAll('.sheet button[onclick^="askEnroll"], #sheet button[onclick^="askEnroll"]').forEach(function(b){ var sid=b.getAttribute('onclick').match(/'([^']+)'/)[1]; b.setAttribute('onclick','closeSheet();pickSess(\''+e.id+'\',\''+sid+'\')'); b.textContent='選這天'; });
+  var h2=document.querySelector('.sheet h2, #sheet h2'); if(h2) h2.insertAdjacentHTML('afterend','<p><span class="chip c-ok">你已繳費</span> 選一天就好，不用再付款</p>'); };
+/* 行政：登記已繳費課程（開通時或之後都可以） */
+function payCourseOpts(){ return S.courses.filter(function(c){return c.price>0;}).map(function(c){ return '<label class="ck-row"><input type="checkbox" value="'+c.id+'"><span>'+esc(c.name)+'</span><small>'+money(c.price)+'</small></label>'; }).join(''); }
+function grantPrepaid(a,ids,note){ ids.forEach(function(cid){ var c=course(cid);
+  S.enroll.push({id:'e'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),acct:a,course:cid,session:'',status:'paid',changes:0,paidAt:today(),payBy:'行政登記已繳費'+(note?'（'+note+'）':''),amount:c?c.price:0,got:c?c.price:0,paidBy:S.adminWho||'行政'}); }); }
+function askPrepaid(a){ var s=stuOf(a);
+  sheet('<h2>登記已繳費的課</h2><p class="muted">'+esc(s?s.name:a)+' 已經付過錢的課勾起來，學員進去就不用再付款，只要選上課日期。</p><div class="ck-list" id="ppL">'+payCourseOpts()+'</div><label class="f">備註（例如：10/20 現金）</label><input class="t" id="ppN" type="text">'+
+    '<button class="btn block" onclick="doPrepaid(\''+a+'\')">登記</button><button class="btn gray block" onclick="closeSheet()">取消</button>'); }
+function doPrepaid(a){ var ids=[].map.call(document.querySelectorAll('#ppL input:checked'),function(x){return x.value;}); if(!ids.length){ toast('請勾選課程'); return; }
+  grantPrepaid(a,ids,$('ppN').value.trim()); save(); closeSheet(); render(); toast('已登記 '+ids.length+' 門已繳費課程'); }
+var _sm0=stuMore; stuMore=function(a){ _sm0(a); var b=document.querySelector('.sheet .btn.gray, #sheet .btn.gray'); if(b) b.insertAdjacentHTML('beforebegin','<button class="btn block" onclick="closeSheet();askPrepaid(\''+a+'\')">登記已繳費的課</button>'); };
+var _aOpen1=aOpen; aOpen=function(){ _aOpen1(); var btn=document.querySelector('#root button[onclick="doOpen()"]'); if(!btn) return;
+  btn.insertAdjacentHTML('beforebegin','<label class="f">已經繳費的課程（勾起來，學員就不用再付款）</label><div class="ck-list" id="opL">'+payCourseOpts()+'</div>'); };
+var _doOpen0=doOpen; doOpen=function(){ var ids=[].map.call(document.querySelectorAll('#opL input:checked'),function(x){return x.value;}); window._OPEN_IDS=ids; _doOpen0(); };
+
+/* ---------- 密碼：建議改，但可以先不改 ---------- */
+var _vsp0=viewSetPw; viewSetPw=function(){ _vsp0(); var h=document.querySelector('.lg-brand p'); if(h) h.textContent=CHPW?'修改密碼':'建議改成自己的密碼（也可以先不改）';
+  var lg=document.querySelector('.lg-forgot'); if(lg){ lg.outerHTML='<button class="btn gray block" style="margin-top:10px" onclick="skipPw()">'+(CHPW?'取消':'先不改，直接使用')+'</button>'; } };
+var CHPW=false;
+function skipPw(){ MUSTPW=false; CHPW=false; try{ localStorage.setItem('st_mustpw','0'); }catch(e){} render(); scrollTo(0,0); }
+function changePw(){ LASTPW=''; CHPW=true; MUSTPW=true; render(); scrollTo(0,0); }
+var _vme1=viewMe; viewMe=function(){ _vme1(); if(ME_SUB==='info'&&meStu()&&meStu().profile&&!DEMO){ var r=$('root'); var pc=r.querySelector('.ptcard'); var html='<div class="card"><h3>密碼</h3><p class="muted" style="margin-top:0">學員專區和積點系統是同一組密碼。</p><button class="btn line block" onclick="changePw()">修改密碼</button></div>'; if(pc) pc.insertAdjacentHTML('beforebegin',html); else r.insertAdjacentHTML('beforeend',html); } };
+
+/* =====================================================================
+   示範帳號：demo@miiragic.tw／12345 —— 全部在這支手機上跑，不會存進系統
+   ===================================================================== */
+var DEMO=false;
+function demoStart(){
+  DEMO=true; var d=seed(); ['students','enroll','orders','ledger','courses','news','shop','online'].forEach(function(k){ S[k]=d[k]; });
+  S.news=BASE.news.concat(d.news.filter(function(x){return x.id!=='n1';}));
+  S.courses.forEach(function(c){ c.sessions.forEach(function(x){ if(x.note==='試用示範場次') x.note='學苑教室'; }); });
+  if(typeof PORTAL_SNAP!=='undefined') _syncPortal0(PORTAL_SNAP,'快照'); if(PORTAL_LIVE) _syncPortal0(PORTAL_LIVE,'即時');
+  var me=S.students.find(function(s){return s.acct==='lin@demo.tw';}); me.name='示範學員'; if(me.profile) me.profile.name='示範學員';
+  S.me='lin@demo.tw'; S.admin=false; S.myType='student';
+  var pc=S.courses.find(function(c){ return c.price>0&&!S.enroll.some(function(e){return e.acct==='lin@demo.tw'&&e.course===c.id;}); }); if(pc){ pc.sessions.forEach(function(s){ s.seats=Math.max(s.seats||0,20); }); grantPrepaid('lin@demo.tw',[pc.id],'示範'); }
+  CODES={}; allSess().forEach(function(x){ if(onDay(x.s)) CODES[x.s.id]='1234'; });
+  MUSTPW=true; LASTPW='12345'; BOOTED=true; TAB='home'; render(); scrollTo(0,0);
+}
+var _sync0=sync; sync=function(){ if(DEMO) return Promise.resolve(); return _sync0(); };
+var _reload0=reload; reload=function(){ if(DEMO){ render(); return Promise.resolve(); } return _reload0(); };
+var _doLogin0=doLogin; doLogin=function(){ var u=half($('lu').value).trim().toLowerCase(), p=$('lp').value; if(u==='demo@miiragic.tw'&&p==='12345'){ demoStart(); return; } _doLogin0(); };
+var _doSetPw0=doSetPw; doSetPw=function(){ if(DEMO){ var a=$('np1').value,b=$('np2').value; if(a.length<6){toast('密碼至少 6 碼');return;} if(a!==b){toast('兩次輸入的不一樣');return;} MUSTPW=false; render(); toast('示範帳號不會真的改密碼'); return; } _doSetPw0(); };
+var _logout0=logout; logout=function(){ if(DEMO){ DEMO=false; S.me=null; S.students=[]; S.enroll=[]; S.orders=[]; S.ledger=[]; CODES={}; render(); scrollTo(0,0); return; } _logout0(); };
+var _cv0=checkinVia; checkinVia=function(eid,code){ if(!DEMO) return _cv0(eid,code);
+  var e=S.enroll.find(function(x){return x.id===eid;}); if(e.status!=='paid'){ toast('這筆報名還不能簽到'); return Promise.resolve(null); }
+  if(code!=='1234'){ toast('簽到碼不對（示範簽到碼是 1234）'); return Promise.resolve(null); }
+  e.status='checked'; e.checkedAt=today()+' '+nowHM(); e.checkedBy='學員'; return Promise.resolve(rewardCheckin(e)); };
+var _dr0=doRedeem; doRedeem=function(id){ if(!DEMO) return _dr0(id);
+  var it=S.shop.find(function(x){return x.id===id;}), c=coinsOf(S.me); if(c<it.coins||it.stock<=0){ toast('不能兌換'); closeSheet(); return; }
+  var addr=''; if(it.pickup==='寄送'){ if(!$('rA').value.trim()){ toast('請填地址'); return; } addr=($('rN').value+' '+$('rP').value+' '+$('rA').value).trim(); }
+  var oid='o'+Date.now(); it.stock--; S.orders.push({id:oid,acct:S.me,item:id,itemName:it.name,coins:it.coins,date:today(),status:it.pickup==='自動發放'?'done':'wait',pickup:it.pickup,addr:addr});
+  award(S.me,'od:'+oid,-it.coins,0,'兌換 '+it.name); closeSheet(); SHOP_SUB='orders'; render(); toast('兌換成功（示範）'); };
+var _head0=head; head=function(){ return (DEMO?'<div class="demo-bar">示範帳號・資料不會存・簽到碼 1234</div>':'')+_head0(); };
+
+var _ca0=copyAct; copyAct=function(a){ if(!stuOf(a)) return; _ca0(a); };
 /* 啟動：先顯示載入中，有通行證就讀資料庫 */
 reload();
 
