@@ -364,6 +364,7 @@ nav.tabs button.on svg{stroke-width:2.2}
 .ol-btn{background:#1f6f43!important;border-color:#1f6f43!important;margin-top:10px;text-decoration:none;text-align:center}
 .month-sw{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 12px}.month-sw b{font-size:18px}
 .card>.stat3:first-child{border-top:0;margin-top:0;padding-top:0}
+.card.claim{border:2px dashed #f0b54a;background:#fffaf0}
 </style>
 </head>
 <body class="t-blue">
@@ -2158,6 +2159,7 @@ openCourse=function(cid){
   var h='<span class="chip c-blue">'+esc(c.mode||'')+'</span><h2 style="margin-top:8px">'+esc(c.name)+'</h2><p>'+esc(c.intro||'')+'</p><p class="muted">講師：'+esc(c.teacher||'')+'</p>';
   var note={ent:'<p><span class="chip c-ok">你已繳費</span> 選一天就好，不用再付款</p>',payWait:'<div class="card soft"><b>已送出報名，等行政確認收款</b><p class="muted" style="margin:4px 0 0">確認後這裡就可以選上課日期。</p></div>',booked:'<p><span class="chip c-ok">你已報名</span> 要換日期請到「我的課」</p>',
     retake:'<div class="card soft"><b>你上過這門課了</b><p class="muted" style="margin:4px 0 0">想再來上（複訓）請選日期，需繳場地費'+(retakeFee()?' '+money(retakeFee()):'')+'，行政確認收款後完成報名。</p></div>',
+    claimWait:'<div class="card soft"><b>你已申報這門課，等行政確認</b><p class="muted" style="margin:4px 0 0">確認後這裡就可以直接選上課日期。</p></div>',
     locked:'<div class="card soft"><b>要先報名付款，才能選上課日期</b><p class="muted" style="margin:4px 0 0">按下面「我要報名這門課」，付款後行政確認收到款項，就會開放選日期。</p></div>'}[st.k];
   h+=note;
   if(st.k==='locked'||st.k==='payWait'){ h+='<h3>費用</h3>'+payTable(c.pay||[c.price]); }
@@ -2168,7 +2170,7 @@ openCourse=function(cid){
     var btn= mine?'<span class="chip c-ok">'+(mine.status==='wait'?'候補中・等行政審核':mine.status==='pending'?'待付款':'你已報名')+'</span>'
       : st.k==='ent'?(n>0?'<button class="btn" onclick="closeSheet();pickSess(\''+st.e.id+'\',\''+s.id+'\')">選這天</button>':'<button class="btn line" onclick="closeSheet();pickSess(\''+st.e.id+'\',\''+s.id+'\')">額滿，申請加入</button>')
       : st.k==='retake'?'<button class="btn" onclick="closeSheet();askRetake(\''+s.id+'\')">選這天（複訓）</button>'
-      : '<span class="chip c-gray">'+(st.k==='booked'?'':'付款後開放')+'</span>';
+      : '<span class="chip c-gray">'+(st.k==='booked'?'':st.k==='claimWait'?'確認後開放':'付款後開放')+'</span>';
     if(st.k==='booked'&&!mine) btn='';
     h+='<div class="sess"><div class="row"><b>'+sdate(s)+' '+esc(s.time)+'</b><span class="muted">'+(n>0?'剩 '+n+' 位':'額滿')+'</span></div>'+(s.note?'<div class="muted">'+esc(s.note)+'</div>':'')+(btn?'<div style="margin-top:8px">'+btn+'</div>':'')+'</div>'; });
   if(st.k==='locked') h+='<button class="btn block big" onclick="closeSheet();askApply(\''+cid+'\')">我要報名這門課</button>';
@@ -2203,12 +2205,12 @@ doPick=function(eid,sid){ var e=S.enroll.find(function(x){return x.id===eid;}), 
 function cancelWaitPre(eid){ var e=S.enroll.find(function(x){return x.id===eid;}); e.status='paid'; e.session=''; save(); render(); toast('已取消申請，可以重新選日期'); }
 /* 我的課：待付款／等審核的說明 */
 var _vmine1=viewMine; viewMine=function(){ _vmine1();
-  var pw=S.enroll.filter(function(e){return e.acct===S.me&&e.status==='pending'&&!e.session;});
+  var pw=S.enroll.filter(function(e){return e.acct===S.me&&e.status==='pending'&&!e.session&&!e.claim;});
   if(pw.length){ var g=document.querySelector('#root .pg-h'); if(g) g.insertAdjacentHTML('afterend','<div class="grp"><span>等行政確認收款</span></div>'+pw.map(function(e){ return '<div class="card pre"><div class="pre-top"><span class="chip c-warn">待付款</span><b>'+esc(course(e.course).name)+'</b></div><p class="muted" style="margin:6px 0 8px">請私訊學苑官方 LINE 付款，行政確認收到後就能選上課日期。</p>'+lineBtn(S.settings.company.lineUrl,'私訊官方 LINE 付款')+'</div>'; }).join('')); }
   S.enroll.filter(function(e){return e.acct===S.me&&e.status==='wait'&&e.prepaid;}).forEach(function(e){
     document.querySelectorAll('#root .card.mc').forEach(function(card){ if(card.innerHTML.indexOf(course(e.course).name)>=0&&card.innerHTML.indexOf('候補')>=0&&!card.querySelector('.cwp')) card.insertAdjacentHTML('beforeend','<p class="hint cwp">已繳費，額滿等行政審核。<button class="lnk" onclick="cancelWaitPre(\''+e.id+'\')">改選別天</button></p>'); }); }); };
 /* 行政：今日加「待確認收款」；額滿申請可以核准 */
-var _at0=aToday; aToday=function(){ _at0(); var pd=S.enroll.filter(function(e){return e.status==='pending';}); var wp=S.enroll.filter(function(e){return e.status==='wait'&&e.prepaid;});
+var _at0=aToday; aToday=function(){ _at0(); var pd=S.enroll.filter(function(e){return e.status==='pending'&&!e.claim;}); var wp=S.enroll.filter(function(e){return e.status==='wait'&&e.prepaid;});
   if(!pd.length&&!wp.length) return;
   var h='';
   if(pd.length){ h+='<div class="card"><div class="sec-h in"><b>待確認收款（'+pd.length+'）</b></div><ul class="roster">'+pd.map(function(e){ var s=stuOf(e.acct)||{name:e.acct}, o=e.session&&sessOf(e.session);
@@ -2284,6 +2286,49 @@ function copyShare(){ var rows=S.enroll.filter(function(e){ return e.status==='c
   var t='【'+SHM+' 課程分潤明細】\n'+rows.map(function(e){ var s=stuOf(e.acct)||{name:e.acct}, c=course(e.course)||{}; return (s.referrer||'未填')+'｜'+s.name+'｜'+(c.name||'')+(e.retake?'（複訓）':'')+'｜'+(e.retake?0:(+c.share||0))+(s.second?'｜第二人 '+s.second+' '+s.ratio:''); }).join('\n');
   sheet('<h2>複製明細</h2><div class="copybox" id="ntxt">'+esc(t)+'</div><button class="btn block" onclick="copyTxt()">複製</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
 var _am1=aMore; aMore=function(){ _am1(); var m=document.querySelector('#root .card.menu'); if(m) m.insertAdjacentHTML('afterbegin','<button onclick="aGo(\'share\')">'+img('chart','m-ill')+'<span><b>課程分潤明細</b><small>誰簽到了、每位推薦人分潤多少</small></span><i>›</i></button>'); };
+
+
+/* =====================================================================
+   舊學員申報（K 2026-10-31）：積點系統的學員帳號都能登入（預設密碼 12345）；
+   以前報名過的課自己勾、送出給行政確認 → 行政按「確認」就變成已繳費、可以選日期
+   ===================================================================== */
+ST.rejected=['申報未通過','c-gray'];
+/* 申報用 status:'pending'＋claim:true（伺服器原本就允許學員建立「待確認」、不能自己改成已付款） */
+var CLAIM_SMALL=false;
+function isClaim(e){ return e.status==='pending'&&e.claim; }
+function claimsOf(a){ return S.enroll.filter(function(e){ return e.acct===a&&isClaim(e); }); }
+function hasCourse(a,cid){ return S.enroll.some(function(e){ return e.acct===a&&e.course===cid&&['paid','checked','wait','pending'].indexOf(e.status)>=0; }); }
+function claimCard(){ var a=S.me; if(!a) return '';
+  var cl=claimsOf(a), opts=S.courses.filter(function(c){ return c.price>0&&!hasCourse(a,c.id); });
+  var h='';
+  if(cl.length) h+='<div class="card pre"><div class="pre-top"><span class="chip c-warn">等行政確認</span><b>你申報的課程</b></div><ul class="list-plain" style="margin:8px 0 0">'+cl.map(function(e){return '<li><b>'+esc(course(e.course).name)+'</b>'+(e.note?'<br><span class="muted">'+esc(e.note)+'</span>':'')+'</li>';}).join('')+'</ul><p class="hint">行政確認後就可以直接選上課日期，不用再付款。</p></div>';
+  var any=S.enroll.some(function(e){return e.acct===a&&['paid','checked','wait','pending'].indexOf(e.status)>=0;});
+  if(opts.length&&!any) h+='<div class="card claim"><b style="font-size:18px">以前報名過學苑的課嗎？</b><p class="muted" style="margin:6px 0 10px">勾起來送出，行政確認後就能直接選上課日期，不用再付款。</p><button class="btn block" onclick="askClaim()">申報我報名過的課</button></div>';
+  else if(opts.length&&CLAIM_SMALL) h+='<p class="hint" style="text-align:center"><button class="lnk" onclick="askClaim()">還有其他以前報名過的課？點這裡申報</button></p>';
+  return h; }
+function askClaim(){ var a=S.me, opts=S.courses.filter(function(c){ return c.price>0&&!hasCourse(a,c.id); });
+  if(!opts.length){ toast('目前沒有可以申報的課程'); return; }
+  sheet('<h2>申報報名過的課</h2><p class="muted">把你已經報名、付過錢的課勾起來（上過、還沒上都算）。行政確認後就會開通。</p><div class="ck-list" id="clL">'+opts.map(function(c){ return '<label class="ck-row"><input type="checkbox" value="'+c.id+'"><span>'+esc(c.name)+'</span></label>'; }).join('')+'</div>'+
+    '<label class="f">補充說明（可空白，例如：哪一期、找誰報名、付款方式）</label><input class="t" id="clN" type="text">'+
+    '<button class="btn block" onclick="doClaim()">送出給行政確認</button><button class="btn gray block" onclick="closeSheet()">取消</button>'); }
+function doClaim(){ var ids=[].map.call(document.querySelectorAll('#clL input:checked'),function(x){return x.value;}); if(!ids.length){ toast('請勾選課程'); return; }
+  var note=$('clN').value.trim();
+  ids.forEach(function(cid){ S.enroll.push({id:'e'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),acct:S.me,course:cid,session:'',status:'pending',claim:true,note:note,amount:0,changes:0,at:today()+' '+nowHM()}); });
+  save(); closeSheet(); render(); toast('已送出，等行政確認'); }
+function cancelClaim(id){ var e=S.enroll.find(function(x){return x.id===id;}); e.status='refunded'; save(); render(); }
+/* 首頁、我的課都放申報卡 */
+var _vh2=viewHome; viewHome=function(){ _vh2(); var c=claimCard(); if(!c) return; var st=document.querySelector('#root button.status'); if(st) st.insertAdjacentHTML('afterend',c); else $('root').insertAdjacentHTML('afterbegin',c); };
+var _vmine3=viewMine; viewMine=function(){ _vmine3(); CLAIM_SMALL=true; var c=claimCard(); CLAIM_SMALL=false; if(!c) return; var g=document.querySelector('#root .pg-h'); if(g) g.insertAdjacentHTML('afterend',c); };
+/* 課程頁：申報中的課 */
+var _cs0=courseState; courseState=function(cid){ var c=course(cid); if(c&&c.price>0&&S.enroll.some(function(e){return e.acct===S.me&&e.course===cid&&isClaim(e);})) return {k:'claimWait'}; return _cs0(cid); };
+/* 行政：今日頁「舊學員申報」確認／退回 */
+var _at1=aToday; aToday=function(){ _at1(); var cl=S.enroll.filter(isClaim); if(!cl.length) return;
+  var h='<div class="card"><div class="sec-h in"><b>舊學員申報課程（'+cl.length+'）</b></div><p class="muted" style="margin:0 0 6px">確認他真的報名、付過錢，按「確認」就開通，他可以直接選日期。</p><ul class="roster">'+cl.map(function(e){ var s=stuOf(e.acct)||{name:e.acct};
+    return '<li><span class="nm nm2"><b>'+esc(s.name)+'</b><small class="muted">'+esc(course(e.course).name)+(s.referrer?'・推薦人 '+esc(s.referrer):'')+(e.note?'<br>'+esc(e.note):'')+'</small></span><span class="acts"><button class="btn sm ok" onclick="approveClaim(\''+e.id+'\')">確認</button><button class="btn sm line" onclick="rejectClaim(\''+e.id+'\')">退回</button></span></li>'; }).join('')+'</ul></div>';
+  var t=document.querySelector('#root .todos'); if(t) t.insertAdjacentHTML('afterend',h); };
+function approveClaim(id){ var e=S.enroll.find(function(x){return x.id===id;}); var c=course(e.course)||{};
+  e.status='paid'; e.paidAt=today(); e.payBy='舊學員申報（行政確認）'; e.amount=c.price||0; e.got=0; e.paidBy=S.adminWho||'行政'; save(); render(); toast('已開通，學員可以選日期了'); }
+function rejectClaim(id){ var e=S.enroll.find(function(x){return x.id===id;}); e.status='refunded'; e.claimRejected=true; e.rejectedBy=S.adminWho||'行政'; save(); render(); toast('已退回'); }
 
 /* 啟動：先顯示載入中，有通行證就讀資料庫 */
 reload();
