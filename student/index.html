@@ -358,6 +358,8 @@ nav.tabs button.on svg{stroke-width:2.2}
 .ck-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
 .ck-row input{width:20px;height:20px}.ck-row span{flex:1;font-weight:600}.ck-row small{color:var(--quiet)}
 .demo-bar{background:#fff4d6;color:#7a5a00;font-size:13px;text-align:center;padding:7px 10px;border-radius:10px;margin:0 0 8px}
+.roster .nm.nm2{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}
+.roster .nm.nm2 b{white-space:nowrap}.roster .nm.nm2 small{font-size:14px;line-height:1.4}
 </style>
 </head>
 <body class="t-blue">
@@ -2127,6 +2129,93 @@ function actText(s){ var ct=S.settings.company, pp=prepaidOf(s.acct).map(functio
     '\n上課當天到教室後，在「我的課」按「我到了，簽到」，輸入教室公布的簽到碼就完成，還會拿到小金幣可以換禮物 🎁\n\n'+
     '積點系統也是用同一組帳號密碼。有問題直接回覆這裡，或私訊學苑官方 LINE：'+(ct.lineUrl||ct.line); }
 var _ca0=copyAct; copyAct=function(a){ if(!stuOf(a)) return; _ca0(a); };
+
+/* =====================================================================
+   報名規則（K 2026-10-31）
+   - 開通時勾的課＝已繳費：學員只要選日期；有空位直接成功，額滿要行政審核
+   - 沒繳費的課：看得到課表但不能選日期，要先「報名並付款」，行政確認收款後才開放選日期
+   - 上完課要再來（複訓）：選日期後跳場地費繳費通知，行政確認收款才算報名成功
+   ===================================================================== */
+function myEn(cid){ return S.enroll.filter(function(e){ return e.acct===S.me&&e.course===cid&&e.status!=='refunded'; }); }
+function courseState(cid){ var c=course(cid), en=myEn(cid);
+  if(!(c.price>0)) return {k:'free'};
+  var ent=en.find(function(e){return e.status==='paid'&&!e.session;}); if(ent) return {k:'ent',e:ent};
+  var penN=en.find(function(e){return e.status==='pending'&&!e.session;}); if(penN) return {k:'payWait',e:penN};
+  var up=en.find(function(e){ var o=e.session&&sessOf(e.session); return o&&(o.s.end||o.s.date)>=today()&&e.status!=='checked'; }); if(up) return {k:'booked',e:up};
+  var done=en.some(function(e){return e.status==='checked';}); if(done) return {k:'retake'};
+  return {k:'locked'}; }
+function retakeFee(){ return +(S.settings.retakeFee||0); }
+openCourse=function(cid){
+  var c=course(cid), st=courseState(cid);
+  if(st.k==='free') return _oc0(cid);
+  var h='<span class="chip c-blue">'+esc(c.mode||'')+'</span><h2 style="margin-top:8px">'+esc(c.name)+'</h2><p>'+esc(c.intro||'')+'</p><p class="muted">講師：'+esc(c.teacher||'')+'</p>';
+  var note={ent:'<p><span class="chip c-ok">你已繳費</span> 選一天就好，不用再付款</p>',payWait:'<div class="card soft"><b>已送出報名，等行政確認收款</b><p class="muted" style="margin:4px 0 0">確認後這裡就可以選上課日期。</p></div>',booked:'<p><span class="chip c-ok">你已報名</span> 要換日期請到「我的課」</p>',
+    retake:'<div class="card soft"><b>你上過這門課了</b><p class="muted" style="margin:4px 0 0">想再來上（複訓）請選日期，需繳場地費'+(retakeFee()?' '+money(retakeFee()):'')+'，行政確認收款後完成報名。</p></div>',
+    locked:'<div class="card soft"><b>要先報名付款，才能選上課日期</b><p class="muted" style="margin:4px 0 0">按下面「我要報名這門課」，付款後行政確認收到款項，就會開放選日期。</p></div>'}[st.k];
+  h+=note;
+  if(st.k==='locked'||st.k==='payWait'){ h+='<h3>費用</h3>'+payTable(c.pay||[c.price]); }
+  h+='<h3>上課日期</h3>';
+  var ss=c.sessions.filter(function(s){return (s.end||s.date)>=today();}).sort(function(a,b){return a.date<b.date?-1:1;});
+  if(!ss.length) h+='<p class="muted">目前還沒排課，排好會出現在這裡。</p>';
+  ss.forEach(function(s){ var n=left(s), mine=S.enroll.find(function(e){return e.acct===S.me&&e.session===s.id&&e.status!=='refunded';});
+    var btn= mine?'<span class="chip c-ok">'+(mine.status==='wait'?'候補中・等行政審核':mine.status==='pending'?'待付款':'你已報名')+'</span>'
+      : st.k==='ent'?(n>0?'<button class="btn" onclick="closeSheet();pickSess(\''+st.e.id+'\',\''+s.id+'\')">選這天</button>':'<button class="btn line" onclick="closeSheet();pickSess(\''+st.e.id+'\',\''+s.id+'\')">額滿，申請加入</button>')
+      : st.k==='retake'?'<button class="btn" onclick="closeSheet();askRetake(\''+s.id+'\')">選這天（複訓）</button>'
+      : '<span class="chip c-gray">'+(st.k==='booked'?'':'付款後開放')+'</span>';
+    if(st.k==='booked'&&!mine) btn='';
+    h+='<div class="sess"><div class="row"><b>'+sdate(s)+' '+esc(s.time)+'</b><span class="muted">'+(n>0?'剩 '+n+' 位':'額滿')+'</span></div>'+(s.note?'<div class="muted">'+esc(s.note)+'</div>':'')+(btn?'<div style="margin-top:8px">'+btn+'</div>':'')+'</div>'; });
+  if(st.k==='locked') h+='<button class="btn block big" onclick="closeSheet();askApply(\''+cid+'\')">我要報名這門課</button>';
+  h+='<button class="btn gray block" onclick="closeSheet()">關閉</button>';
+  sheet(h); };
+/* 沒繳費的課：先報名付款（不選日期） */
+function askApply(cid){ var c=course(cid); PAYSEL=0;
+  sheet('<h2>報名 '+esc(c.name)+'</h2><h3>付款方式</h3><div class="paysel">'+(c.pay||[c.price]).slice(0,4).map(function(v,i){ return '<button class="'+(i===0?'on':'')+'" onclick="PAYSEL='+i+';[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'on\')});this.classList.add(\'on\')"><span>'+PAYN[i]+'</span><b>'+money(v)+'</b></button>'; }).join('')+'</div>'+
+    '<p class="muted">送出後請私訊學苑官方 LINE 付款；行政確認收到款項，就可以選上課日期。</p><button class="btn block" onclick="doApply(\''+cid+'\')">送出報名</button><button class="btn gray block" onclick="closeSheet()">取消</button>'); }
+function doApply(cid){ var c=course(cid), pay=c.pay||[c.price];
+  S.enroll.push({id:'e'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),acct:S.me,course:cid,session:'',status:'pending',changes:0,paidAt:'',payBy:PAYN[PAYSEL],amount:pay[PAYSEL],at:today()+' '+nowHM()});
+  save(); closeSheet(); TAB='mine'; render(); payInfo(); }
+/* 複訓：選日期 → 場地費繳費通知 → 行政確認收款 */
+function askRetake(sid){ var o=sessOf(sid), f=retakeFee();
+  sheet('<h2>複訓報名</h2><p><b>'+esc(o.c.name)+'</b><br>'+sdate(o.s)+' '+esc(o.s.time)+'</p><div class="card soft"><b>需繳場地費'+(f?' '+money(f):'')+'</b><p class="muted" style="margin:4px 0 0">'+(f?'':'金額請洽學苑官方 LINE。')+'送出後私訊學苑官方 LINE 付款，行政確認收到款項才算報名成功。</p></div>'+
+    '<button class="btn block" onclick="doRetake(\''+sid+'\')">送出複訓報名</button><button class="btn gray block" onclick="closeSheet()">取消</button>'); }
+function doRetake(sid){ var o=sessOf(sid);
+  S.enroll.push({id:'e'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),acct:S.me,course:o.c.id,session:sid,status:'pending',retake:true,changes:0,paidAt:'',payBy:'複訓場地費',amount:retakeFee(),at:today()+' '+nowHM()});
+  save(); closeSheet(); TAB='mine'; render(); payInfo(); }
+/* 已繳費選日期：有空位直接成功，額滿送行政審核 */
+prepaidCard=function(e,full){ var c=course(e.course), ss=c.sessions.filter(function(s){return s.date>=today();}).sort(function(a,b){return a.date<b.date?-1:1;}).slice(0,full?6:2);
+  var h='<div class="card pre"><div class="pre-top"><span class="chip c-ok">已繳費</span><b>'+esc(c.name)+'</b></div><p class="muted" style="margin:6px 0 8px">不用再付款，選一天來上課就好。最近的上課時間：</p>';
+  if(!ss.length) h+='<p class="hint">目前還沒排課，排好會出現在這裡。</p>';
+  ss.forEach(function(s){ var n=left(s); h+='<div class="pre-s"><span><b>'+sdate(s)+'</b> '+esc(s.time)+'<br><span class="muted">'+(n>0?'剩 '+n+' 位':'額滿・可申請加入')+'</span></span><button class="btn sm'+(n>0?'':' line')+'" onclick="pickSess(\''+e.id+'\',\''+s.id+'\')">'+(n>0?'選這天':'申請加入')+'</button></div>'; });
+  return h+'</div>'; };
+pickSess=function(eid,sid){ var o=sessOf(sid), full=left(o.s)<=0;
+  sheet('<h2>'+(full?'這場已額滿':'選這天上課？')+'</h2><p><b>'+esc(o.c.name)+'</b><br>'+sdate(o.s)+' '+esc(o.s.time)+'</p><p class="muted">'+(full?'可以送出申請，行政審核通過就會幫你加入；沒通過可以再選別天。':'已經繳過費，不用再付款。之後要換日期可以到「我的課」改。')+'</p>'+
+    '<button class="btn block" onclick="doPick(\''+eid+'\',\''+sid+'\')">'+(full?'送出申請':'確定')+'</button><button class="btn gray block" onclick="closeSheet()">再看看</button>'); };
+doPick=function(eid,sid){ var e=S.enroll.find(function(x){return x.id===eid;}), o=sessOf(sid), full=left(o.s)<=0;
+  e.session=sid; e.pickedAt=today(); if(full){ e.status='wait'; e.prepaid=true; }
+  save(); closeSheet(); TAB='mine'; render(); toast(full?'已送出申請，等行政審核':'已選好上課日期'); };
+function cancelWaitPre(eid){ var e=S.enroll.find(function(x){return x.id===eid;}); e.status='paid'; e.session=''; save(); render(); toast('已取消申請，可以重新選日期'); }
+/* 我的課：待付款／等審核的說明 */
+var _vmine1=viewMine; viewMine=function(){ _vmine1();
+  var pw=S.enroll.filter(function(e){return e.acct===S.me&&e.status==='pending'&&!e.session;});
+  if(pw.length){ var g=document.querySelector('#root .pg-h'); if(g) g.insertAdjacentHTML('afterend','<div class="grp"><span>等行政確認收款</span></div>'+pw.map(function(e){ return '<div class="card pre"><div class="pre-top"><span class="chip c-warn">待付款</span><b>'+esc(course(e.course).name)+'</b></div><p class="muted" style="margin:6px 0 8px">請私訊學苑官方 LINE 付款，行政確認收到後就能選上課日期。</p>'+lineBtn(S.settings.company.lineUrl,'私訊官方 LINE 付款')+'</div>'; }).join('')); }
+  S.enroll.filter(function(e){return e.acct===S.me&&e.status==='wait'&&e.prepaid;}).forEach(function(e){
+    document.querySelectorAll('#root .card.mc').forEach(function(card){ if(card.innerHTML.indexOf(course(e.course).name)>=0&&card.innerHTML.indexOf('候補')>=0&&!card.querySelector('.cwp')) card.insertAdjacentHTML('beforeend','<p class="hint cwp">已繳費，額滿等行政審核。<button class="lnk" onclick="cancelWaitPre(\''+e.id+'\')">改選別天</button></p>'); }); }); };
+/* 行政：今日加「待確認收款」；額滿申請可以核准 */
+var _at0=aToday; aToday=function(){ _at0(); var pd=S.enroll.filter(function(e){return e.status==='pending';}); var wp=S.enroll.filter(function(e){return e.status==='wait'&&e.prepaid;});
+  if(!pd.length&&!wp.length) return;
+  var h='';
+  if(pd.length){ h+='<div class="card"><div class="sec-h in"><b>待確認收款（'+pd.length+'）</b></div><ul class="roster">'+pd.map(function(e){ var s=stuOf(e.acct)||{name:e.acct}, o=e.session&&sessOf(e.session);
+    return '<li><span class="nm nm2"><b>'+esc(s.name)+'</b><small class="muted">'+esc(course(e.course).name)+(e.retake?'・複訓':'')+(o?'・'+dlabel(o.s.date):'・還沒選日期')+'・'+money(e.amount||0)+'</small></span><span class="acts"><button class="btn sm ok" onclick="confirmPaid(\''+e.id+'\')">確認收款</button></span></li>'; }).join('')+'</ul></div>'; }
+  if(wp.length){ h+='<div class="card"><div class="sec-h in"><b>已繳費、額滿申請加入（'+wp.length+'）</b></div><ul class="roster">'+wp.map(function(e){ var s=stuOf(e.acct)||{name:e.acct}, o=sessOf(e.session);
+    return '<li><span class="nm nm2"><b>'+esc(s.name)+'</b><small class="muted">'+esc(course(e.course).name)+'・'+(o?dlabel(o.s.date):'')+'</small></span><span class="acts"><button class="btn sm ok" onclick="approveWait(\''+e.id+'\')">核准</button><button class="btn sm line" onclick="rejectWait(\''+e.id+'\')">退回</button></span></li>'; }).join('')+'</ul></div>'; }
+  var t=document.querySelector('#root .todos'); if(t) t.insertAdjacentHTML('afterend',h); };
+function approveWait(id){ var e=S.enroll.find(function(x){return x.id===id;}); e.status='paid'; e.approvedBy=S.adminWho||'行政'; save(); render(); toast('已核准，學員加入這場'); }
+function rejectWait(id){ var e=S.enroll.find(function(x){return x.id===id;}); e.status='paid'; e.session=''; save(); render(); toast('已退回，學員可以改選別天'); }
+var _pr0=promote; promote=function(id){ var e=S.enroll.find(function(x){return x.id===id;}); if(e&&e.prepaid) return approveWait(id); return _pr0(id); };
+/* 設定：複訓場地費 */
+var _as0=aSet; aSet=function(){ _as0(); var b=document.querySelector('#root .card'); if(!b) return;
+  b.insertAdjacentHTML('beforebegin','<div class="card"><h3 style="margin-top:0">複訓場地費</h3><p class="muted" style="margin-top:0">上過的課再來上，學員要繳的場地費（每次）。</p><input class="t" id="rtF" type="text" inputmode="numeric" value="'+(S.settings.retakeFee||'')+'" placeholder="例如 500"><button class="btn block" style="margin-top:10px" onclick="S.settings.retakeFee=+half($(\'rtF\').value).replace(/[^\\d]/g,\'\')||0;save();toast(\'已儲存\')">儲存場地費</button></div>'); };
+
 /* 啟動：先顯示載入中，有通行證就讀資料庫 */
 reload();
 
