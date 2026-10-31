@@ -460,6 +460,35 @@ details.cust summary::-webkit-details-marker{display:none}
 .ann-txt{margin-top:8px;padding:10px 12px;border-radius:12px;background:#fbf4e3;font-size:14px;line-height:1.7}
 .go-fill{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:56px;margin:16px 0 4px;border-radius:16px;border:0;font-family:inherit;font-size:17px;font-weight:700;letter-spacing:.06em;color:#f3dfa6;background:linear-gradient(180deg,#2a4b72,#16314f);box-shadow:0 12px 24px -12px rgba(13,29,48,.7)}
 .go-fill svg{width:18px;height:18px}
+.vs{margin-top:4px;font-size:14px;color:#c9d6e8}.vs b.up{color:#9fe0b5}.vs b.dn{color:#f3a99c}
+.gbar{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(233,214,160,.28)}
+.gtop{display:flex;justify-content:space-between;font-size:13px;color:#c9d6e8}.gtop b{color:#f3d98e}.gbar small{font-size:12px;color:#8fa3bf}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);margin-top:14px;border-top:1px solid rgba(233,214,160,.28);padding-top:12px}
+.tri>div{text-align:center}.tri>div+div{border-left:1px solid rgba(233,214,160,.28)}
+.tri b{display:block;font-size:24px;color:#fff}.tri b small{font-size:13px;color:#b8c7dc;margin-left:2px}.tri span{font-size:12px;color:#b8c7dc}
+.comp{display:flex;align-items:center;gap:16px}.donut{width:128px;height:128px;flex:none}
+.comp ul{list-style:none;margin:0;padding:0;flex:1;min-width:0}.comp li{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:14px}
+.comp li i{width:12px;height:12px;border-radius:3px;flex:none}.comp li span{flex:1}.comp li b{white-space:nowrap}
+.care{border-top:1px solid var(--line)}.care:first-of-type{border-top:0}
+.care summary{list-style:none;display:flex;align-items:center;gap:10px;min-height:48px;cursor:pointer}.care summary::-webkit-details-marker{display:none}
+.care summary b{flex:1;font-size:15px}.care summary i{font-style:normal;font-family:var(--num);font-weight:700;min-width:28px;text-align:center;padding:2px 8px;border-radius:999px;background:#f6ead0;color:#7d5f26}
+.care summary i.hot{background:#fbe9e5;color:#a8473b}.care summary svg{width:16px;height:16px;color:var(--gold-d)}.care[open] summary svg{transform:rotate(180deg)}
+.cr{display:flex;justify-content:space-between;gap:10px;padding:7px 10px;margin-bottom:6px;border-radius:10px;background:#fbf4e3;font-size:14px}.cr span{color:var(--sub);text-align:right}.cr span b{color:#a8473b}
+.talk{margin:8px 0 12px;padding:10px 12px;border-radius:12px;border:1px dashed #d8c08a}.talk span{font-size:12px;color:var(--gold-d);font-weight:700}
+.talk p{margin:4px 0 8px;font-size:14px;line-height:1.6}.cp{height:36px;padding:0 14px;border-radius:10px;border:1px solid #e3cd98;background:#fffaf0;color:#6b5530;font-family:inherit;font-size:13px}
+.rk{border-top:1px solid var(--line)}.rk:first-of-type{border-top:0}.rk summary{list-style:none;display:flex;align-items:center;gap:10px;padding:9px 0;cursor:pointer}.rk summary::-webkit-details-marker{display:none}
+.rk .no{width:24px;font-family:var(--num);font-weight:700;color:var(--gold-d);text-align:center;flex:none}.rk .mid{flex:1;min-width:0}
+.rk .t{display:flex;justify-content:space-between;gap:8px}.rk .t b{font-size:15px}.rk .bar{height:6px;border-radius:6px;background:#f1e7d0;margin-top:6px;overflow:hidden}
+.rk .bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#c99b45,#e8cf8a)}
+.rk-d{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 10px 34px}.rk-d div{padding:6px 8px;border-radius:10px;background:#fbf4e3}
+.rk-d span{display:block;font-size:11px;color:var(--sub);white-space:nowrap}.rk-d b{font-size:14px;white-space:nowrap}.rk-d em{display:block;font-style:normal;font-size:11px}.rk-d em.up{color:#2f7d4f}.rk-d em.dn{color:#a8473b}
+.more-btn{width:100%;height:42px;margin-top:8px;border-radius:12px;border:1px solid #e3cd98;background:#fffaf0;color:#6b5530;font-family:inherit;font-size:14px}
+.trend{width:100%;height:auto}.trend .tv{font-size:11px;fill:#5d4a26;font-family:var(--num)}.trend .tm{font-size:12px;fill:#8a7650}
+.fold summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer}.fold summary::-webkit-details-marker{display:none}
+.fold summary h2{margin:0;font-family:var(--serif);font-size:18px;flex:1}.fold summary small{color:var(--sub)}.fold summary svg{width:18px;height:18px;color:var(--gold-d)}.fold[open] summary{margin-bottom:10px}.fold[open] summary svg{transform:rotate(180deg)}
+.tm2{padding:10px 0;border-top:1px solid var(--line)}.tm2 .t{display:flex;justify-content:space-between;margin-bottom:6px}
+.ord-r{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}.ord-r b{font-family:var(--num);white-space:nowrap;min-width:3.4em}
+@media (max-width:380px){.rk-d{grid-template-columns:repeat(2,1fr);margin-left:0}.comp{flex-direction:column;align-items:stretch}.donut{margin:0 auto}}
 </style>
 </head>
 <body>
@@ -546,7 +575,7 @@ function renderLogin(msg){
     ${whenHTML()}
     <div class="login-head">
       <div class="org">靈應壇 × 神奇身心靈學苑</div>
-      <h1 class="foil">業績總覽</h1>
+      <h1 class="foil">${VIEW==='dash'?'老師儀表台':'業績總覽'}</h1>
       <div class="rule"><i></i></div>
     </div>
     <form class="pane" id="lf" autocomplete="off" novalidate>
@@ -899,6 +928,7 @@ function allView(d){
 }
 function render(){
   if(!S.token){renderLogin();return;}
+  if(VIEW==='dash'){renderDash();return;}
   const d=S.tab==='all'?S.all:S.me;
   let inner=S.tab==='cust'?custView():S.tab==='info'?infoView():S.tab==='fill'?fillView():d?(S.tab==='all'?allView(d):S.tab==='rank'?rankView(d):monthView(d)):(S.net?`<section class="pane"><div class="empty"><b>目前無法取得業績</b>請檢查網路後按「重試」。</div></section>`:skeleton());
   $('#root').innerHTML=shell(inner);
@@ -926,7 +956,7 @@ function lcGet(k){try{const o=JSON.parse(localStorage.getItem(lcKey())||'{}');re
 function lcPut(k,v){try{const o=JSON.parse(localStorage.getItem(lcKey())||'{}');o[k]=v;localStorage.setItem(lcKey(),JSON.stringify(o));}catch(e){}}
 function lcClear(){try{Object.keys(localStorage).filter(k=>k.indexOf('perfc_')===0).forEach(k=>localStorage.removeItem(k));}catch(e){}}
 async function load(clear){
-  if(!S.token)return;const id=++S.req;
+  if(!S.token)return;if(VIEW==='dash'){return loadDash(clear);}const id=++S.req;
   const tab=S.tab,month=S.month;
   if(clear){S.net=false;
     if(tab==='all'){if(!S.all)S.all=lcGet('all_'+month)||null;}else if(!S.me){S.me=lcGet('me_'+month)||null;}
@@ -973,6 +1003,11 @@ async function demo(b){
   if(b.action==='perfLogin'){if(!DCUM[b.name])return{ok:false,err:'帳號或密碼不對'};const t='d'+Date.now();DSESS[t]={name:b.name,role:b.name==='蕭竣方'?'管理':'老師'};return{ok:true,token:t,name:b.name,role:DSESS[t].role};}
   if(b.action==='perfLogout'){delete DSESS[b.token];return{ok:true};}
   const s=DSESS[b.token];if(!s)return{ok:false,relogin:true};
+  if(b.action==='perfDash'){if(s.role!=='管理')return{ok:false,error:'沒有權限'};const pm=shift(b.month,-1);
+    const rows=Object.keys(DCUM).map((n,i)=>{const a=(i%6===5)?0:dAmt(n,b.month);const w=[.3,.25,.2,.15,.1],ks=['補財','還陰債','年斗','祭改','普桌'],pr=[3000,6000,10000,3000,2000];
+      return {name:n,cum:DCUM[n],sp:DSP[n]||'',goal:300000,amount:a,prev:Math.round(dAmt(n,pm)*(1+((i*7)%5-2)/10)),items:a?ks.map((k,j)=>({k,n:Math.max(1,Math.round(a*w[j]/pr[j])),a:Math.round(a*w[j])})):[]};});
+    const trend=[];for(let i=5;i>=0;i--){const m=shift(b.month,-i);trend.push({m,total:Object.keys(DCUM).reduce((t,n)=>t+dAmt(n,m)*(1-i*.04),0)});}
+    return {ok:true,month:b.month,rows,trend,serverTime:now};}
   if(b.action==='perfMe'){const a=dAmt(s.name,b.month);const w=[.3,.25,.2,.15,.1],ks=['補財','還陰債','年斗','祭改','普桌'],pr=[3000,6000,10000,3000,2000];
     const items=a?ks.map((k,i)=>({k,n:Math.max(1,Math.round(a*w[i]/pr[i])),a:Math.round(a*w[i])})):[];
     const down=[];(function walk(n){Object.keys(DSP).forEach(c=>{if(DSP[c]===n&&!down.find(x=>x.name===c)){down.push({name:c,rank:dRank(c),amount:dAmt(c,b.month)});walk(c);}});})(s.name);
@@ -1034,6 +1069,120 @@ function rite(){const d=document.createElement('div');d.className='rite';d.inner
     const al=.35+.35*Math.sin(p.a),x=(p.x+Math.sin(p.a*.3)*.01)*W,y=p.y*H,r=p.r*devicePixelRatio;
     const gr=g.createRadialGradient(x,y,0,x,y,r*4);gr.addColorStop(0,`rgba(255,240,190,${al})`);gr.addColorStop(.4,`rgba(214,172,82,${al*.6})`);gr.addColorStop(1,'rgba(214,172,82,0)');
     g.fillStyle=gr;g.beginPath();g.arc(x,y,r*4,0,6.29);g.fill();});requestAnimationFrame(f);})();})();
+
+/* ====================== 老師儀表台（?view=dash，管理身分＋股東） ====================== */
+const VIEW=new URLSearchParams(location.search).get('view')||'';
+const DOU_KEYS=['年斗','季斗','五行年斗','五行季斗','令牌'];
+function dashData(){return S.dash&&S.dash[S.month];}
+function nextRank(cum){const i=rankOf('',cum);for(let k=i+1;k<RANKS.length;k++){if(!RANKS[k].need)return {r:RANKS[k],gap:RANKS[k].th-cum};}return null;}
+function fahuiN(items){return (items||[]).filter(x=>DOU_KEYS.indexOf(x.k)<0).reduce((s,x)=>s+(+x.n||0),0);}
+function douN(items){return (items||[]).filter(x=>DOU_KEYS.indexOf(x.k)>=0).reduce((s,x)=>s+(+x.n||0),0);}
+function nextOrderDays(){const ev=(S.cfg&&S.cfg.events)||[],t=new Date();t.setHours(0,0,0,0);
+  const o=ev.filter(e=>e.type==='order'&&e.date&&new Date(e.date+'T23:59:59')>=t).sort((a,b)=>a.date<b.date?-1:1)[0];
+  if(!o)return null;return {d:Math.round((new Date(o.date+'T00:00:00')-t)/864e5),date:o.date};}
+function pct(a,b){return b?Math.round((a-b)/b*100):null;}
+function copyTxt(t){try{navigator.clipboard.writeText(t);toast('已複製，貼到 LINE 就能傳');}catch(e){toast('複製失敗，請長按文字複製');}}
+function donut(parts){const tot=parts.reduce((s,p)=>s+p.v,0)||1;let a=-Math.PI/2,out='';const R=54,r=34,cx=64,cy=64;
+  parts.forEach(p=>{if(!p.v)return;const b=a+p.v/tot*Math.PI*2,lg=(b-a)>Math.PI?1:0;
+    const P=(ang,rr)=>[cx+rr*Math.cos(ang),cy+rr*Math.sin(ang)];const [x1,y1]=P(a,R),[x2,y2]=P(b,R),[x3,y3]=P(b,r),[x4,y4]=P(a,r);
+    out+= (p.v>=tot-0.5)?`<circle cx="${cx}" cy="${cy}" r="${(R+r)/2}" fill="none" stroke="${p.c}" stroke-width="${R-r}"/>`
+      :`<path d="M${x1} ${y1}A${R} ${R} 0 ${lg} 1 ${x2} ${y2}L${x3} ${y3}A${r} ${r} 0 ${lg} 0 ${x4} ${y4}Z" fill="${p.c}"/>`;a=b;});
+  return `<svg viewBox="0 0 128 128" class="donut">${out||`<circle cx="64" cy="64" r="44" fill="none" stroke="#eee3c8" stroke-width="20"/>`}</svg>`;}
+function trendSvg(tr){const max=Math.max(1,...tr.map(x=>x.total)),W=320,H=150,bw=W/tr.length;
+  return `<svg viewBox="0 0 ${W} ${H+34}" class="trend">${tr.map((x,i)=>{const h=Math.max(2,x.total/max*(H-22)),X=i*bw+bw*.2,cur=i===tr.length-1;
+    return `<rect x="${X}" y="${H-h}" width="${bw*.6}" height="${h}" rx="6" fill="${cur?'#16314f':'#d8c08a'}"/>
+    <text x="${X+bw*.3}" y="${H-h-6}" text-anchor="middle" class="tv">${wan(x.total)}</text>
+    <text x="${X+bw*.3}" y="${H+20}" text-anchor="middle" class="tm">${+x.m.split('.')[1]}月</text>`;}).join('')}</svg>`;}
+function dashView(){
+  const d=dashData();
+  if(!d)return monthBar()+`<div class="sk" style="height:260px"></div><div class="sk gap" style="height:200px"></div><p class="muted" style="text-align:center">第一次打開要算全公司資料，請稍等…</p>`;
+  const rows=d.rows||[],tot=rows.reduce((s,r)=>s+(+r.amount||0),0),prevTot=rows.reduce((s,r)=>s+(+r.prev||0),0);
+  const goal=rows.reduce((s,r)=>s+(+r.goal||0),0),active=rows.filter(r=>+r.amount>0).length;
+  const fa=rows.reduce((s,r)=>s+fahuiN(r.items),0),cur=S.month>=nowMonth(),od=cur?nextOrderDays():null,p=pct(tot,prevTot);
+  // 組成
+  let fAmt=0,dAmt2=0;rows.forEach(r=>(r.items||[]).forEach(x=>{if(DOU_KEYS.indexOf(x.k)>=0)dAmt2+=+x.a||0;else fAmt+=+x.a||0;}));
+  const parts=[{k:'法會',v:fAmt,c:'#16314f'},{k:'斗燈',v:dAmt2,c:'#c99b45'},{k:'課程',v:0,c:'#2f7d6f'},{k:'商品',v:0,c:'#a8473b'}];
+  // 需要關心
+  const ordTxt=od?`${+od.date.split('-')[1]}/${+od.date.split('-')[2]}`:'這次';
+  const none=rows.filter(r=>!(+r.amount)&&((+r.prev)||(+r.cum))).sort((a,b)=>(+b.prev||0)-(+a.prev||0));
+  const near=rows.map(r=>({r,n:nextRank(+r.cum||0)})).filter(x=>x.n&&x.n.gap>0&&x.n.gap<=200000).sort((a,b)=>a.n.gap-b.n.gap);
+  const drop=rows.filter(r=>(+r.prev)>0&&(+r.amount)<(+r.prev)).map(r=>({r,dv:(+r.prev)-(+r.amount)})).sort((a,b)=>b.dv-a.dv).slice(0,3);
+  const pend=S.dpend;
+  const careBox=(title,cnt,body,talk)=>`<details class="care"><summary><b>${title}</b><i class="${cnt?'hot':''}">${cnt}</i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>${body}${talk?`<div class="talk"><span>建議這樣說</span><p>${esc(talk)}</p><button class="cp" data-cp="${esc(talk)}">複製話術</button></div>`:''}</details>`;
+  const chip=(n,s)=>`<div class="cr"><b>${esc(n)}</b><span>${s}</span></div>`;
+  const care=[
+    careBox('本月還沒出單',none.length,none.length?none.map(r=>chip(r.name,r.prev?`上月 ${money(r.prev)}`:'')).join(''):'<div class="empty">大家這個月都有出單</div>',
+      `最近客人狀況還好嗎？這個月法會${ordTxt}截止，有需要我幫忙一起想想可以約哪些客人，隨時跟我說喔！`),
+    careBox('快升階',near.length,near.length?near.map(x=>chip(x.r.name,`差 <b>${money(x.n.gap)}</b> 升${x.n.r.k}`)).join(''):'<div class="empty">目前沒有接近升階的老師</div>',
+      near[0]?`跟你說個好消息，你只差 ${money(near[0].n.gap)} 就升${near[0].n.r.k}了！這個月衝一下就到，有需要幫忙的地方跟我說。`:''),
+    careBox('夥伴申請沒審核',pend&&pend.ok?pend.list.length:'—',pend&&pend.ok?(pend.list.length?pend.list.map(x=>chip(x.name,`<b>${x.total}</b> 筆待審核`)).join(''):'<div class="empty">都審完了</div>'):'<div class="empty">在這支手機用管理員帳號登入積點系統一次，就會顯示</div>',
+      `提醒一下，積點系統有夥伴的申請在等你審核，有空的時候點進去看一下喔，他們會比較安心。`),
+    careBox('比上月掉最多',drop.length,drop.length?drop.map(x=>chip(x.r.name,`少了 <b>${money(x.dv)}</b>（上月 ${money(x.r.prev)}）`)).join(''):'<div class="empty">沒有老師比上月少</div>',
+      `這個月比較忙嗎？上個月你做得很好，這個月如果有卡住的地方，我們一起看看怎麼幫你。`)
+  ].join('');
+  // 排行
+  const rk=rows.slice().sort((a,b)=>(+b.amount||0)-(+a.amount||0)),mx=Math.max(1,...rk.map(r=>+r.amount||0));
+  const showAll=S.dAll;
+  const rankRow=(r,i)=>{const ri=rankOf('',+r.cum||0),R=RANKS[ri],pp=pct(+r.amount||0,+r.prev||0);
+    return `<details class="rk"><summary><span class="no">${i+1}</span><div class="mid"><div class="t"><b>${esc(r.name)}</b><span class="num">${money(r.amount)}</span></div><div class="bar"><i style="width:${((+r.amount||0)/mx*100).toFixed(1)}%"></i></div></div></summary>
+    <div class="rk-d"><div><span>上月</span><b>${money(r.prev)}</b>${pp!==null?`<em class="${pp<0?'dn':'up'}">${pp>0?'+':''}${pp}%</em>`:''}</div><div><span>品階</span><b style="color:${R.dark}">${R.k}</b></div><div><span>法會份數</span><b>${fahuiN(r.items)}</b></div><div><span>斗燈份數</span><b>${douN(r.items)}</b></div></div></details>`;};
+  // 團隊
+  const names=rows.map(r=>r.name),byN={};rows.forEach(r=>byN[r.name]=r);
+  const roots=rows.filter(r=>!r.sp||names.indexOf(r.sp)<0);
+  const sub=n=>{const out=[];(function w(x){rows.forEach(r=>{if(r.sp===x&&out.indexOf(r)<0){out.push(r);w(r.name);}});})(n);return out;};
+  const teams=roots.map(r=>({r,m:sub(r.name)})).filter(t=>t.m.length).map(t=>({...t,sum:(+t.r.amount||0)+t.m.reduce((s,x)=>s+(+x.amount||0),0)})).sort((a,b)=>b.sum-a.sum);
+  // 課程
+  const ym=S.month.replace('.','-');
+  const courses=((S.cfg&&S.cfg.events)||[]).filter(e=>e.type==='course'&&(e.date||'').slice(0,7)===ym).sort((a,b)=>a.date<b.date?-1:1);
+  return `${monthBar()}
+  <section class="pane ink">
+    <div class="kpi-lab">${cur?'本月':S.month+' '}全公司業績</div>
+    <div class="kpi num"><small>NT$</small><span>${money(tot)}</span></div>
+    <div class="vs">${p===null?'上月沒有資料':`比上月 <b class="${p<0?'dn':'up'}">${p>0?'▲ +':p<0?'▼ ':''}${p}%</b>（上月 ${money(prevTot)}）`}</div>
+    ${goal?`<div class="gbar"><div class="gtop"><span>目標進度</span><b>${Math.round(tot/goal*100)}%</b></div><div class="th-bar" style="margin:8px 0 4px"><i style="width:${Math.min(100,tot/goal*100).toFixed(1)}%"></i></div><small>目標 ${money(goal)}（各老師目標加總）</small></div>`:''}
+    <div class="tri"><div><b class="num">${active}<small>/${rows.length}</small></b><span>有出單老師</span></div><div><b class="num">${fa}</b><span>法會份數</span></div><div><b class="num">${od?od.d:'—'}${od?'<small>天</small>':''}</b><span>距出單截止</span></div></div>
+  </section>
+  <section class="pane"><div class="pane-h"><h2>業績組成</h2></div>
+    <div class="comp">${donut(parts)}<ul>${parts.map(x=>`<li><i style="background:${x.c}"></i><span>${x.k}</span><b class="num">${x.v?money(x.v):'—'}</b></li>`).join('')}</ul></div>
+    <p class="muted" style="margin:8px 0 0">課程、商品等學員系統和商品結帳接上後會自動帶入</p></section>
+  <section class="pane"><div class="pane-h"><h2>需要關心的老師</h2></div>${care}</section>
+  <section class="pane"><div class="pane-h"><h2>老師排行</h2><small>點名字看細節</small></div>
+    ${rk.slice(0,showAll?rk.length:5).map(rankRow).join('')}
+    ${rk.length>5?`<button class="more-btn" id="dAll">${showAll?'收起':'展開全部 '+rk.length+' 位'}</button>`:''}</section>
+  <section class="pane"><div class="pane-h"><h2>每月走勢</h2><small>近 6 個月</small></div>${trendSvg(d.trend||[])}</section>
+  <details class="pane fold"><summary><h2>團隊</h2><small>${teams.length} 組</small><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    ${teams.map(t=>`<div class="tm2"><div class="t"><b>${esc(t.r.name)} 團隊</b><span class="num">${money(t.sum)}</span></div><div class="pills">${[t.r].concat(t.m).map(x=>`<span class="cpill">${esc(x.name)} ${wan(x.amount)}</span>`).join('')}</div></div>`).join('')||'<div class="empty">還沒有團隊資料</div>'}</details>
+  <details class="pane fold"><summary><h2>課程</h2><small>${courses.length} 堂</small><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    ${courses.map(e=>`<div class="ord-r"><b>${+e.date.split('-')[1]}/${+e.date.split('-')[2]}</b><span>${esc(e.title||'課程')}${e.time?'・'+esc(e.time):''}${e.note?'<br><small class="muted">'+esc(e.note)+'</small>':''}</span></div>`).join('')||'<div class="empty">這個月行事曆沒有課程</div>'}
+    <p class="muted" style="margin:8px 0 0">報名人數等學員系統接上後會顯示在這裡</p></details>`;}
+function dashShell(inner){return `<div class="app fade">
+  <header class="top"><div class="who">${crest()}<div><b>老師儀表台</b><span class="greet"><em class="gname" style="--gc:#3f2c0d">${esc(S.name)}</em><span class="ghi">您好</span></span></div></div>
+  <div class="hdate">${hdateHTML()}</div><button class="ghost" id="out">登出</button></header>
+  ${S.net?`<div class="net">${IC.alert}<span>網路不通，資料可能不是最新的</span><button id="retry">重試</button></div>`:''}
+  ${inner}<p class="foot"><a href="./" style="color:inherit">回業績總覽</a></p></div>`;}
+function renderDash(){
+  const inner=S.dashDeny?`<section class="pane"><div class="empty"><b>這一頁只有管理身分能看</b>請用管理帳號登入，或回業績總覽。</div></section>`:dashView();
+  $('#root').innerHTML=dashShell(inner);
+  $('#out').onclick=logout;
+  const pm=$('#pm'),nm=$('#nm');
+  if(pm)pm.onclick=()=>{S.month=shift(S.month,-1);load(true);};
+  if(nm)nm.onclick=()=>{if(S.month>=nowMonth())return;S.month=shift(S.month,1);load(true);};
+  const rt=$('#retry');if(rt)rt.onclick=()=>load(false);
+  const da=$('#dAll');if(da)da.onclick=()=>{S.dAll=!S.dAll;renderDash();};
+  document.querySelectorAll('[data-cp]').forEach(b=>b.onclick=e=>{e.preventDefault();copyTxt(b.dataset.cp);});
+}
+async function loadDash(clear){
+  const id=++S.req,month=S.month;S.dash=S.dash||{};
+  if(clear){S.net=false;if(!S.dash[month])S.dash[month]=lcGet('dash_'+month)||null;renderDash();}
+  loadCfg();
+  if(!S.dpend){const go=()=>window.MiiragicPending&&MiiragicPending.byReferrer().then(r=>{S.dpend=r||{};renderDash();}).catch(()=>{});
+    if(window.MiiragicPending)go();else{const sc=document.createElement('script');sc.src='https://kevin87265-pixel.github.io/portal/pending.js';sc.onload=go;document.head.appendChild(sc);}}
+  try{const r=await api({action:'perfDash',token:S.token,month});
+    if(id!==S.req)return;if(r&&r.relogin){expire();return;}
+    if(r&&r.ok===false&&/權限/.test(r.error||'')){S.dashDeny=true;renderDash();return;}
+    if(!r||!r.ok)throw 0;S.dashDeny=false;S.dash[month]=r;lcPut('dash_'+month,r);S.net=false;renderDash();
+  }catch(e){if(id!==S.req)return;S.net=true;renderDash();}
+}
 
 /* ====== 啟動 ====== */
 applyTerm();
