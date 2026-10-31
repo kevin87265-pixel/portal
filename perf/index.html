@@ -851,19 +851,19 @@ function rankView(d){
     <div class="kpi num foil"><small>NT$</small><span data-n="${+d.team||0}">${money(d.team)}</span></div>
     <div class="duo">
       <div><div class="k">我自己</div><div class="v num">${money(d.mine&&d.mine.amount)}</div><div class="h">${core?'核心池 1%':`級距 ${me.p}%・獎金 ${money(me.bonus)}`}</div></div>
-      <div><div class="k">下線合計</div><div class="v num">${money((+d.team||0)-(+(d.mine&&d.mine.amount)||0))}</div><div class="h">${down.length} 位</div></div>
+      <div><div class="k">團隊夥伴合計</div><div class="v num">${money((+d.team||0)-(+(d.mine&&d.mine.amount)||0))}</div><div class="h">${down.length} 位</div></div>
     </div>
     ${down.length&&!core?(()=>{const mine=+(d.mine&&d.mine.amount)||0,dsum=(+d.team||0)-mine,lv=STEPS.filter(x=>mine>=x.t).length,tp=TEAMP[lv],rp=RANKP[i],tb=Math.round(dsum*tp/100*rp/100),nx=STEPS[lv];
       const nb=nx?Math.round(dsum*TEAMP[lv+1]/100*rp/100):0;
       return `<div class="th"><div class="th-top"><span>團隊獎金（試算）</span><span class="th-now">NT$ ${money(tb)}</span></div>
-        <div class="th-msg" style="font-size:13px;color:#c9d6e8">下線合計 ${money(dsum)} × 團隊抽成 ${tp}% × 聘階 ${rp}%</div>
+        <div class="th-msg" style="font-size:13px;color:#c9d6e8">夥伴合計 ${money(dsum)} × 團隊抽成 ${tp}% × 聘階 ${rp}%</div>
         ${nx?`<div class="th-msg" style="margin-top:6px">自己再做 <b>NT$ ${money(nx.t-mine)}</b> 到 ${nx.t/10000} 萬，團隊抽成升到 ${TEAMP[lv+1]}%，團隊獎金變 <b>NT$ ${money(nb)}</b>（多 ${money(nb-tb)}）</div>`:`<div class="th-msg" style="margin-top:6px">已是最高團隊抽成 5%</div>`}
       </div>`;})():''}
     ${down.length?`<div class="th"><div class="th-msg">${near?`有 <b>${near}</b> 位夥伴離下一級不到 6 萬，推一把就上去`:'推動夥伴升級距，他們拿得多、團隊也長大'}${extra?`；全部夥伴都升一級，合計可多領 <b>NT$ ${money(extra)}</b>`:''}</div></div>`:''}
   </section>
   <section class="pane">
-    <div class="pane-h"><h2>我的下線</h2><small>${down.length} 位・依業績</small></div>
-    ${down.length?down.sort((a,b)=>(+b.amount||0)-(+a.amount||0)).map(card).join(''):'<div class="empty"><b>目前還沒有下線</b>帶出第一位夥伴，一起往上走。</div>'}
+    <div class="pane-h"><h2>我的團隊夥伴</h2><small>${down.length} 位・依業績</small></div>
+    ${down.length?down.sort((a,b)=>(+b.amount||0)-(+a.amount||0)).map(card).join(''):'<div class="empty"><b>目前還沒有團隊夥伴</b>帶出第一位夥伴，一起往上走。</div>'}
   </section>
   <div class="gap">${cardHTML(d)}</div>
   <p class="motto-line" style="text-align:center;font-family:var(--serif);color:var(--gold-d);letter-spacing:.14em;font-size:14px;margin:12px 0 16px;text-wrap:balance">「${r.motto}」</p>`;
