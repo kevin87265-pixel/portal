@@ -840,7 +840,7 @@ function adminChart(a){
 }
 function printChart(){ try{ var w=$('chartFrame').contentWindow; w.focus(); w.print(); }catch(e){ toast('這個預覽環境不能列印，搬到正式網址後就可以'); } }
 function actText(s){ var ct=S.settings.company;
-  return '【'+ct.name+'｜學員專區開通】\n'+s.name+' 您好，您的學員帳號已開通。\n帳號：'+s.acct+'\n預設密碼：12345（第一次登入會請您設定自己的密碼）\n網址：https://kevin87265-pixel.github.io/portal/student/\n（積點系統也是用這組帳號密碼）\n\n登入後請先到「我的」填寫基本資料（含生日），系統會自動排出您的八字命盤。\n有問題請洽學苑 LINE：'+ct.line+(ct.lineUrl?' '+ct.lineUrl:''); }
+  return '【'+ct.name+'｜學員專區開通】\n'+s.name+' 您好，您的學員帳號已開通。\n帳號：'+s.acct+'\n預設密碼：12345（第一次登入會請您設定自己的密碼）\n網址：tinyurl.com/miiragic-learn\n（積點系統也是用這組帳號密碼）\n\n登入後請先到「我的」填寫基本資料（含生日），系統會自動排出您的八字命盤。\n有問題請洽學苑 LINE：'+ct.line+(ct.lineUrl?' '+ct.lineUrl:''); }
 function copyAct(a){ var s=stuOf(a); sheet('<h2>開通通知</h2><p class="muted">複製後貼給學員的 LINE。</p><div class="copybox" id="ntxt">'+esc(actText(s))+'</div><button class="btn block" onclick="copyTxt()">複製</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
 function aManual(){
   var step=function(n,who,t,body){ return '<div class="card"><div class="row"><span class="chip c-blue">第 '+n+' 步</span><span class="chip c-gray">'+who+'</span></div><h3 style="margin:8px 0 4px">'+t+'</h3>'+body+'</div>'; };
@@ -2117,6 +2117,15 @@ var _dr0=doRedeem; doRedeem=function(id){ if(!DEMO) return _dr0(id);
   award(S.me,'od:'+oid,-it.coins,0,'兌換 '+it.name); closeSheet(); SHOP_SUB='orders'; render(); toast('兌換成功（示範）'); };
 var _head0=head; head=function(){ return (DEMO?'<div class="demo-bar">示範帳號・資料不會存・簽到碼 1234</div>':'')+_head0(); };
 
+
+/* 開通通知：開通後自動跳出，行政按「複製」貼給學員 LINE */
+function actText(s){ var ct=S.settings.company, pp=prepaidOf(s.acct).map(function(e){return course(e.course).name;});
+  return '【'+ct.name+'｜學員專區開通】\n'+s.name+' 您好，歡迎加入學苑！您的學員帳號已經開通了 🎉\n\n'+
+    '🔗 網址：tinyurl.com/miiragic-learn\n👤 帳號：'+s.acct+'\n🔑 密碼：12345\n\n'+
+    '📌 第一次登入：\n1. 建議改成自己的密碼（也可以先不改）\n2. 到「我的」填姓名、生日，系統會自動排出您的八字命盤\n'+
+    (pp.length?'3. 您已繳費的課程：'+pp.join('、')+'\n　 不用再付款，首頁直接「選這天」就好\n':'3. 到「課表」選日期報名\n')+
+    '\n上課當天到教室後，在「我的課」按「我到了，簽到」，輸入教室公布的簽到碼就完成，還會拿到小金幣可以換禮物 🎁\n\n'+
+    '積點系統也是用同一組帳號密碼。有問題直接回覆這裡，或私訊學苑官方 LINE：'+(ct.lineUrl||ct.line); }
 var _ca0=copyAct; copyAct=function(a){ if(!stuOf(a)) return; _ca0(a); };
 /* 啟動：先顯示載入中，有通行證就讀資料庫 */
 reload();
