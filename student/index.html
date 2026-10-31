@@ -2139,6 +2139,7 @@ var _vme1=viewMe; viewMe=function(){ _vme1(); if(ME_SUB==='info'&&meStu()&&meStu
 var DEMO=false;
 function demoStart(){
   DEMO=true; var d=seed(); ['students','enroll','orders','ledger','courses','news','shop','online'].forEach(function(k){ S[k]=d[k]; });
+  S.shop=S.shop.concat(themeItems());
   S.news=BASE.news.concat(d.news.filter(function(x){return x.id!=='n1';}));
   S.courses.forEach(function(c){ c.sessions.forEach(function(x){ if(x.note==='試用示範場次') x.note='學苑教室'; }); });
   if(typeof PORTAL_SNAP!=='undefined') _syncPortal0(PORTAL_SNAP,'快照'); if(PORTAL_LIVE) _syncPortal0(PORTAL_LIVE,'即時');
