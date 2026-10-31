@@ -129,9 +129,10 @@ textarea.t{min-height:100px}
 body.t-jade{--pri:#24804a;--pri2:#33995c;--pri-soft:#e6f4ec;--bg:#f2f7f4;--line:#d9e9df;--ink:#16261d;--quiet:#5f7268;--acc:#c6a15b;--acc-soft:#fbf6ea;--accd:#9a7631}
 body.t-red{--pri:#b23a3a;--pri2:#c95454;--pri-soft:#f9e9e8;--bg:#faf4f3;--line:#efdcda;--ink:#2a1716;--quiet:#77605e;--acc:#c6a15b;--acc-soft:#fbf6ea;--accd:#9a7631}
 body.t-amber{--pri:#b8860b;--pri2:#cc9a1f;--pri-soft:#faf0de;--bg:#fbf7ef;--line:#efe3cb;--ink:#2b210f;--quiet:#76694f;--acc:#b23a3a;--acc-soft:#f9e9e8;--accd:#8c2c2c}
-body.t-gold{--pri:#a8842c;--pri2:#bf9a3c;--pri-soft:#f6efdd;--bg:#faf8f2;--line:#ece4d0;--ink:#2a2416;--quiet:#73694f;--acc:#8a6d2f;--acc-soft:#f6efdd;--accd:#6d5422}
+body.t-gold{--pri:#c99a12;--pri2:#ddb12a;--pri-soft:#fbf3d9;--bg:#faf8f2;--line:#ece4d0;--ink:#2a2416;--quiet:#73694f;--acc:#8a6d2f;--acc-soft:#f6efdd;--accd:#6d5422}
+body.t-rose{--pri:#c27c88;--pri2:#d4959f;--pri-soft:#f9eef0;--bg:#fbf6f7;--line:#f0e1e4;--ink:#2e1d21;--quiet:#7a6669;--acc:#c6a15b;--acc-soft:#fbf6ea;--accd:#9a7631}
 body.t-ink{--pri:#22303f;--pri2:#3a4b5e;--pri-soft:#e8ecf1;--bg:#f4f5f7;--line:#dfe3e9;--ink:#141b24;--quiet:#626b77;--acc:#c6a15b;--acc-soft:#fbf6ea;--accd:#9a7631}
-.sw-jade i{background:#24804a}.sw-red i{background:#b23a3a}.sw-amber i{background:#b8860b}.sw-gold i{background:#a8842c}.sw-ink i{background:#22303f}
+.sw-jade i{background:#24804a}.sw-red i{background:#b23a3a}.sw-amber i{background:#b8860b}.sw-gold i{background:linear-gradient(135deg,#f3d26b,#c99a12)}.sw-ink i{background:#22303f}.sw-rose i{background:#c27c88}
 .sw span{text-align:center;font-size:13px;line-height:1.3}
 .sw span em{display:block;font-style:normal;font-size:11px;color:var(--quiet)}
 .sw.lock i{position:relative}.sw.lock i::after{content:"🔒";position:absolute;right:-6px;bottom:-4px;font-size:14px;background:#fff;border-radius:50%;width:20px;height:20px;line-height:20px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.2)}
@@ -2429,7 +2430,7 @@ viewMe=function(){
 };
 
 /* ---------- 幸運色主題：海軍藍／墨綠／霧紫免費，五行幸運色到商城用小金幣換（2026-10-31） ---------- */
-var LUCKY=[['jade','翠綠','木','#24804a'],['red','朱紅','火','#b23a3a'],['amber','土黃','土','#b8860b'],['gold','金色','金','#a8842c'],['ink','墨黑','水','#22303f']];
+var LUCKY=[['jade','翠綠','木','#24804a'],['red','朱紅','火','#b23a3a'],['amber','土黃','土','#b8860b'],['gold','黃金色','金','#c99a12'],['ink','墨黑','水','#22303f'],['rose','霧玫粉','火','#c27c88']];
 LUCKY.forEach(function(x){ THEMES.push([x[0],x[1]+'・'+x[2]]); });
 var FREE_THEMES=['blue','green','purple'];
 function themeItems(){ return LUCKY.map(function(x){ return {id:'th-'+x[0],name:x[1]+'幸運色',coins:30,stock:999,desc:'五行屬'+x[2]+'的幸運色。兌換後整個學員專區換成'+x[1]+'，到「我的 → 資料與顏色」可以隨時切換。',pickup:'自動發放',minLv:1,icon:'🎨',on:true,theme:x[0]}; }); }
