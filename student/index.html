@@ -2384,7 +2384,7 @@ function tarotNums(y,m,d){
 function tarotCard(p){
   var s=solarOf(p); if(!s) return '<div class="card soft">生日資料不完整，請到「資料與顏色」補上生日。</div>';
   var r=tarotNums(+s.y,+s.m,+s.d), row=function(no,t,n,how){ return '<div class="tn-row"><span class="tn-no">'+no+'</span><div class="tn-main"><div class="tn-t">'+t+'</div><div class="tn-n"><b>'+n+'</b>　'+TAROT[n]+'</div><div class="muted tn-how">'+how+'</div></div></div>'; };
-  return '<div class="card"><h3>我的塔羅靈數</h3><p class="muted">國曆生日 '+s.y+'/'+s.m+'/'+s.d+'</p>'+
+  return '<div class="card"><h3>找出自己的塔羅靈數</h3><a href="img/tarot-num.jpg" target="_blank" rel="noopener"><img src="img/tarot-num.jpg" alt="找出自己的塔羅靈數：三個步驟與星座靈數對照表" style="width:100%;border-radius:12px;display:block" loading="lazy"></a><p class="muted" style="margin:8px 0 0">點圖片可以放大看。</p></div><div class="card"><h3>我的塔羅靈數</h3><p class="muted">國曆生日 '+s.y+'/'+s.m+'/'+s.d+'</p>'+
     row(1,'生日數字總和，加到剩一位數',r.n1,r.ds.split('').join('＋')+'＝'+r.chain.join(' → '))+
     row(2,'總和減出生日期',r.n2,r.total+' − '+s.d+'＝'+r.n2raw+(r.n2raw!==r.n2?(r.n2raw>=22?'，超過 22 要減 22，得 '+r.n2:'，小於 0 加 22，得 '+r.n2):''))+
     row(3,'星座靈數',r.n3,r.zName)+
