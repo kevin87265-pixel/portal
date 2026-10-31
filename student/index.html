@@ -799,7 +799,7 @@ function aRoster(){
   var all=allSess(); if(!RS&&all.length) RS=all[0].s.id;
   var h=ahead()+'<h2>報名名單</h2><select class="t" onchange="RS=this.value;render()">'+all.map(function(x){return '<option value="'+x.s.id+'" '+(x.s.id===RS?'selected':'')+'>'+esc(x.c.name)+'・'+sdate(x.s)+' '+x.s.time+'</option>';}).join('')+'</select>';
   var list=S.enroll.filter(function(e){return e.session===RS;}); var cnt=function(k){return list.filter(function(e){return e.status===k;}).length;};
-  h+='<div class="row" style="margin:12px 0"><span class="chip c-blue">已付款 '+cnt('paid')+'</span><span class="chip c-ok">已簽到 '+cnt('checked')+'</span><span class="chip c-warn">候補 '+cnt('wait')+'</span><span class="chip c-gray">已退款 '+cnt('refunded')+'</span></div>';
+  h+='<div class="row" style="margin:12px 0"><span class="chip c-blue">已付款 '+cnt('paid')+'</span><span class="chip c-ok">已簽到 '+cnt('checked')+'</span><span class="chip c-warn">候補 '+cnt('wait')+'</span><span class="chip c-gray">已退款 '+cnt('refunded')+'</span>'+(cnt('pending')?'<span class="chip c-warn">待付款 '+cnt('pending')+'</span>':'')+'</div>';
   if(!list.length) h+='<div class="card soft">這場還沒有人報名。</div>';
   list.forEach(function(e){
     var st=S.students.find(function(x){return x.acct===e.acct;})||{name:e.acct}; var s=ST[e.status]||['',''];
@@ -832,8 +832,8 @@ function adminChart(a){
 }
 function printChart(){ try{ var w=$('chartFrame').contentWindow; w.focus(); w.print(); }catch(e){ toast('這個預覽環境不能列印，搬到正式網址後就可以'); } }
 function actText(s){ var ct=S.settings.company;
-  return '【'+ct.name+'｜學員專區開通】\n'+s.name+' 您好，您的學員帳號已開通。\n帳號：'+s.acct+'\n預設密碼：12345（第一次登入會請您設定自己的密碼）\n網址：（正式網址上線後填入）\n\n登入後請先到「我的」填寫基本資料（含生日），系統會自動排出您的八字命盤。\n有問題請洽學苑 LINE：'+ct.line+(ct.lineUrl?' '+ct.lineUrl:''); }
-function copyAct(a){ var s=stuOf(a); sheet('<h2>開通通知</h2><p class="muted">複製後貼給學員的 LINE；正式版開通時也會自動寄 Email。</p><div class="copybox" id="ntxt">'+esc(actText(s))+'</div><button class="btn block" onclick="copyTxt()">複製</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
+  return '【'+ct.name+'｜學員專區開通】\n'+s.name+' 您好，您的學員帳號已開通。\n帳號：'+s.acct+'\n預設密碼：12345（第一次登入會請您設定自己的密碼）\n網址：https://kevin87265-pixel.github.io/portal/student/\n（積點系統也是用這組帳號密碼）\n\n登入後請先到「我的」填寫基本資料（含生日），系統會自動排出您的八字命盤。\n有問題請洽學苑 LINE：'+ct.line+(ct.lineUrl?' '+ct.lineUrl:''); }
+function copyAct(a){ var s=stuOf(a); sheet('<h2>開通通知</h2><p class="muted">複製後貼給學員的 LINE。</p><div class="copybox" id="ntxt">'+esc(actText(s))+'</div><button class="btn block" onclick="copyTxt()">複製</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
 function aManual(){
   var step=function(n,who,t,body){ return '<div class="card"><div class="row"><span class="chip c-blue">第 '+n+' 步</span><span class="chip c-gray">'+who+'</span></div><h3 style="margin:8px 0 4px">'+t+'</h3>'+body+'</div>'; };
   var h=ahead()+'<h2>行政使用手冊</h2><p>學員從開通到上完課，整個流程照下面走。</p>'+
