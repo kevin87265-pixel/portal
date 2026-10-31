@@ -2479,6 +2479,8 @@ apply=function(d){ _applyTh(d); if(!ownTheme(THEME)){ THEME='blue'; try{ localSt
 
 /* 等級獎勵文字跟顏色解鎖一致（2026-11-01） */
 (function(){ var m={2:'解鎖墨綠主題＋名字徽章',3:'商城解鎖學長姐限定商品',4:'解鎖霧紫主題＋候補優先',5:'生日月送 100 金幣＋一對一諮詢',6:'學苑榮譽榜＋每年免費旁聽一次'}; LV.forEach(function(l){ if(m[l.n]) l.perk=m[l.n]; }); })();
+/* Lv2 名稱改「學員」（2026-11-01 K） */
+LV.forEach(function(l){ if(l.n===2) l.name='學員'; });
 
 </script>
 </body>
