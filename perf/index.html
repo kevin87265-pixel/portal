@@ -493,10 +493,26 @@ details.cust summary::-webkit-details-marker{display:none}
 .back-round{flex:none;width:46px;height:46px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#2a4b72,#16314f);color:#f3dfa6;text-decoration:none;box-shadow:0 6px 14px -8px rgba(13,29,48,.7)}
 .back-round svg{width:16px;height:16px;margin-bottom:-2px}.back-round small{font-size:11px;line-height:1.1;letter-spacing:.05em}
 @media (max-width:400px){.top:has(.back-round) .hdate span{display:none}}
-.span-pick{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14px;color:#5d4a26}
+.span-lab{font-size:14px;color:#5d4a26;margin-bottom:8px}.span-pick{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14px;color:#5d4a26}
 .span-pick button{height:34px;padding:0 10px;border-radius:999px;border:1px solid #e3cd98;background:#fffaf0;color:#6b5530;font-family:inherit;font-size:13px}
 .span-pick button.on{background:linear-gradient(180deg,#2a4b72,#16314f);color:#f3dfa6;border-color:#0d1d30}
 .est{margin-top:12px;padding:10px 12px;border-radius:12px;background:#fbf4e3;font-size:14px;line-height:1.7}.est p{margin:0}.est b{color:#a8473b;white-space:nowrap}
+.up-mask{position:fixed;inset:0;z-index:50;background:rgba(40,30,15,.5);display:flex;align-items:center;justify-content:center;padding:70px 18px 20px;overflow:auto}
+.up-conf{position:fixed;inset:0;pointer-events:none}.up-conf i{position:absolute;width:7px;height:12px;border-radius:2px;opacity:.9}
+.up-md{position:relative;width:100%;max-width:380px;border-radius:26px;background:#fffaf0;padding:26px 20px 20px;text-align:center;box-shadow:0 30px 60px -20px rgba(0,0,0,.5);border:1px solid #e9d6a6}
+.up-md::before{content:"";position:absolute;inset:6px;border:1px solid rgba(201,155,69,.35);border-radius:21px;pointer-events:none}
+.up-badge{width:90px;height:90px;margin:-70px auto 10px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:var(--serif);font-weight:900;font-size:21px;letter-spacing:.06em;box-shadow:0 0 0 5px #fffaf0,0 12px 24px -8px rgba(0,0,0,.45)}
+.up-badge.b1{background:radial-gradient(circle at 30% 30%,#5fa08c,#1b3b33)}.up-badge.b2{background:radial-gradient(circle at 30% 30%,#6a76c4,#191f48)}.up-badge.b3{background:radial-gradient(circle at 30% 30%,#c0605a,#3a1515)}
+.up-k{font-size:13px;letter-spacing:.3em;color:#a2864f}.up-md h2{font-family:var(--serif);font-size:24px;margin:6px 0 4px;color:#3a2a12}
+.up-sub{font-size:14px;color:#6b5530;line-height:1.6}
+.up-goal{margin:14px 0 0;padding:14px;border-radius:16px;background:linear-gradient(150deg,#16314f,#0a1a2c);color:#e9eef6}
+.up-goal small{display:block;font-size:12px;color:#b8c7dc;letter-spacing:.08em}.up-big{display:block;font-family:var(--serif);font-size:32px;color:#f3d98e;margin:2px 0}.up-goal span{font-size:13px;color:#c9d6e8}
+.up-tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.up-tiers div{padding:8px 2px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(233,214,160,.3)}
+.up-tiers b{display:block;font-family:var(--serif);font-size:17px;color:#f3d98e}.up-tiers span{display:block;font-size:11px;line-height:1.35}
+.up-lt{margin:14px 0 8px;font-weight:700;color:#7d5f26;letter-spacing:.2em;font-size:13px}
+.up-pg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.up-pg div{padding:10px 6px;border-radius:14px;background:#fbf4e3;border:1px solid #efdfb8}
+.up-pg b{display:block;font-family:var(--serif);font-size:16px;color:#3a2a12;white-space:nowrap}.up-pg span{font-size:12px;color:#7d6a45;white-space:nowrap}
+.up-btn{width:100%;margin-top:16px;height:50px;border-radius:14px;border:0;color:#f3dfa6;font-weight:700;font-size:16px;letter-spacing:.1em;font-family:inherit;background:linear-gradient(180deg,#2a4b72,#16314f)}
 </style>
 </head>
 <body>
@@ -618,9 +634,9 @@ async function doLogin(ev){
     if(!r||!r.ok){
       if(r&&r.err&&/太多次/.test(r.err)){showErr(r.err);return;}
       const q=await pvTryLogin(acc,pw);
-      if(q.ok){S.mode='pv';S.token=q.token;S.pv=q.pv;S.name=q.pv.name;try{sessionStorage.setItem('perf3',JSON.stringify({mode:'pv',token:q.token,name:S.name}));}catch(e){}S.busy=false;renderPV();loadPV();return;}
+      if(q.ok){S.mode='pv';S.token=q.token;S.pv=q.pv;S.name=q.pv.name;checkUpPV(q.pv.name,q.pv.role);try{sessionStorage.setItem('perf3',JSON.stringify({mode:'pv',token:q.token,name:S.name}));}catch(e){}S.busy=false;renderPV();loadPV();return;}
       showErr(q.err||(q.locked?`錯誤次數太多，請 ${q.wait||10} 分鐘後再試`:(r&&r.err)||'帳號或密碼不對'));return;}
-    S.token=r.token;S.name=r.name||acc;S.role=r.role==='管理'?'管理':'老師';S.tab='month';S.month=nowMonth();S.me=null;S.all=null;S.cust={};
+    S.token=r.token;S.name=r.name||acc;S.role=r.role==='管理'?'管理':'老師';checkUpTeacher(S.name);S.tab='month';S.month=nowMonth();S.me=null;S.all=null;S.cust={};
     try{sessionStorage.setItem('perf3',JSON.stringify({token:S.token,name:S.name,role:S.role}));}catch(e){}
     if(VIEW==='dash'){location.replace(location.pathname);return;}
     S.busy=false;firstPaint=true;load(true);startTimer();
@@ -1227,7 +1243,7 @@ async function loadPV(){
   const tok=(()=>{try{return localStorage.getItem('miiragic_token')||'';}catch(e){return '';}})()||S.token;
   const r=await mgRpc('mg_load',{p_token:tok});
   if(!r||!r.ok){if(r&&r.error&&/AUTH|token|登入/i.test(r.error.message||'')){expire();return;}S.net=true;renderPV();return;}
-  const a=pvApply(r);if(a.ok){S.pv=a;S.name=a.name;S.net=false;}renderPV();}
+  const a=pvApply(r);if(a.ok){S.pv=a;S.name=a.name;S.net=false;const pr=stageGet(a.name);if(pr!==null&&+pr<a.role){stageSet(a.name,a.role);setTimeout(()=>showUp(a.role),400);}}renderPV();}
 const ymOf=d=>{const m=String(d||'').replace(/\//g,'-').match(/^(\d{4})-(\d{1,2})/);return m?m[1]+'.'+m[2].padStart(2,'0'):'';};
 function pvView(){
   const p=S.pv;if(!p)return `<div class="sk" style="height:260px"></div><div class="sk gap" style="height:200px"></div>`;
@@ -1243,10 +1259,12 @@ function pvView(){
   const pendPV=pend.reduce((s,x)=>s+(+x.pv||0),0);
   const when=n=>{const d=new Date();d.setMonth(d.getMonth()+n);return `${d.getFullYear()} 年 ${d.getMonth()+1} 月`;};
   let est1='',est2='';
-  if(avg>0){const m1=Math.max(0,Math.ceil(gap/avg));
-    est1=`<p class="muted" style="margin-bottom:4px">目前平均每月約 ${money(avg)} PV</p>`+(gap?`<p>預估 <b>${when(m1)}</b> 升${stg.next}</p>`:`<p>已達門檻，可以請推薦人幫你升${stg.next}</p>`);
-    if(p.role===1){const m2=m1+Math.ceil(PV_STAGE[2].goal/avg);est2=`預估 <b>${when(m2)}</b> 升正式老師`;}}
-  else est1='<p>最近還沒有審核通過的業績，從這個月開始衝吧！</p>';
+  if(!gap){est1=`<p>已達門檻，可以請推薦人幫你升${stg.next}</p>`;}
+  else{
+    est1=`<p>目標：<b>${when(span)}</b> 升${stg.next}</p><p>每月做到 <b>${money(target)} PV</b> 就能達成</p>`;
+    if(p.role===1){const m2=span+Math.ceil(PV_STAGE[2].goal/target);est2=`<b>${when(m2)}</b> 升正式老師`;}
+    if(avg>=target)est1+=`<p class="muted">照目前速度會更早達成！</p>`;
+  }
   const det=ok.filter(x=>ymOf(x.date)===M).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
   return `<section class="pane ink">
     <div class="kpi-lab">${stg.name}（${stg.price}）・晉升進度</div>
@@ -1256,8 +1274,8 @@ function pvView(){
       <div class="th-msg">${gap?`還差 <b class="num">${money(gap)}</b> PV 升${stg.next}`:`<b>已達門檻！</b>請推薦人幫你晉升${stg.next}`}</div></div>
     ${pendPV?`<div class="th-remind" style="margin-top:10px">${IC.alert}<span>還有 <b>${money(pendPV)}</b> PV 等推薦人審核，通過就會加上去</span></div>`:''}
   </section>
-  <section class="pane"><div class="pane-h"><h2>本月目標</h2><small>${+M.split('.')[1]} 月</small></div>
-    <div class="span-pick">幾個月升級？${[3,6,12].map(n=>`<button data-span="${n}" class="${span===n?'on':''}">${n}個月</button>`).join('')}</div>
+  <section class="pane"><div class="pane-h"><h2>目標設定</h2><small>${+M.split('.')[1]} 月</small></div>
+    <div class="span-lab">設定目標：幾個月內升級？</div><div class="span-pick">${[2,3,6,12].map(n=>`<button data-span="${n}" class="${span===n?'on':''}">${n}個月</button>`).join('')}</div>
     <div class="cstat c3" style="margin-top:12px"><div><b class="num">${wan(target)}</b><span>本月目標</span></div><div><b class="num">${wan(thisM)}</b><span>本月已審核</span></div><div><b class="num" style="${leftM?'color:#a8473b':''}">${leftM?wan(leftM):'達標'}</b><span>本月還差</span></div></div>
     <div class="est">${est1}${est2?`<p>${est2}</p>`:''}</div></section>
   <section class="pane"><div class="pane-h"><h2>本月審核通過的業績</h2><small>${det.length} 筆</small></div>
@@ -1271,8 +1289,24 @@ function renderPV(){
   const rt=$('#retry');if(rt)rt.onclick=loadPV;
   document.querySelectorAll('[data-span]').forEach(b=>b.onclick=()=>{S.pvSpan=+b.dataset.span;renderPV();});}
 
+/* ====== 升級通知（升級後第一次登入跳一次） ====== */
+const UP={1:{cls:'b1',tag:'考核',k:'晉 升 成 功',t:'恭喜成為考核老師',sub:'你的努力大家都看到了！<br>從這個月開始，法會金紙以 1680 計算',goal:'下一個目標・升實習老師',g:'168,000 PV',btn:'我知道了，繼續努力'},
+ 2:{cls:'b2',tag:'實習',k:'晉 升 成 功',t:'恭喜成為實習老師',sub:'離正式老師只剩最後一步了！<br>從這個月開始，法會金紙以 1470 計算',goal:'下一個目標・升正式老師（1260）',g:'147,000 PV',btn:'我知道了，繼續努力'},
+ 3:{cls:'b3',tag:'正式',k:'歡 迎 加 入',t:'恭喜成為正式老師',sub:'從今天起，你就是學苑的正式老師',btn:'開始我的正式老師之路'}};
+function stageGet(n){try{return localStorage.getItem('perfStage_'+n);}catch(e){return null;}}
+function stageSet(n,v){try{localStorage.setItem('perfStage_'+n,String(v));}catch(e){}}
+function showUp(role){const u=UP[role];if(!u)return;
+  const body=role===3?`<div class="up-goal"><small>每月門檻獎金・當月業績達標就加發</small><div class="up-tiers">${[[2,10],[5,20],[8,30],[10,40]].map(([p,w])=>`<div><b>${p}%</b><span>當月達<br>${w}萬PV</span></div>`).join('')}</div></div>
+    <div class="up-lt">正式老師專屬</div><div class="up-pg"><div><b>1260</b><span>法會金紙計價</span></div><div><b>填單系統</b><span>專屬填單系統</span></div><div><b>業績總覽</b><span>業績、客戶提醒</span></div><div><b>自動升聘階</b><span>專屬標章與禮遇</span></div></div>`
+    :`<div class="up-goal"><small>${u.goal}</small><b class="up-big">${u.g}</b><span>審核通過的業績都會自動累積</span></div>`;
+  const d=document.createElement('div');d.className='up-mask';
+  d.innerHTML=`${role===3?'<div class="up-conf">'+Array.from({length:36},(_,i)=>`<i style="left:${Math.random()*100}%;top:${Math.random()*20}%;background:${['#f3d98e','#c99b45','#e8a5a0','#9fe0b5','#c6cbee'][i%5]};transform:rotate(${Math.random()*180}deg)"></i>`).join('')+'</div>':''}
+  <div class="up-md"><div class="up-badge ${u.cls}">${u.tag}</div><div class="up-k">${u.k}</div><h2>${u.t}</h2><div class="up-sub">${u.sub}</div>${body}<button class="up-btn">${u.btn}</button></div>`;
+  document.body.appendChild(d);d.querySelector('.up-btn').onclick=()=>d.remove();}
+function checkUpPV(name,role){const prev=stageGet(name);stageSet(name,role);if(prev===null||+prev<role)setTimeout(()=>showUp(role),400);}
+function checkUpTeacher(name){const prev=stageGet(name);if(prev!==null&&+prev<3){stageSet(name,3);setTimeout(()=>showUp(3),400);}}
 /* 有新版就自動換新（GitHub 會快取 10 分鐘） */
-const BUILD='20261031225112';
+const BUILD='20261031225849';
 (function(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname.replace(/[^/]*$/,'')+'version.txt?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=(v||'').trim();
   if(v&&v!==BUILD){const k='perfReload_'+v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,1);}catch(e){}
     const q=new URLSearchParams(location.search);q.set('_v',v);location.replace(location.pathname+'?'+q.toString());}}).catch(()=>{});})();
