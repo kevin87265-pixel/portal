@@ -360,6 +360,8 @@ nav.tabs button.on svg{stroke-width:2.2}
 .demo-bar{background:#fff4d6;color:#7a5a00;font-size:13px;text-align:center;padding:7px 10px;border-radius:10px;margin:0 0 8px}
 .roster .nm.nm2{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}
 .roster .nm.nm2 b{white-space:nowrap}.roster .nm.nm2 small{font-size:14px;line-height:1.4}
+.srow .sd small.okc{color:#1f6f43;font-weight:700}.srow .sd small.warnc{color:#b26a00;font-weight:700}
+.ol-btn{background:#1f6f43!important;border-color:#1f6f43!important;margin-top:10px;text-decoration:none;text-align:center}
 </style>
 </head>
 <body class="t-blue">
@@ -1573,6 +1575,7 @@ function viewMine(){
     h+='<div class="card mc">'+'<div class="mc-top">'+dateBlock(o.s)+'<div class="sc-body"><span class="sc-top">'+subjTag(o.c)+'<span class="chip '+st[1]+'">'+st[0]+'</span></span><b class="sc-name">'+esc(o.c.name)+'</b><span class="sc-time">'+(o.s.end&&o.s.end!==o.s.date?sdate(o.s)+'　':'')+esc(o.s.time)+'</span><span class="sc-sub">'+esc(o.s.note||o.c.place)+'</span></div></div>';
     if(e.status==='paid'&&onDay(o.s)) h+='<button class="btn block big" onclick="askCheckin(\''+e.id+'\')">我到了，簽到 ›</button>';
     else if(e.status==='paid') h+='<p class="hint">上課當天這裡會出現「簽到」按鈕</p>';
+    if(typeof olHtml==='function') h+=olHtml(e,o);
     if(e.status==='pending') h+='<p class="hint">還沒付款：私訊學苑官方 LINE 付款，行政確認後會變「已付款」</p>'+lineBtn(S.settings.company.lineUrl,'私訊官方 LINE 付款');
     if(e.status==='paid'){
       if(canChange(e,o)) h+='<div class="mc-act"><button class="btn line sm" onclick="askChange(\''+e.id+'\')">改上課日期</button><span class="muted">還可以改 '+(S.settings.maxChanges-(e.changes||0))+' 次</span></div>';
@@ -1830,8 +1833,8 @@ function errMsg(r){ var m=(r&&r.error&&r.error.message)||(r&&r.msg)||''; if(m===
 function authLost(){ setTok(null); S.me=null; S.admin=false; render(); toast('登入已過期，請重新登入'); }
 
 /* 本機只留「共用設定」的預設值，學員資料一律從資料庫來 */
-var SHARED=['settings','courses','news','shop','online'];
-var BASE=seed();
+var SHARED=['settings','courses','news','shop','online','sess'];
+var BASE=seed(); BASE.sess={}; BASE.settings.retakeFee=500;
 BASE.courses.forEach(function(c){ c.sessions=(c.sessions||[]).filter(function(s){return s.id!=='s1';}); });
 BASE.news=[{id:'n1',type:'公告',pin:true,title:'學員專區正式上線',body:'報名、改日期、上課簽到、看命盤、小金幣換好禮都在這裡。帳號密碼跟積點系統同一組。有問題請私訊學苑官方 LINE。',date:today(0)}];
 var PORTAL_LIVE=null; var _syncPortal0=syncPortal; syncPortal=function(ev,from){ if(from==='即時') PORTAL_LIVE=ev; return _syncPortal0(ev,from); }; S=JSON.parse(JSON.stringify(BASE)); S.students=[]; S.enroll=[]; S.orders=[]; S.ledger=[]; S.me=null; S.admin=false;
@@ -1876,7 +1879,9 @@ function apply(d){
   S.me=d.me&&d.me.student?d.me.username:null; S.admin=!!(d.me&&d.me.admin); S.adminWho=d.me&&d.me.admin?(d.me.name||'學苑行政'):null; S.myType=d.me&&d.me.type;
   if(S.me&&!S.students.some(function(s){return s.acct===S.me;})) S.students.push({acct:S.me,name:d.me.name||'',email:S.me,profile:null,referrer:''});
   if(typeof PORTAL_SNAP!=='undefined') _syncPortal0(PORTAL_SNAP,'快照'); if(PORTAL_LIVE) _syncPortal0(PORTAL_LIVE,'即時');
+  if(!S.sess) S.sess={};
   takeSnap(); BOOTED=true;
+  if(S.admin&&autoSess()) setTimeout(sync,0);
   if(S.admin){ var miss=SHARED.filter(function(k){return sh[k]==null;}); if(miss.length){ miss.forEach(function(k){ delete SNAP[snapKey('shared',k)]; }); sync(); } }
 }
 function reload(){ if(!TOKEN){ BOOTED=true; render(); return Promise.resolve(); }
@@ -2100,7 +2105,7 @@ function demoStart(){
   var me=S.students.find(function(s){return s.acct==='lin@demo.tw';}); me.name='示範學員'; if(me.profile) me.profile.name='示範學員';
   S.me='lin@demo.tw'; S.admin=false; S.myType='student';
   var pc=S.courses.find(function(c){ return c.price>0&&!S.enroll.some(function(e){return e.acct==='lin@demo.tw'&&e.course===c.id;}); }); if(pc){ pc.sessions.forEach(function(s){ s.seats=Math.max(s.seats||0,20); }); grantPrepaid('lin@demo.tw',[pc.id],'示範'); }
-  CODES={}; allSess().forEach(function(x){ if(onDay(x.s)) CODES[x.s.id]='1234'; });
+  CODES={}; allSess().forEach(function(x){ if(onDay(x.s)) CODES[x.s.id]='1234'; }); S.sess={}; autoSess(); Object.keys(S.sess).forEach(function(k){ if(S.sess[k].online) S.sess[k].link='https://meet.google.com/demo-link'; });
   MUSTPW=true; LASTPW='12345'; BOOTED=true; TAB='home'; render(); scrollTo(0,0);
 }
 var _sync0=sync; sync=function(){ if(DEMO) return Promise.resolve(); return _sync0(); };
@@ -2214,7 +2219,42 @@ function rejectWait(id){ var e=S.enroll.find(function(x){return x.id===id;}); e.
 var _pr0=promote; promote=function(id){ var e=S.enroll.find(function(x){return x.id===id;}); if(e&&e.prepaid) return approveWait(id); return _pr0(id); };
 /* 設定：複訓場地費 */
 var _as0=aSet; aSet=function(){ _as0(); var b=document.querySelector('#root .card'); if(!b) return;
-  b.insertAdjacentHTML('beforebegin','<div class="card"><h3 style="margin-top:0">複訓場地費</h3><p class="muted" style="margin-top:0">上過的課再來上，學員要繳的場地費（每次）。</p><input class="t" id="rtF" type="text" inputmode="numeric" value="'+(S.settings.retakeFee||'')+'" placeholder="例如 500"><button class="btn block" style="margin-top:10px" onclick="S.settings.retakeFee=+half($(\'rtF\').value).replace(/[^\\d]/g,\'\')||0;save();toast(\'已儲存\')">儲存場地費</button></div>'); };
+  b.insertAdjacentHTML('beforebegin','<div class="card"><h3 style="margin-top:0">複訓場地費</h3><p class="muted" style="margin-top:0">上過的實體課再來上，學員要繳的場地費（每次）；線上複訓免費。</p><input class="t" id="rtF" type="text" inputmode="numeric" value="'+(S.settings.retakeFee||'')+'" placeholder="例如 500"><button class="btn block" style="margin-top:10px" onclick="S.settings.retakeFee=+half($(\'rtF\').value).replace(/[^\\d]/g,\'\')||0;save();toast(\'已儲存\')">儲存場地費</button></div>'); };
+
+
+/* =====================================================================
+   線上課：連結只給報名成功（已付款／已簽到）的學員；線上複訓免費
+   S.sess[場次id] = {online:true/false, link:'會議連結', set:行政手動設過}
+   ===================================================================== */
+function autoOnline(o){ return /線上/.test((o.s.note||'')+' '+(o.s.place||''))||o.c.mode==='線上課'; }
+function isOnline(sid){ var i=(S.sess||{})[sid], o=sessOf(sid); if(i&&i.online!=null) return !!i.online; return o?autoOnline(o):false; }
+function autoSess(){ var ch=false; S.sess=S.sess||{}; allSess().forEach(function(x){ var i=S.sess[x.s.id]; if(i&&i.set) return; var on=autoOnline(x); if(!i||i.online!==on){ S.sess[x.s.id]=Object.assign({},i||{},{online:on}); ch=true; } }); return ch; }
+var _es0=editSess; editSess=function(cid,sid){ _es0(cid,sid); var i=(sid&&S.sess[sid])||{}, on=sid?isOnline(sid):false;
+  var b=document.querySelector('#sheet button[onclick^="saveSess"], .sheet button[onclick^="saveSess"]'); if(!b) return;
+  b.insertAdjacentHTML('beforebegin','<label class="f">上課方式</label><div class="seg" id="sOn"><button type="button" class="'+(on?'':'on')+'" onclick="this.parentNode.children[1].classList.remove(\'on\');this.classList.add(\'on\');document.getElementById(\'sLw\').style.display=\'none\'">實體</button><button type="button" class="'+(on?'on':'')+'" onclick="this.parentNode.children[0].classList.remove(\'on\');this.classList.add(\'on\');document.getElementById(\'sLw\').style.display=\'block\'">線上</button></div>'+
+    '<div id="sLw" style="display:'+(on?'block':'none')+'"><label class="f">線上上課連結（只有報名成功的學員看得到）</label><input class="t" id="sL" type="text" placeholder="貼上 Google Meet／Zoom 連結" value="'+esc(i.link||'')+'"></div>'); };
+var _ss0=saveSess; saveSess=function(cid,sid){ var on=!!document.querySelector('#sOn button:nth-child(2).on'), ln=($('sL')?$('sL').value.trim():'');
+  if(ln&&!/^https?:\/\//.test(ln)) ln='https://'+ln;
+  var before=course(cid).sessions.map(function(s){return s.id;}); _ss0(cid,sid);
+  var id=sid||course(cid).sessions.map(function(s){return s.id;}).filter(function(x){return before.indexOf(x)<0;})[0];
+  if(id){ S.sess[id]={online:on,link:on?ln:'',set:true}; save(); render(); } };
+/* 行政課程管理：線上場次標示 */
+var _ac0=aCourses; aCourses=function(){ _ac0(); document.querySelectorAll('#root .srow').forEach(function(r){ var b=r.querySelector('button[onclick^="editSess"]'); if(!b) return; var sid=(b.getAttribute('onclick').match(/'([^']*)','([^']*)'/)||[])[2]; if(!sid||!isOnline(sid)) return;
+  var i=S.sess[sid]||{}; r.querySelector('.sd').insertAdjacentHTML('beforeend','<small class="'+(i.link?'okc':'warnc')+'">線上・'+(i.link?'已放連結':'還沒放連結')+'</small>'); }); };
+/* 學員我的課：線上課顯示「進入線上教室」（只有已付款／已簽到） */
+function olHtml(e,o){ if(!(e.status==='paid'||e.status==='checked')||!e.session||!isOnline(e.session)) return ''; var ln=(S.sess[e.session]||{}).link;
+  return ln?'<a class="btn block big ol-btn" href="'+esc(ln)+'" target="_blank" rel="noopener">進入線上教室 ›</a><p class="hint">線上課，上課時間點進去就好</p>':'<p class="hint">線上課：上課連結開課前會放在這裡</p>'; }
+/* 複訓：線上免費、直接報名成功；實體要場地費 */
+askRetake=function(sid){ var o=sessOf(sid), f=retakeFee(), on=isOnline(sid);
+  if(on){ sheet('<h2>線上複訓</h2><p><b>'+esc(o.c.name)+'</b><br>'+sdate(o.s)+' '+esc(o.s.time)+'</p><div class="card soft"><b>線上複訓免費</b><p class="muted" style="margin:4px 0 0">送出就報名成功，上課連結會出現在「我的課」。</p></div><button class="btn block" onclick="doRetake(\''+sid+'\')">報名</button><button class="btn gray block" onclick="closeSheet()">取消</button>'); return; }
+  sheet('<h2>複訓報名</h2><p><b>'+esc(o.c.name)+'</b><br>'+sdate(o.s)+' '+esc(o.s.time)+'</p><div class="card soft"><b>實體複訓需繳場地費'+(f?' '+money(f):'')+'</b><p class="muted" style="margin:4px 0 0">'+(f?'':'金額請洽學苑官方 LINE。')+'送出後私訊學苑官方 LINE 付款，行政確認收到款項才算報名成功。</p></div>'+
+    '<button class="btn block" onclick="doRetake(\''+sid+'\')">送出複訓報名</button><button class="btn gray block" onclick="closeSheet()">取消</button>'); };
+doRetake=function(sid){ var o=sessOf(sid), on=isOnline(sid);
+  S.enroll.push({id:'e'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),acct:S.me,course:o.c.id,session:sid,status:on?'paid':'pending',retake:true,changes:0,paidAt:on?today():'',payBy:on?'線上複訓免費':'複訓場地費',amount:on?0:retakeFee(),at:today()+' '+nowHM()});
+  save(); closeSheet(); TAB='mine';
+  if(on){ reload().then(function(){ render(); toast('報名成功，上課連結在「我的課」'); }); } else { render(); payInfo(); } };
+/* 提醒文字：線上課附上課連結 */
+var _rt0=remindText; remindText=function(names,o){ var t=_rt0(names,o); if(o&&isOnline(o.s.id)){ var ln=(S.sess[o.s.id]||{}).link; t=t.replace(/請登入學員專區[^\n]*\n?/,'')+'\n線上上課連結：'+(ln||'（請行政補上）')+'\n也可以在學員專區「我的課」直接點「進入線上教室」。'; } return t; };
 
 /* 啟動：先顯示載入中，有通行證就讀資料庫 */
 reload();
