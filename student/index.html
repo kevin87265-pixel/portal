@@ -2349,9 +2349,11 @@ function claimCard(){ var a=S.me; if(!a) return '';
   var h='';
   if(cl.length) h+='<div class="card pre"><div class="pre-top"><span class="chip c-warn">等行政確認</span><b>你申報的課程</b></div><ul class="list-plain" style="margin:8px 0 0">'+cl.map(function(e){return '<li><b>'+esc(course(e.course).name)+'</b>'+(e.note?'<br><span class="muted">'+esc(e.note)+'</span>':'')+'</li>';}).join('')+'</ul><p class="hint">行政確認後就可以直接選上課日期，不用再付款。</p></div>';
   var any=S.enroll.some(function(e){return e.acct===a&&['paid','checked','wait','pending'].indexOf(e.status)>=0;});
-  if(opts.length&&!any) h+='<div class="card claim"><b style="font-size:18px">以前報名過學苑的課嗎？</b><p class="muted" style="margin:6px 0 10px">勾選後送出，行政確認就能選日期。</p><button class="btn block" onclick="askClaim()">申報我報名過的課</button></div>';
+  var skip=(meStu()||{}).claimSkip;
+  if(opts.length&&!any&&!skip) h+='<div class="card claim"><b style="font-size:18px">以前報名過學苑的課嗎？</b><p class="muted" style="margin:6px 0 10px">勾選後送出，行政確認就能選日期。</p><button class="btn block" onclick="askClaim()">申報我報名過的課</button><button class="btn gray block" style="margin-top:8px" onclick="skipClaim()">沒有報過，不用了</button></div>';
   else if(opts.length&&CLAIM_SMALL) h+='<p class="hint" style="text-align:center"><button class="lnk" onclick="askClaim()">還有其他以前報名過的課？點這裡申報</button></p>';
   return h; }
+function skipClaim(){ var st=meStu(); if(!st) return; st.claimSkip=true; save(); render(); toast('之後想申報，到「我的課」就可以'); }
 function askClaim(){ var a=S.me, opts=S.courses.filter(function(c){ return c.price>0&&!hasCourse(a,c.id); });
   if(!opts.length){ toast('目前沒有可以申報的課程'); return; }
   sheet('<h2>申報報名過的課</h2><p class="muted">把你已經報名、付過錢的課勾起來（上過、還沒上都算）。行政確認後就會開通。</p><div class="ck-list" id="clL">'+opts.map(function(c){ return '<label class="ck-row"><input type="checkbox" value="'+c.id+'"><span>'+esc(c.name)+'</span></label>'; }).join('')+'</div>'+
