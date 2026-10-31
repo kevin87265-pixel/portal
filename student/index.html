@@ -1563,6 +1563,7 @@ function viewMine(){
     h+='<div class="card mc">'+'<div class="mc-top">'+dateBlock(o.s)+'<div class="sc-body"><span class="sc-top">'+subjTag(o.c)+'<span class="chip '+st[1]+'">'+st[0]+'</span></span><b class="sc-name">'+esc(o.c.name)+'</b><span class="sc-time">'+(o.s.end&&o.s.end!==o.s.date?sdate(o.s)+'　':'')+esc(o.s.time)+'</span><span class="sc-sub">'+esc(o.s.note||o.c.place)+'</span></div></div>';
     if(e.status==='paid'&&onDay(o.s)) h+='<button class="btn block big" onclick="askCheckin(\''+e.id+'\')">我到了，簽到 ›</button>';
     else if(e.status==='paid') h+='<p class="hint">上課當天這裡會出現「簽到」按鈕</p>';
+    if(e.status==='pending') h+='<p class="hint">還沒付款：私訊學苑官方 LINE 付款，行政確認後會變「已付款」</p>'+lineBtn(S.settings.company.lineUrl,'私訊官方 LINE 付款');
     if(e.status==='paid'){
       if(canChange(e,o)) h+='<div class="mc-act"><button class="btn line sm" onclick="askChange(\''+e.id+'\')">改上課日期</button><span class="muted">還可以改 '+(S.settings.maxChanges-(e.changes||0))+' 次</span></div>';
       else if(daysUntil(o.s.date)>0) h+='<p class="hint">改日期期限已過或次數用完，要調整請聯絡行政</p>';
@@ -1778,7 +1779,7 @@ function askEnroll(sid,wait){
     h+='<h3>付款方式</h3><div class="paysel">'+(o.c.pay||[o.c.price]).slice(0,4).map(function(v,i){ return '<button class="'+(i===0?'on':'')+'" onclick="PAYSEL='+i+';[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'on\')});this.classList.add(\'on\')"><span>'+PAYN[i]+'</span><b>'+money(v)+'</b></button>'; }).join('')+'</div>'+
       '<p class="muted">無卡分期請私訊學苑官方 LINE。還沒簽到前都可以改日期或申請退款；上課當天簽到後就不能退款。送出後請私訊學苑官方 LINE 付款，行政確認收到款項就完成報名。</p>';
   }
-  h+='<button class="btn block" onclick="doEnroll(\''+sid+'\','+(!!wait)+')">'+(wait?'登記候補':free?'確認報名':'前往付款')+'</button><button class="btn gray block" onclick="closeSheet()">取消</button>';
+  h+='<button class="btn block" onclick="doEnroll(\''+sid+'\','+(!!wait)+')">'+(wait?'登記候補':free?'確認報名':'送出報名')+'</button><button class="btn gray block" onclick="closeSheet()">取消</button>';
   sheet(h);
 }
 function doEnroll(sid,wait){
