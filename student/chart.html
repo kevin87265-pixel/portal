@@ -28,6 +28,7 @@ function draw(p){
   q('#ppSex [data-v="'+(p.sex==='F'?'0':'1')+'"]').click();
   q('#ppCal [data-v="'+(p.cal==='農'?'lunar':'solar')+'"]').click();
   var lp=q('#ppLeap'); if(lp) lp.checked=!!p.leap;
+  var zi=q('#ppZi'); if(zi) zi.value='same'; /* 晚子時（23:00 後）仍算當天（2026-11-01 K） */
   q('#ppY').value=p.y; q('#ppM').value=p.m; q('#ppD').value=p.d; q('#ppH').value=p.h; q('#ppMi').value=p.mi;
   q('#ppForm').requestSubmit();
   setTimeout(function(){
