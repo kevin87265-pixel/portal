@@ -404,6 +404,8 @@ nav.tabs button.on svg{stroke-width:2.2}
 .th-cur>i{display:inline-block}.th-cur>i>i{display:block;width:18px;height:18px;border-radius:50%}
 .th-sum+.themes{margin-top:12px}
 .lv-one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lv-sm{font-size:12.5px}
+.rit-note{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;font-size:14px}.rit-note .chip{flex:0 0 auto}
+.card.push .row .btn{margin:0;flex:1}
 
 </style>
 </head>
@@ -1945,7 +1947,7 @@ function codeOf(sid){ return CODES[sid]||'····'; }
 /* ---------- 登入／登出／密碼 ---------- */
 function render(){
   if(!BOOTED){ $('tabs').style.display='none'; $('root').innerHTML='<div class="boot"><div class="spin"></div><p>載入中…</p></div>'; return; }
-  if(S.admin){ tabsAdmin(); ({more:aMore,manual:aManual,today:aToday,shop:aShop,students:aStudents,open:aOpen,edit:aEdit,courses:aCourses,roster:aRoster,news:aNews,online:aOnline,notice:aNotice,set:aSet,share:aShare})[ATAB](); return; }
+  if(S.admin){ tabsAdmin(); ({more:aMore,manual:aManual,today:aToday,shop:aShop,students:aStudents,open:aOpen,edit:aEdit,courses:aCourses,roster:aRoster,news:aNews,online:aOnline,notice:aNotice,set:aSet,share:aShare,push:aPush,bulk:aBulk})[ATAB](); return; }
   if(TOKEN&&S.myType==='ref'){ $('tabs').style.display='none'; viewNotStudent(); return; }
   if(!S.me||!meStu()){ $('tabs').style.display='none'; viewLogin(); return; }
   if(MUSTPW){ $('tabs').style.display='none'; viewSetPw(); return; }
@@ -2481,6 +2483,99 @@ apply=function(d){ _applyTh(d); if(!ownTheme(THEME)){ THEME='blue'; try{ localSt
 (function(){ var m={2:'解鎖墨綠主題＋名字徽章',3:'商城解鎖學長姐限定商品',4:'解鎖霧紫主題＋候補優先',5:'生日月送 100 金幣＋一對一諮詢',6:'學苑榮譽榜＋每年免費旁聽一次'}; LV.forEach(function(l){ if(m[l.n]) l.perk=m[l.n]; }); })();
 /* Lv2 名稱改「學員」（2026-11-01 K） */
 LV.forEach(function(l){ if(l.n===2) l.name='學員'; });
+
+/* =====================================================================
+   推課名單、體驗班批次開帳號、法會小公告（2026-11-01 第 1 階段）
+   ===================================================================== */
+var PUSH_F='all';
+function isFormal(c){ return c&&(+c.price||0)>0; }
+function trialOf(a){ return S.enroll.filter(function(e){ var c=course(e.course); return e.acct===a&&c&&!isFormal(c)&&/體驗/.test(c.name)&&(e.status==='checked'||e.status==='paid'); }); }
+function formalOf(a){ return S.enroll.filter(function(e){ return e.acct===a&&isFormal(course(e.course))&&(['paid','checked','wait'].indexOf(e.status)>=0||(e.status==='pending'&&!e.claim)); }); }
+function pushList(){
+  var out=[];
+  S.students.forEach(function(s){ if(!s.acct) return; if(formalOf(s.acct).length) return;
+    var tr=trialOf(s.acct), any=S.enroll.some(function(e){ return e.acct===s.acct&&e.status!=='refunded'; });
+    var subj=tr.map(function(e){ return /八字/.test(course(e.course).name)?'八字':/塔羅/.test(course(e.course).name)?'塔羅':'其他'; });
+    var last=tr.map(function(e){ var x=sessOf(e.session); return x&&x.s?x.s.date:(e.checkedAt||e.at||'').slice(0,10); }).sort().pop()||'';
+    out.push({s:s,tr:tr,subj:subj,last:last,kind:tr.length?'trial':any?'other':'none',claim:claimsOf(s.acct).length});
+  });
+  return out;
+}
+function aPush(){
+  var all=pushList(), f=PUSH_F;
+  var list=all.filter(function(x){ return f==='all'?x.kind==='trial'||x.kind==='none':f==='bz'?x.subj.indexOf('八字')>=0:f==='tr'?x.subj.indexOf('塔羅')>=0:x.kind==='none'; });
+  list.sort(function(a,b){ return (b.last||'').localeCompare(a.last||''); });
+  var cnt=function(k){ return all.filter(function(x){ return k==='bz'?x.subj.indexOf('八字')>=0:k==='tr'?x.subj.indexOf('塔羅')>=0:k==='none'?x.kind==='none':(x.kind==='trial'||x.kind==='none'); }).length; };
+  var tabs=[['all','全部'],['bz','上過八字體驗'],['tr','上過塔羅體驗'],['none','沒有上課紀錄']];
+  var h=ahead()+'<div class="pg-h"><h2>推課名單</h2></div><p class="muted" style="margin:-4px 2px 10px">還沒報正式課的學員，最近上體驗班的排最前面。</p>'+
+    '<div class="seg">'+tabs.map(function(t){ return '<button class="'+(f===t[0]?'on':'')+'" onclick="PUSH_F=\''+t[0]+'\';render()">'+t[1]+' '+cnt(t[0])+'</button>'; }).join('')+'</div>';
+  if(!list.length) h+='<div class="card soft">目前沒有名單。</div>';
+  else h+='<button class="btn line block" onclick="copyPush()">複製這份名單</button>';
+  h+=list.map(function(x){ var sug=x.subj.indexOf('八字')>=0?'八字初階班':x.subj.indexOf('塔羅')>=0?'塔羅初階班':'';
+    return '<div class="card push"><div class="row" style="justify-content:space-between"><b style="font-size:17px">'+esc(x.s.name||x.s.acct)+'</b>'+(x.claim?'<span class="chip c-warn">有申報待確認</span>':'')+'</div>'+
+      '<p class="muted" style="margin:4px 0 0">'+(x.tr.length?'上過 '+esc(x.tr.map(function(e){return course(e.course).name;}).join('、'))+(x.last?'（'+esc(x.last.slice(5).replace('-','/'))+'）':''):'系統裡還沒有上課紀錄')+'</p>'+
+      '<p class="muted" style="margin:2px 0 0">推薦人 '+esc(x.s.referrer||'未填')+(sug?'・建議推 <b>'+sug+'</b>':'')+'</p>'+
+      '<div class="row" style="gap:8px;margin-top:8px"><button class="btn line sm" onclick="stuMore(\''+esc(x.s.acct)+'\')">看學員</button><button class="btn sm" onclick="askPrepaidFor(\''+esc(x.s.acct)+'\')">開通正式課</button></div></div>'; }).join('');
+  $('root').innerHTML=h;
+}
+function askPrepaidFor(a){ if(typeof askPrepaid==='function') askPrepaid(a); else stuMore(a); }
+function copyPush(){ var f=PUSH_F, all=pushList();
+  var list=all.filter(function(x){ return f==='all'?x.kind==='trial'||x.kind==='none':f==='bz'?x.subj.indexOf('八字')>=0:f==='tr'?x.subj.indexOf('塔羅')>=0:x.kind==='none'; });
+  var t='【推課名單 '+today()+'】\n'+list.map(function(x){ return (x.s.name||x.s.acct)+'｜'+(x.tr.length?x.tr.map(function(e){return course(e.course).name;}).join('、'):'沒有上課紀錄')+'｜推薦人 '+(x.s.referrer||'未填'); }).join('\n');
+  sheet('<h2>推課名單</h2><div class="copybox" id="ntxt">'+esc(t)+'</div><button class="btn block" onclick="copyTxt()">複製</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
+
+/* 體驗班批次開帳號：一行一位「姓名 Email」，同一位推薦人 */
+var BULK={txt:'',ref:'',done:null};
+function bulkParse(t){ return t.split(/\n+/).map(function(l){ l=l.trim(); if(!l) return null; var m=l.match(/[^\s,，、]+@[^\s,，、]+\.[^\s,，、]+/); if(!m) return {bad:l};
+  var e=m[0].toLowerCase(), n=l.replace(m[0],'').replace(/[,，、\t]/g,' ').trim(); return {n:n,e:e,line:l}; }).filter(Boolean); }
+function aBulk(){
+  var h=ahead()+'<div class="pg-h"><h2>批次開帳號</h2></div><p class="muted" style="margin:-4px 2px 10px">體驗班名單一次開好。一行一位：姓名＋Email。不會勾已繳費課程，之後報正式課再到學員「登記已繳費的課」。</p>';
+  if(BULK.done){ var d=BULK.done;
+    h+='<div class="card"><h3>完成</h3><p>開通 <b>'+d.ok.length+'</b> 位'+(d.skip.length?'，略過 '+d.skip.length+' 位':'')+(d.fail.length?'，失敗 '+d.fail.length+' 位':'')+'</p>'+
+      (d.skip.length?'<p class="muted">略過（已經有帳號）：'+esc(d.skip.join('、'))+'</p>':'')+(d.fail.length?'<p class="muted" style="color:var(--bad)">失敗：'+esc(d.fail.join('、'))+'</p>':'')+
+      (d.ok.length?'<button class="btn block" onclick="copyBulk()">複製開通通知（全部）</button>':'')+'<button class="btn line block" onclick="BULK={txt:\'\',ref:\'\',done:null};render()">再開一批</button></div>';
+    $('root').innerHTML=h; return; }
+  h+='<div class="card"><label class="f">推薦人（這批都一樣）</label><select class="t" id="bkR"><option value="">請選推薦人</option>'+(S.refs||[]).slice().sort(function(a,b){return a.name<b.name?-1:1;}).map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===BULK.ref?' selected':'')+'>'+esc(x.name)+'</option>';}).join('')+'</select>'+
+    '<label class="f">名單（一行一位）</label><textarea class="t" id="bkT" rows="8" placeholder="王小明 ming@gmail.com&#10;陳美美 mei@yahoo.com.tw">'+esc(BULK.txt)+'</textarea>'+
+    '<button class="btn block" onclick="bulkCheck()">檢查名單</button></div>';
+  $('root').innerHTML=h;
+}
+function bulkCheck(){ BULK.txt=$('bkT').value; BULK.ref=$('bkR').value;
+  if(!BULK.ref){ toast('請選推薦人'); return; }
+  var rows=bulkParse(BULK.txt); if(!rows.length){ toast('請貼上名單'); return; }
+  var bad=rows.filter(function(r){return r.bad;}), ok=rows.filter(function(r){return !r.bad;});
+  var seen={}, dup=[], has=[], go=[];
+  ok.forEach(function(r){ if(seen[r.e]){ dup.push(r.e); return; } seen[r.e]=1; if(S.students.some(function(s){return (s.acct||'').toLowerCase()===r.e;})) has.push(r); else if(!r.n) bad.push({bad:r.line+'（沒有姓名）'}); else go.push(r); });
+  var ref=(S.refs||[]).find(function(x){return x.id===BULK.ref;})||{name:''};
+  sheet('<h2>確認開通</h2><p>推薦人：<b>'+esc(ref.name)+'</b></p><p>要開通 <b>'+go.length+'</b> 位：</p><ul class="list-plain">'+go.map(function(r){return '<li>'+esc(r.n)+'・'+esc(r.e)+'</li>';}).join('')+'</ul>'+
+    (has.length?'<p class="muted">已經有帳號、會略過：'+esc(has.map(function(r){return r.n||r.e;}).join('、'))+'</p>':'')+
+    (bad.length?'<p class="muted" style="color:var(--bad)">看不懂、不會開：'+esc(bad.map(function(r){return r.bad;}).join('、'))+'</p>':'')+
+    (dup.length?'<p class="muted">重複的 Email 只開一次：'+esc(dup.join('、'))+'</p>':'')+
+    (go.length?'<button class="btn block" id="bkGo" onclick="bulkRun()">開通這 '+go.length+' 位</button>':'')+'<button class="btn gray block" onclick="closeSheet()">回去修改</button>');
+  window._BK={go:go,has:has.map(function(r){return r.n||r.e;}),ref:ref};
+}
+function bulkRun(){ var k=window._BK; if(!k) return; var b=$('bkGo'); if(b){ b.disabled=true; b.textContent='開通中…'; }
+  var ex=function(op){ return rpc('mg_exec',{p_token:TOKEN,p_op:op}); }, done={ok:[],skip:k.has.slice(),fail:[]}, i=0;
+  var next=function(){ if(i>=k.go.length){ return rpc('st_put',{p_token:TOKEN,p_rows:done.ok.map(function(d){return {kind:'student',id:d.acct,data:d};})}).then(function(){ BULK.done={ok:done.ok.map(function(d){return d.name;}),skip:done.skip,fail:done.fail,docs:done.ok}; closeSheet(); reload(); }); }
+    var r=k.go[i++]; if(b) b.textContent='開通中… '+i+'/'+k.go.length;
+    var sid='s'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    var doc={acct:r.e,name:r.n,phone:'',email:r.e,referrer:k.ref.name,second:'',ratio:'',profile:null,createdAt:today(),note:'批次開通（體驗班）'};
+    return ex({table:'students',op:'insert',values:{id:sid,name:r.n,admin_id:k.ref.id,role:0,redeemable_pts:0},filters:[]}).then(function(r1){
+      if(!r1||!r1.ok){ done.fail.push(r.n+'（'+errMsg(r1)+'）'); return next(); }
+      return ex({table:'accounts',op:'insert',values:{username:r.e,password:'12345',type:'student',linked_id:sid},filters:[]}).then(function(r2){
+        if(!r2||!r2.ok){ ex({table:'students',op:'delete',filters:[{col:'id',op:'eq',val:sid}]}); done.fail.push(r.n+'（'+(/dup|unique|exist/i.test(errMsg(r2))?'這個 Email 已經有帳號':errMsg(r2))+'）'); return next(); }
+        done.ok.push(doc); return next(); }); }); };
+  next(); }
+function copyBulk(){ var d=BULK.done; if(!d) return; var t=d.docs.map(function(s){ return actText(s); }).join('\n\n———————\n\n');
+  sheet('<h2>開通通知</h2><p class="muted">每個人一段，分開貼給各自的 LINE。</p><div class="copybox" id="ntxt">'+esc(t)+'</div><button class="btn block" onclick="copyTxt()">全部複製</button><button class="btn gray block" onclick="closeSheet()">關閉</button>'); }
+var _am2=aMore; aMore=function(){ _am2(); var m=document.querySelector('#root .card.menu'); if(!m) return;
+  m.insertAdjacentHTML('afterbegin','<button onclick="aGo(\'push\')">'+img('books','m-ill')+'<span><b>推課名單</b><small>上過體驗班、還沒報正式課的人</small></span><i>›</i></button><button onclick="BULK.done=null;aGo(\'bulk\')">'+img('order','m-ill')+'<span><b>批次開帳號</b><small>體驗班名單一次開好</small></span><i>›</i></button>'); };
+
+/* 法會小公告：放在「我的等級」積點入口上面，只顯示即將到來／進行中的法會 */
+function ritualNote(){ var ev=(S.portalEv||[]).filter(function(e){ return e.type==='ritual'&&(e.end||e.date)>=today()&&(!e.to||e.to.student!==false); }).sort(function(a,b){return a.date<b.date?-1:1;})[0];
+  if(!ev) return ''; var d=function(x){ return (+x.slice(5,7))+'/'+(+x.slice(8,10)); };
+  return '<div class="card rit-note"><span class="chip c-warn">法會</span><div><b>'+esc(ev.title||'法會')+'</b>　'+d(ev.date)+(ev.end&&ev.end!==ev.date?'–'+d(ev.end):'')+(ev.note?'<br><span class="muted">'+esc(ev.note)+'</span>':'')+'</div></div>'; }
+var _vm3=viewMe; viewMe=function(){ _vm3(); if(ME_SUB!=='lv') return; var pc=document.querySelector('#root .ptcard'); var n=ritualNote(); if(pc&&n) pc.insertAdjacentHTML('beforebegin',n); };
 
 </script>
 </body>
