@@ -2157,6 +2157,8 @@ function demoStart(){
   var me=S.students.find(function(s){return s.acct==='lin@demo.tw';}); me.name='示範學員'; if(me.profile) me.profile.name='示範學員';
   S.me='lin@demo.tw'; S.admin=false; S.myType='student';
   var pc=S.courses.find(function(c){ return c.price>0&&!S.enroll.some(function(e){return e.acct==='lin@demo.tw'&&e.course===c.id;}); }); if(pc){ pc.sessions.forEach(function(s){ s.seats=Math.max(s.seats||0,20); }); grantPrepaid('lin@demo.tw',[pc.id],'示範'); }
+  /* 示範複訓：塔羅初階班當成已經上過（上個月簽到），學員點進去看到的是複訓 */
+  S.enroll.forEach(function(e){ var c=course(e.course); if(e.acct==='lin@demo.tw'&&c&&/塔羅初階/.test(c.name)){ e.status='checked'; e.session=''; e.checkedAt=new Date(Date.now()-30*864e5).toISOString().slice(0,10); } });
   CODES={}; allSess().forEach(function(x){ if(onDay(x.s)) CODES[x.s.id]='1234'; }); S.sess={}; autoSess(); Object.keys(S.sess).forEach(function(k){ if(S.sess[k].online) S.sess[k].link='https://meet.google.com/demo-link'; });
   MUSTPW=true; LASTPW='12345'; BOOTED=true; TAB='home'; render(); scrollTo(0,0);
 }
