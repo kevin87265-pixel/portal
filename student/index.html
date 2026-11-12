@@ -408,6 +408,7 @@ nav.tabs button.on svg{stroke-width:2.2}
 .card.push .row .btn{margin:0;flex:1}
 .pre-s .btn{white-space:nowrap;flex:0 0 auto}.pre-s>span{min-width:0}
 
+.chipbtn{border:0;cursor:pointer;font:inherit;font-size:13px}
 </style>
 </head>
 <body class="t-blue">
@@ -483,7 +484,7 @@ function seed(){
       {id:'c4',name:'塔羅進階班',alias:'塔羅創業菁英班',mode:'線下實體課',intro:'塔羅創業菁英班：從解牌到接案實戰。',teacher:'陳彩綺 講師',place:'學苑教室',price:24900,share:4000,seats:15,
         pay:[24900,25900,26300,27200,27100,29200],combo:{name:'塔羅兩階合報（初階＋創業菁英）',pay:[34900,36300,36900,38100,38000,40900],share:5404},sessions:[]},
       {id:'c5',name:'八字體驗班',mode:'線上／線下',intro:'洞悉人脈秘密，一招讓你突破人性。',teacher:'羅文勳 院長',place:'線上課',price:0,share:0,seats:50,sessions:[]},
-      {id:'c6',name:'塔羅體驗班',mode:'線上課',intro:'教你基礎認識塔羅，利用塔羅牌來洞悉未來趨勢。',teacher:'陳彩綺 講師',place:'線上課',price:0,share:0,seats:50,sessions:[]},
+      {id:'c6',name:'塔羅體驗班',mode:'線上課',intro:'教你基礎認識塔羅，利用塔羅牌來洞悉未來趨勢。',teacher:'陳彩綺 講師',place:'線上課',price:300,pay:[300,300],share:0,seats:50,sessions:[]},
       {id:'c7',name:'命盤解析課',mode:'線上／實體',intro:'老師實戰批盤現場，學會說出命的故事。學員免費開放。',teacher:'羅文勳 院長',place:'線上課',price:0,share:0,seats:80,sessions:[]}
     ],
     online:[
@@ -1581,7 +1582,7 @@ function aCourses(){
       else h+='<div class="kv3 one"><div><span>費用</span><b>免費</b></div></div>';
       h+='<div class="sess-h">即將開課'+(past?'<span>（已結束 '+past+' 場不顯示）</span>':'')+'</div>';
       if(!up.length) h+='<p class="muted" style="margin:4px 0">目前沒有排課</p>';
-      up.forEach(function(s){ h+='<div class="srow"><span class="sd">'+sdate(s)+'<small>'+esc(s.time)+(s.src==='portal'?'・入口網站':'')+'</small></span><span class="chip c-blue">'+taken(s.id)+'/'+s.seats+'</span><button class="btn gray sm" onclick="editSess(\''+c.id+'\',\''+s.id+'\')">改</button></div>'; });
+      up.forEach(function(s){ h+='<div class="srow"><span class="sd">'+sdate(s)+'<small>'+esc(s.time)+(s.src==='portal'?'・入口網站':'')+'</small></span><button class="chip c-blue chipbtn" onclick="RS=\''+s.id+'\';aGo(\'roster\')">'+taken(s.id)+'/'+s.seats+' 看名單 ›</button><button class="btn gray sm" onclick="editSess(\''+c.id+'\',\''+s.id+'\')">改</button></div>'; });
       h+='<div class="row" style="margin-top:10px"><button class="btn line sm" onclick="editSess(\''+c.id+'\')">加場次</button><button class="btn gray sm" onclick="editCourse(\''+c.id+'\')">改課程資料</button></div></div>';
     });
   });
@@ -1627,6 +1628,7 @@ function viewMine(){
       if(canChange(e,o)) h+='<div class="mc-act"><button class="btn line sm" onclick="askChange(\''+e.id+'\')">改上課日期</button><span class="muted">還可以改 '+(S.settings.maxChanges-(e.changes||0))+' 次</span></div>';
       else if(daysUntil(o.s.date)>0) h+='<p class="hint">改日期期限已過或次數用完，要調整請聯絡行政</p>';
     }
+    if(typeof cancelUI==='function') h+=cancelUI(e,o);
     h+='</div>';
   });
   if(done.length){ h+='<div class="grp"><span>上過・已處理</span></div>';
@@ -2491,7 +2493,7 @@ LV.forEach(function(l){ if(l.n===2) l.name='學員'; });
    推課名單、體驗班批次開帳號、法會小公告（2026-11-01 第 1 階段）
    ===================================================================== */
 var PUSH_F='all';
-function isFormal(c){ return c&&(+c.price||0)>0; }
+function isFormal(c){ return c&&(+c.price||0)>0&&!/體驗/.test(c.name); }
 function trialOf(a){ return S.enroll.filter(function(e){ var c=course(e.course); return e.acct===a&&c&&!isFormal(c)&&/體驗/.test(c.name)&&(e.status==='checked'||e.status==='paid'); }); }
 function formalOf(a){ return S.enroll.filter(function(e){ return e.acct===a&&isFormal(course(e.course))&&(['paid','checked','wait'].indexOf(e.status)>=0||(e.status==='pending'&&!e.claim)); }); }
 function pushList(){
@@ -2579,6 +2581,68 @@ function ritualNote(){ var ev=(S.portalEv||[]).filter(function(e){ return e.type
   if(!ev) return ''; var d=function(x){ return (+x.slice(5,7))+'/'+(+x.slice(8,10)); };
   return '<div class="card rit-note"><span class="chip c-warn">法會</span><div><b>'+esc(ev.title||'法會')+'</b>　'+d(ev.date)+(ev.end&&ev.end!==ev.date?'–'+d(ev.end):'')+(ev.note?'<br><span class="muted">'+esc(ev.note)+'</span>':'')+'</div></div>'; }
 var _vm3=viewMe; viewMe=function(){ _vm3(); if(ME_SUB!=='lv') return; var pc=document.querySelector('#root .ptcard'); var n=ritualNote(); if(pc&&n) pc.insertAdjacentHTML('beforebegin',n); };
+
+/* =====================================================================
+   2026-11-12 K：塔羅體驗班 300 元、可以取消報名、名單看得到每一場
+   ===================================================================== */
+ST.refunded=['已取消・退款','c-gray'];
+function isFree(c){ return !(c&&+c.price>0); }
+function fixPrices(){ (S.courses||[]).forEach(function(c){ if(c.name==='塔羅體驗班'&&!(+c.price>0)){ c.price=300; c.pay=[300,300]; c.share=c.share||0; } }); }
+(function(){ fixPrices(); var _ap=apply; apply=function(d){ _ap(d); fixPrices(); if(S.admin) setTimeout(sync,0); }; })();
+function cancelUI(e,o){
+  if(['paid','wait','pending'].indexOf(e.status)<0) return '';
+  if(daysUntil(o.s.date)<0||(onDay(o.s)&&e.status!=='wait')) return '';
+  if(e.cancelReq) return '<p class="hint">已申請取消（'+esc(e.cancelReq.slice(5))+'），等行政確認'+(e.status==='paid'&&!isFree(o.c)?'並退款':'')+'。<a href="javascript:undoCancel(\''+e.id+'\')">不取消了</a></p>';
+  return '<div class="mc-act"><button class="btn gray sm" onclick="askCancel(\''+e.id+'\')">取消報名</button></div>';
+}
+function askCancel(id){ var e=S.enroll.find(function(x){return x.id===id;}); if(!e) return; var c=course(e.course);
+  var paid=e.status==='paid'&&!isFree(c);
+  sheet('<h2>取消這堂課？</h2><p><b>'+esc(c.name)+'</b></p><p>'+(paid?'送出後行政會跟你聯絡退款，退款完成就取消。':'送出後行政確認就會取消，名額會讓給其他人。')+'</p>'+
+    '<button class="btn block" onclick="doCancelReq(\''+id+'\')">確定取消</button><button class="btn gray block" onclick="closeSheet()">先不要</button>'); }
+function doCancelReq(id){ var e=S.enroll.find(function(x){return x.id===id;}); e.cancelReq=today()+' '+nowHM(); save(); closeSheet(); render(); toast('已送出取消申請'); }
+function undoCancel(id){ var e=S.enroll.find(function(x){return x.id===id;}); delete e.cancelReq; save(); render(); toast('已收回取消申請'); }
+function adCancel(id){ var e=S.enroll.find(function(x){return x.id===id;}); if(!e) return; var c=course(e.course), st=stuOf(e.acct)||{name:e.acct};
+  var paid=e.status==='paid'&&!isFree(c)&&(e.amount||0)!==0;
+  sheet('<h2>取消 '+esc(st.name)+' 的報名？</h2><p>'+esc(c.name)+'</p>'+(paid?'<p>這筆已付款，請<b>先退款</b>再按確認；推薦業績會扣回。</p>':'<p>名額會空出來給其他人。</p>')+
+    '<button class="btn block" onclick="doAdCancel(\''+id+'\')">'+(paid?'已退款，取消報名':'確定取消')+'</button><button class="btn gray block" onclick="closeSheet()">先不要</button>'); }
+function doAdCancel(id){ var e=S.enroll.find(function(x){return x.id===id;}); e.status='refunded'; e.cancelAt=today(); e.cancelBy=S.adminWho||'行政'; save(); closeSheet(); render(); toast('已取消這筆報名'); }
+function upSess(){ return allSess().filter(function(x){ return (x.s.end||x.s.date)>=today(); }); }
+function aRoster(){
+  var all=allSess(), up=upSess();
+  if(!RS||!all.some(function(x){return x.s.id===RS;})) RS=(up[0]||all[all.length-1]||{s:{}}).s.id||'';
+  var opt=function(x){ return '<option value="'+x.s.id+'" '+(x.s.id===RS?'selected':'')+'>'+sdate(x.s)+'　'+esc(x.c.name)+'（'+taken(x.s.id)+' 人）</option>'; };
+  var past=all.filter(function(x){return up.indexOf(x)<0;}).reverse();
+  var h=ahead()+'<h2>報名名單</h2><select class="t" onchange="RS=this.value;render()"><optgroup label="即將上課">'+up.map(opt).join('')+'</optgroup>'+(past.length?'<optgroup label="已結束">'+past.map(opt).join('')+'</optgroup>':'')+'</select>';
+  var x=all.find(function(y){return y.s.id===RS;}); if(!x){ $('root').innerHTML=h+'<div class="card soft">還沒有排課。</div>'; return; }
+  var list=S.enroll.filter(function(e){return e.session===RS&&!e.anon;}); var cnt=function(k){return list.filter(function(e){return e.status===k;}).length;};
+  var req=list.filter(function(e){return e.cancelReq&&e.status!=='refunded';}).length;
+  h+='<p class="muted" style="margin:10px 2px 0">'+esc(x.s.time)+'・'+esc(x.s.note||x.c.place)+'・'+(isFree(x.c)?'免費':money(x.c.price))+'</p>';
+  h+='<div class="row" style="margin:10px 0;flex-wrap:wrap;gap:6px"><span class="chip c-blue">已付款 '+cnt('paid')+'</span><span class="chip c-ok">已簽到 '+cnt('checked')+'</span>'+(cnt('pending')?'<span class="chip c-warn">待付款 '+cnt('pending')+'</span>':'')+(cnt('wait')?'<span class="chip c-warn">候補 '+cnt('wait')+'</span>':'')+(req?'<span class="chip c-warn">申請取消 '+req+'</span>':'')+(cnt('refunded')?'<span class="chip c-gray">已取消 '+cnt('refunded')+'</span>':'')+'</div>';
+  if(!list.length) h+='<div class="card soft">這場還沒有人報名。</div>';
+  var ord={paid:0,checked:0,pending:1,wait:2,refunded:3}, rq=function(e){ return e.cancelReq&&e.status!=='refunded'?1:0; };
+  list.slice().sort(function(a,b){ return rq(b)-rq(a)||(ord[a.status]||0)-(ord[b.status]||0); }).forEach(function(e){
+    var st=stuOf(e.acct)||{name:e.acct}; var s=ST[e.status]||['',''];
+    var b='';
+    if(e.status==='paid'&&onDay(x.s)) b+='<button class="btn ok sm" onclick="askAdminCheckin(\''+e.id+'\')">幫他簽到</button>';
+    if(e.status==='wait') b+='<button class="btn line sm" onclick="promote(\''+e.id+'\')">轉為正式報名</button>';
+    if(e.status==='pending') b+='<button class="btn ok sm" onclick="confirmPaid(\''+e.id+'\')">確認已收款</button>';
+    if(['paid','wait','pending'].indexOf(e.status)>=0) b+='<button class="btn gray sm" onclick="adCancel(\''+e.id+'\')">取消報名</button>';
+    h+='<div class="card"><div class="row" style="justify-content:space-between"><b style="font-size:17px">'+esc(st.name)+'</b><span class="chip '+s[1]+'">'+s[0]+'</span></div>'+
+      (rq(e)?'<p style="margin:6px 0 0;color:var(--bad)">學員申請取消（'+esc(e.cancelReq.slice(5))+'）</p>':'')+
+      '<p class="muted" style="margin:4px 0 0">'+(st.phone?esc(st.phone)+'・':'')+'推薦人：'+esc(st.referrer||'未填')+(st.second?'・第二人：'+esc(st.second)+'（'+esc(st.ratio)+'）':'')+'</p>'+
+      (b?'<div class="row" style="gap:8px;margin-top:8px;flex-wrap:wrap">'+b+'</div>':'')+'</div>';
+  });
+  $('root').innerHTML=h;
+}
+(function(){ var _at=aToday; aToday=function(){ _at();
+  var tm=allSess().filter(function(x){ return daysUntil(x.s.date)===1; }); if(!tm.length) return;
+  var h='<div class="grp"><span>明天的課</span></div>';
+  tm.forEach(function(x){ var en=S.enroll.filter(function(e){ return e.session===x.s.id&&!e.anon&&['paid','pending','wait'].indexOf(e.status)>=0; });
+    h+='<div class="card"><div class="row" style="justify-content:space-between"><b style="font-size:17px">'+esc(x.c.name)+'</b><span class="chip c-blue">'+en.filter(function(e){return e.status!=='wait';}).length+' 人</span></div><p class="muted" style="margin:2px 0 8px">'+esc(x.s.time)+'・'+esc(x.s.note||x.c.place)+'</p>'+
+      (en.length?'<ul class="roster">'+en.map(function(e){ var st=stuOf(e.acct)||{name:e.acct}, s=ST[e.status]||['',''];
+        return '<li><span class="nm"><b>'+esc(st.name)+'</b></span><span class="chip '+(e.cancelReq?'c-warn':s[1])+'">'+(e.cancelReq?'申請取消':s[0].replace('・待上課',''))+'</span></li>'; }).join('')+'</ul>':'<p class="muted">還沒有人報名</p>')+
+      '<button class="btn line sm" style="margin-top:8px" onclick="RS=\''+x.s.id+'\';aGo(\'roster\')">看完整名單 ›</button></div>'; });
+  $('root').insertAdjacentHTML('beforeend',h); }; })();
 
 </script>
 </body>
