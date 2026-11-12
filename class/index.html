@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>神奇身心靈學苑・課程表</title>
+<style>
+:root{color-scheme:light only}
+body{margin:0;background:#fef5f0;font-family:"Noto Sans TC",-apple-system,"PingFang TC",sans-serif;color:#2a2a2a}
+header{padding:18px 16px 6px;text-align:center}
+header b{font-size:20px;letter-spacing:.12em}
+header p{margin:6px 0 0;font-size:13px;color:#8a7d75}
+.seg{display:flex;gap:8px;justify-content:center;margin:12px 0 4px}
+.seg button{border:1px solid #e8d6cc;background:#fff;border-radius:999px;padding:8px 18px;font-size:15px;font-family:inherit;color:#5a4b42}
+.seg button.on{background:#5a3a2e;color:#fff;border-color:#5a3a2e}
+main{padding:10px 10px 30px;max-width:720px;margin:0 auto}
+img{display:block;width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(90,58,46,.12)}
+.tip{text-align:center;font-size:13px;color:#8a7d75;margin:12px 0 0}
+.empty{text-align:center;padding:60px 0;color:#8a7d75}
+</style></head><body>
+<header><b>神奇身心靈學苑 課程表</b><p>課程有異動會自動更新，以這裡為準</p><div class="seg" id="seg"></div></header>
+<main id="m"><div class="empty">讀取中…</div></main>
+<script>
+const U="https://plgrsxtlaznajzqgcuqr.supabase.co/rest/v1/game_data", K="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZ3JzeHRsYXpuYWp6cWdjdXFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5Njg1MDIsImV4cCI6MjA5MDU0NDUwMn0.XyZ0wQbZQ-CInglRpv-MHMuMvkviRovm-o-On_FeyGs";
+const H={apikey:K,Authorization:"Bearer "+K};
+const get=id=>fetch(U+"?id=eq."+id+"&select=data",{headers:H}).then(r=>r.json()).then(r=>r[0]&&r[0].data);
+(async()=>{
+  const cfg=await get("portal_config_main"); let imgs=[];
+  (cfg&&cfg.teacher||[]).forEach(c=>(c.items||[]).forEach(it=>{ if(it.type==="gallery"&&it.name==="課程資料") imgs=(it.images||[]).filter(m=>/^\s*\d+\s*月\s*課表/.test(m.title||"")&&m.sb); }));
+  const now=new Date(Date.now()+8*3600e3), cm=now.getUTCMonth()+1, nm=cm%12+1;
+  const pick=m=>imgs.find(x=>new RegExp("^\\s*"+m+"\\s*月").test(x.title));
+  const list=[pick(cm),pick(nm)].filter(Boolean);
+  if(!list.length){ document.getElementById("m").innerHTML='<div class="empty">課表整理中，請私訊學苑官方 LINE</div>'; return; }
+  const data={}; await Promise.all(list.map(async x=>{ const d=await get(x.sb); if(d&&d.image) data[x.sb]=d.image; }));
+  const show=i=>{ const x=list[i]; document.querySelectorAll("#seg button").forEach((b,j)=>b.classList.toggle("on",i===j));
+    document.getElementById("m").innerHTML=data[x.sb]?'<img src="'+data[x.sb]+'" alt="'+x.title+'"><p class="tip">長按圖片可以存到手機</p>':'<div class="empty">讀不到圖片，請重新整理</div>'; };
+  document.getElementById("seg").innerHTML=list.length>1?list.map((x,i)=>'<button type="button">'+x.title.replace(/\s/g,"")+'</button>').join(""):"";
+  document.querySelectorAll("#seg button").forEach((b,i)=>b.onclick=()=>show(i));
+  show(0);
+})().catch(()=>{ document.getElementById("m").innerHTML='<div class="empty">網路不穩，請重新整理</div>'; });
+</script></body></html>
