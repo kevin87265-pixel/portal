@@ -1337,7 +1337,8 @@ var NOV_FROM_IMAGE=[
 ].map(function(r){ return {id:r[0],date:r[1],time:r[2],type:'course',title:r[3],course:r[3],note:r[4],to:{student:true,teacher:true},src:'2026年11月課表（圖片）'}; });
 function syncPortal(events,from){
   var list=(events||[]).filter(function(e){ return e.type==='course'&&e.to&&e.to.student; });
-  NOV_FROM_IMAGE.forEach(function(n){ if(!list.some(function(e){ return e.date===n.date&&normC(e.course||e.title)===normC(n.course); })) list.push(n); });
+  /* 2026-11-12 K 已在入口網站行事曆排好 11 月課：行事曆有 11 月的課就不再補圖片版，避免多出舊場次 */
+  if(!list.some(function(e){ return /^2026-11/.test(e.date); })) NOV_FROM_IMAGE.forEach(function(n){ if(!list.some(function(e){ return e.date===n.date&&normC(e.course||e.title)===normC(n.course); })) list.push(n); });
   list.sort(function(a,b){ return a.date<b.date?-1:1; });
   /* 同一門課、同一時段、連續兩天＝同一場（例如八字進階班 11/21～11/22） */
   var merged=[];
@@ -1345,7 +1346,8 @@ function syncPortal(events,from){
     var p=merged[merged.length-1];
     if(p&&normC(p.course||p.title)===normC(e.course||e.title)&&p.time===e.time){
       var nd=new Date((p.end||p.date)+'T12:00:00'); nd.setDate(nd.getDate()+1);
-      if(e.date===ymdS(nd)){ p.end=e.date; return; }
+      if(e.date===ymdS(nd)){ p.end=e.end&&e.end>e.date?e.end:e.date; return; }
+      if(e.date>=p.date&&e.date<=(p.end||p.date)) return;
     }
     merged.push(Object.assign({},e));
   });
