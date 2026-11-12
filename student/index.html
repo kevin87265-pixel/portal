@@ -483,7 +483,7 @@ function seed(){
         pay:[12000,12500,12700,13200,13100,14100],combo:{name:'塔羅兩階合報（初階＋創業菁英）',pay:[34900,36300,36900,38100,38000,40900],share:5404},sessions:[]},
       {id:'c4',name:'塔羅進階班',alias:'塔羅創業菁英班',mode:'線下實體課',intro:'塔羅創業菁英班：從解牌到接案實戰。',teacher:'陳彩綺 講師',place:'學苑教室',price:24900,share:4000,seats:15,
         pay:[24900,25900,26300,27200,27100,29200],combo:{name:'塔羅兩階合報（初階＋創業菁英）',pay:[34900,36300,36900,38100,38000,40900],share:5404},sessions:[]},
-      {id:'c5',name:'八字體驗班',mode:'線上／線下',intro:'洞悉人脈秘密，一招讓你突破人性。',teacher:'羅文勳 院長',place:'線上課',price:0,share:0,seats:50,sessions:[]},
+      {id:'c5',name:'八字體驗班',mode:'線上／線下',intro:'洞悉人脈秘密，一招讓你突破人性。',teacher:'羅文勳 院長',place:'線上課',price:300,pay:[300,300],share:0,seats:50,sessions:[]},
       {id:'c6',name:'塔羅體驗班',mode:'線上課',intro:'教你基礎認識塔羅，利用塔羅牌來洞悉未來趨勢。',teacher:'陳彩綺 講師',place:'線上課',price:300,pay:[300,300],share:0,seats:50,sessions:[]},
       {id:'c7',name:'命盤解析課',mode:'線上／實體',intro:'老師實戰批盤現場，學會說出命的故事。學員免費開放。',teacher:'羅文勳 院長',place:'線上課',price:0,share:0,seats:80,sessions:[]}
     ],
@@ -2583,11 +2583,11 @@ function ritualNote(){ var ev=(S.portalEv||[]).filter(function(e){ return e.type
 var _vm3=viewMe; viewMe=function(){ _vm3(); if(ME_SUB!=='lv') return; var pc=document.querySelector('#root .ptcard'); var n=ritualNote(); if(pc&&n) pc.insertAdjacentHTML('beforebegin',n); };
 
 /* =====================================================================
-   2026-11-12 K：塔羅體驗班 300 元、可以取消報名、名單看得到每一場
+   2026-11-12 K：塔羅、八字體驗班都是 300 元、可以取消報名、名單看得到每一場
    ===================================================================== */
 ST.refunded=['已取消・退款','c-gray'];
 function isFree(c){ return !(c&&+c.price>0); }
-function fixPrices(){ (S.courses||[]).forEach(function(c){ if(c.name==='塔羅體驗班'&&!(+c.price>0)){ c.price=300; c.pay=[300,300]; c.share=c.share||0; } }); }
+function fixPrices(){ (S.courses||[]).forEach(function(c){ if((c.name==='塔羅體驗班'||c.name==='八字體驗班')&&!(+c.price>0)){ c.price=300; c.pay=[300,300]; c.share=c.share||0; } }); }
 (function(){ fixPrices(); var _ap=apply; apply=function(d){ _ap(d); fixPrices(); if(S.admin) setTimeout(sync,0); }; })();
 function cancelUI(e,o){
   if(['paid','wait','pending'].indexOf(e.status)<0) return '';
