@@ -1070,7 +1070,9 @@ function whenHTML(){const d=new Date(),W='日一二三四五六';
   const hm=`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
   return `<div class="when"><span class="clock">${hm}</span><span class="wrow"><span>${ganzhiYear(d)}</span><span class="term">${currentTerm(d)}</span><span>${d.getMonth()+1}月${d.getDate()}日 週${W[d.getDay()]}</span></span></div>`;}
 function applyTerm(){const t=currentTerm(new Date());if(t===lastTerm)return;lastTerm=t;const bg=document.getElementById('termbg');
-  bg.style.setProperty('--termfall',TERM_FALL[seasonOf(t)]);bg.style.backgroundImage=TERM_IMG[t]?`url(${TERM_IMG[t]})`:TERM_FALL[seasonOf(t)];}
+  bg.style.setProperty('--termfall',TERM_FALL[seasonOf(t)]);const im=termImgFor(t);bg.style.backgroundImage=im?`url(${im})`:TERM_FALL[seasonOf(t)];}
+/* 這個節氣還沒有畫就往前找最近一張有畫的 */
+function termImgFor(t){if(TERM_IMG[t])return TERM_IMG[t];const i=TERMS.findIndex(x=>x[0]===t);for(let k=1;k<24;k++){const n=TERMS[(i-k+24)%24][0];if(TERM_IMG[n])return TERM_IMG[n];}return '';}
 function hdateHTML(){const d=new Date(),W='日一二三四五六';return `<b class="num">${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}</b><span>${currentTerm(d)}・${d.getMonth()+1}/${d.getDate()}（${W[d.getDay()]}）</span>`;}
 function tickClock(){document.querySelectorAll('.when').forEach(w=>{w.outerHTML=whenHTML();});document.querySelectorAll('.hdate').forEach(h=>h.innerHTML=hdateHTML());applyTerm();}
 setInterval(tickClock,15000);
@@ -1306,7 +1308,7 @@ function showUp(role){const u=UP[role];if(!u)return;
 function checkUpPV(name,role){const prev=stageGet(name);stageSet(name,role);if(prev===null||+prev<role)setTimeout(()=>showUp(role),400);}
 function checkUpTeacher(name){const prev=stageGet(name);if(prev!==null&&+prev<3){stageSet(name,3);setTimeout(()=>showUp(3),400);}}
 /* 有新版就自動換新（GitHub 會快取 10 分鐘） */
-const BUILD='20261031225849';
+const BUILD='20261112083904';
 (function(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname.replace(/[^/]*$/,'')+'version.txt?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=(v||'').trim();
   if(v&&v!==BUILD){const k='perfReload_'+v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,1);}catch(e){}
     const q=new URLSearchParams(location.search);q.set('_v',v);location.replace(location.pathname+'?'+q.toString());}}).catch(()=>{});})();
