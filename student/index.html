@@ -408,7 +408,141 @@ nav.tabs button.on svg{stroke-width:2.2}
 .card.push .row .btn{margin:0;flex:1}
 .pre-s .btn{white-space:nowrap;flex:0 0 auto}.pre-s>span{min-width:0}
 
-.chipbtn{border:0;cursor:pointer;font:inherit;font-size:13px}
+/* ===== 美化試看版（2026-11-15）：只在 preview.html 套用 ===== */
+:root,body.t-blue{--bg:#f5f3ee;--line:#e8e3d8;--pri-soft:#edf1f8;--sh:0 1px 2px rgba(30,40,60,.04),0 8px 24px rgba(30,40,60,.06);--r:20px}
+body{background:
+  radial-gradient(1200px 500px at 50% -120px,rgba(198,161,91,.10),transparent 70%),
+  var(--bg);background-attachment:fixed}
+html{background:var(--bg)}
+h2{font-size:23px;font-weight:700;position:relative;padding-left:14px}
+h2::before{content:"";position:absolute;left:0;top:.32em;bottom:.32em;width:4px;border-radius:4px;background:linear-gradient(var(--acc),var(--pri))}
+.sheet h2,#sheet h2,.lg-card h2{padding-left:0}.sheet h2::before,#sheet h2::before,.lg-card h2::before{display:none}
+
+/* 頁首：品牌字＋細金線 */
+.topbar{padding:4px 2px 12px;margin:0 0 14px;border-bottom:1px solid rgba(198,161,91,.35)}
+.topbar b{font-size:19px;letter-spacing:.12em}
+.topbar span{font-size:14px;padding:2px 10px;border-radius:99px;background:#fff;border:1px solid var(--line)}
+
+/* 卡片：更柔、更有層次 */
+.card,.status,.today,.tile,.lvcard,.todo{border-color:rgba(232,227,216,.9);box-shadow:var(--sh)}
+.card{border-radius:20px;padding:18px}
+.card.soft{background:linear-gradient(160deg,var(--pri-soft),#fff 140%)}
+.card h3{font-family:"Noto Serif TC","Songti TC",serif;font-weight:700;letter-spacing:.06em}
+
+/* 等級金幣列 */
+.status{border-radius:22px;padding:14px 16px;background:linear-gradient(135deg,#fff 0%,#fff 60%,#fbf6ea 100%)}
+.xp{height:7px;background:#eef0f4}
+.xp span{background:linear-gradient(90deg,var(--lvc,var(--pri)),color-mix(in srgb,var(--lvc,var(--pri)) 60%,#fff))}
+.st-coin b{font-size:22px;font-family:"Noto Serif TC",serif}
+
+/* 今天的課：主角卡 */
+.today{border-radius:24px;background:linear-gradient(150deg,#fff 0%,#fff 55%,var(--pri-soft) 100%)}
+.today::after{content:"";position:absolute;left:18px;right:18px;top:0;height:3px;border-radius:0 0 4px 4px;background:linear-gradient(90deg,var(--acc),transparent)}
+.td-big{font-size:30px;font-weight:700}
+
+/* 入口磚 */
+.tile{border-radius:20px;transition:transform .15s}
+.tile:active{transform:scale(.98)}
+.tile b{font-weight:700;letter-spacing:.05em}
+.tile i{color:var(--acc)}
+
+/* 按鈕 */
+.btn{border-radius:14px;letter-spacing:.04em;box-shadow:0 4px 12px color-mix(in srgb,var(--pri) 22%,transparent);background:linear-gradient(180deg,var(--pri2),var(--pri))}
+.btn.line,.btn.gray{box-shadow:none;background:#fff}
+.btn.line{border-color:color-mix(in srgb,var(--pri) 45%,#fff)}
+.btn.big{border-radius:16px}
+.btn.sm{border-radius:12px;box-shadow:none}
+
+/* 分段切換 */
+.seg button{border-radius:14px;border-color:var(--line)}
+.seg button.on{background:linear-gradient(180deg,var(--pri2),var(--pri));box-shadow:0 4px 10px color-mix(in srgb,var(--pri) 20%,transparent)}
+.seg.sub{border-radius:16px;background:rgba(255,255,255,.85)}
+.seg.sub button.on{background:var(--pri-soft);color:var(--pri);box-shadow:none;font-weight:700}
+
+/* 小標籤 */
+.chip{font-weight:700;letter-spacing:.03em}
+.sec-h b{font-weight:700;letter-spacing:.08em}
+
+/* 下方分頁列：毛玻璃＋選中有底 */
+nav.tabs{background:rgba(255,255,255,.85);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid rgba(232,227,216,.9);box-shadow:0 -6px 20px rgba(30,40,60,.05)}
+nav.tabs button{position:relative;isolation:isolate}
+nav.tabs button.on::before{content:"";position:absolute;top:3px;left:50%;transform:translateX(-50%);width:52px;height:32px;border-radius:14px;background:var(--pri-soft);z-index:-1}
+
+/* 輸入框 */
+input.t,select.t,textarea.t{border-radius:14px;background:#fffdf9}
+
+/* 行政頁首 */
+.adm-head{border-radius:20px;background:linear-gradient(135deg,var(--pri2),var(--pri) 60%);position:relative;overflow:hidden}
+.adm-head::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;border:1px solid rgba(198,161,91,.45);box-shadow:0 0 0 18px rgba(198,161,91,.08)}
+.todo{border-radius:18px}
+.today-h{font-weight:700;letter-spacing:.06em}
+
+/* 選單列（更多） */
+.card.menu button{border-radius:14px}
+
+/* 塔羅靈數格 */
+.tn-col{background:linear-gradient(180deg,#fdf3f5,#fff);border:1px solid #f4dde2}
+
+/* ---- 第二層：比較明顯的改變 ---- */
+/* 學員頁首：跟行政一樣的深色名牌條 */
+.topbar{background:linear-gradient(135deg,var(--pri2),var(--pri) 65%);border:0;border-radius:20px;padding:14px 16px;margin:0 0 16px;box-shadow:0 10px 24px color-mix(in srgb,var(--pri) 25%,transparent);position:relative;overflow:hidden}
+.topbar::after{content:"";position:absolute;right:-36px;top:-46px;width:130px;height:130px;border-radius:50%;border:1px solid rgba(198,161,91,.5);box-shadow:0 0 0 16px rgba(198,161,91,.07);pointer-events:none}
+.topbar b{color:#fff;font-size:19px}
+.topbar span{color:#fff;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.25)}
+.topbar .lnk{color:rgba(255,255,255,.85);position:relative;z-index:1}
+.demo-bar{margin-bottom:10px}
+
+/* 標題：金色菱形＋延伸細線 */
+.sec-h{gap:10px}
+.sec-h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(198,161,91,.5),transparent)}
+.sec-h.in::after{display:none}
+
+/* 課表日期塊：深色＋金色底線 */
+.dblk{background:linear-gradient(180deg,var(--pri2),var(--pri));box-shadow:inset 0 -3px 0 var(--acc),0 4px 10px color-mix(in srgb,var(--pri) 18%,transparent)}
+
+/* 入口磚：插圖墊一圈淡色圓 */
+.tile .ill{background:radial-gradient(circle,var(--pri-soft) 62%,transparent 63%);border-radius:50%;padding:4px}
+
+/* ---- 第三層：增加色彩與畫面 ---- */
+/* 頁首：用當月節慶主視覺當背景 */
+.topbar{background:linear-gradient(90deg,rgba(18,30,58,.78) 0%,rgba(18,30,58,.40) 50%,rgba(18,30,58,0) 85%),var(--hero,none) center 38%/cover,var(--pri);min-height:78px;align-items:center}
+.topbar::after{display:none}
+/* 首頁頁首更大一點 */
+.topbar:has(+ .status),.demo-bar+.topbar:has(+ .status){min-height:112px}
+
+/* 入口磚：每格一個顏色 */
+.tile{border:0}
+/* 入口磚：白底，只有插圖圓底＋標題＋下緣細線帶顏色 */
+.tile{background:#fff;position:relative;overflow:hidden}
+.tile::after{content:"";position:absolute;left:14px;right:14px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--tc)}
+.tile .ill{background:radial-gradient(circle,var(--tcs) 64%,transparent 65%)!important}
+.tile b{color:var(--tc)!important}
+.tile i{color:var(--tc)}
+.tl-blue{--tc:#2a4f8f;--tcs:#dce7f7}
+.tl-green{--tc:#1f7a52;--tcs:#d6efe2}
+.tl-amber{--tc:#9a6a14;--tcs:#f6e7c4}
+.tl-purple{--tc:#5e4396;--tcs:#e6dcf6}
+.tl-teal{--tc:#1b6d74;--tcs:#d3eeef}
+.tile small{color:#4f5a6b}
+.tile .ill{background:radial-gradient(circle,rgba(255,255,255,.9) 62%,transparent 63%)}
+
+/* 課程卡：八字藍、塔羅紫、免費綠 */
+.cat-bz .dblk{background:linear-gradient(180deg,#34589a,#1d3461)}
+.cat-tr .dblk{background:linear-gradient(180deg,#8a64b8,#5b3f8a)}
+.cat-free .dblk{background:linear-gradient(180deg,#3f9a72,#22704f)}
+.scard.cat-bz,.card.mc.cat-bz{border-left:4px solid #2c4b80}
+.scard.cat-tr,.card.mc.cat-tr{border-left:4px solid #7a56aa}
+.scard.cat-free,.card.mc.cat-free{border-left:4px solid #2f8a62}
+.st-tarot{color:#6a479c!important;background:#f1eafa!important}
+.st-free{color:#1f7a55!important;background:#e6f5ee!important}
+
+/* 等級金幣列：淡淡的等級色 */
+.status{background:linear-gradient(120deg,color-mix(in srgb,var(--lvc,#2f8a62) 9%,#fff),#fff 55%,#fbf3df)}
+/* 今天的課：淡藍到淡金 */
+.today{background:linear-gradient(140deg,#eef3fb 0%,#fff 50%,#fbf4e3 100%)}
+/* 最新消息、選單卡片加一點暖色 */
+.news{background:linear-gradient(180deg,#fff,#fdfaf3)}
+
 </style>
 </head>
 <body class="t-blue">
@@ -483,8 +617,8 @@ function seed(){
         pay:[12000,12500,12700,13200,13100,14100],combo:{name:'塔羅兩階合報（初階＋創業菁英）',pay:[34900,36300,36900,38100,38000,40900],share:5404},sessions:[]},
       {id:'c4',name:'塔羅進階班',alias:'塔羅創業菁英班',mode:'線下實體課',intro:'塔羅創業菁英班：從解牌到接案實戰。',teacher:'陳彩綺 講師',place:'學苑教室',price:24900,share:4000,seats:15,
         pay:[24900,25900,26300,27200,27100,29200],combo:{name:'塔羅兩階合報（初階＋創業菁英）',pay:[34900,36300,36900,38100,38000,40900],share:5404},sessions:[]},
-      {id:'c5',name:'八字體驗班',mode:'線上／線下',intro:'洞悉人脈秘密，一招讓你突破人性。',teacher:'羅文勳 院長',place:'線上課',price:300,pay:[300,300],share:0,seats:50,sessions:[]},
-      {id:'c6',name:'塔羅體驗班',mode:'線上課',intro:'教你基礎認識塔羅，利用塔羅牌來洞悉未來趨勢。',teacher:'陳彩綺 講師',place:'線上課',price:300,pay:[300,300],share:0,seats:50,sessions:[]},
+      {id:'c5',name:'八字體驗班',mode:'線上／線下',intro:'洞悉人脈秘密，一招讓你突破人性。',teacher:'羅文勳 院長',place:'線上課',price:0,share:0,seats:50,sessions:[]},
+      {id:'c6',name:'塔羅體驗班',mode:'線上課',intro:'教你基礎認識塔羅，利用塔羅牌來洞悉未來趨勢。',teacher:'陳彩綺 講師',place:'線上課',price:0,share:0,seats:50,sessions:[]},
       {id:'c7',name:'命盤解析課',mode:'線上／實體',intro:'老師實戰批盤現場，學會說出命的故事。學員免費開放。',teacher:'羅文勳 院長',place:'線上課',price:0,share:0,seats:80,sessions:[]}
     ],
     online:[
@@ -1337,8 +1471,7 @@ var NOV_FROM_IMAGE=[
 ].map(function(r){ return {id:r[0],date:r[1],time:r[2],type:'course',title:r[3],course:r[3],note:r[4],to:{student:true,teacher:true},src:'2026年11月課表（圖片）'}; });
 function syncPortal(events,from){
   var list=(events||[]).filter(function(e){ return e.type==='course'&&e.to&&e.to.student; });
-  /* 2026-11-12 K 已在入口網站行事曆排好 11 月課：行事曆有 11 月的課就不再補圖片版，避免多出舊場次 */
-  if(!list.some(function(e){ return /^2026-11/.test(e.date); })) NOV_FROM_IMAGE.forEach(function(n){ if(!list.some(function(e){ return e.date===n.date&&normC(e.course||e.title)===normC(n.course); })) list.push(n); });
+  NOV_FROM_IMAGE.forEach(function(n){ if(!list.some(function(e){ return e.date===n.date&&normC(e.course||e.title)===normC(n.course); })) list.push(n); });
   list.sort(function(a,b){ return a.date<b.date?-1:1; });
   /* 同一門課、同一時段、連續兩天＝同一場（例如八字進階班 11/21～11/22） */
   var merged=[];
@@ -1346,8 +1479,7 @@ function syncPortal(events,from){
     var p=merged[merged.length-1];
     if(p&&normC(p.course||p.title)===normC(e.course||e.title)&&p.time===e.time){
       var nd=new Date((p.end||p.date)+'T12:00:00'); nd.setDate(nd.getDate()+1);
-      if(e.date===ymdS(nd)){ p.end=e.end&&e.end>e.date?e.end:e.date; return; }
-      if(e.date>=p.date&&e.date<=(p.end||p.date)) return;
+      if(e.date===ymdS(nd)){ p.end=e.date; return; }
     }
     merged.push(Object.assign({},e));
   });
@@ -1584,7 +1716,7 @@ function aCourses(){
       else h+='<div class="kv3 one"><div><span>費用</span><b>免費</b></div></div>';
       h+='<div class="sess-h">即將開課'+(past?'<span>（已結束 '+past+' 場不顯示）</span>':'')+'</div>';
       if(!up.length) h+='<p class="muted" style="margin:4px 0">目前沒有排課</p>';
-      up.forEach(function(s){ h+='<div class="srow"><span class="sd">'+sdate(s)+'<small>'+esc(s.time)+(s.src==='portal'?'・入口網站':'')+'</small></span><button class="chip c-blue chipbtn" onclick="RS=\''+s.id+'\';aGo(\'roster\')">'+taken(s.id)+'/'+s.seats+' 看名單 ›</button><button class="btn gray sm" onclick="editSess(\''+c.id+'\',\''+s.id+'\')">改</button></div>'; });
+      up.forEach(function(s){ h+='<div class="srow"><span class="sd">'+sdate(s)+'<small>'+esc(s.time)+(s.src==='portal'?'・入口網站':'')+'</small></span><span class="chip c-blue">'+taken(s.id)+'/'+s.seats+'</span><button class="btn gray sm" onclick="editSess(\''+c.id+'\',\''+s.id+'\')">改</button></div>'; });
       h+='<div class="row" style="margin-top:10px"><button class="btn line sm" onclick="editSess(\''+c.id+'\')">加場次</button><button class="btn gray sm" onclick="editCourse(\''+c.id+'\')">改課程資料</button></div></div>';
     });
   });
@@ -1630,7 +1762,6 @@ function viewMine(){
       if(canChange(e,o)) h+='<div class="mc-act"><button class="btn line sm" onclick="askChange(\''+e.id+'\')">改上課日期</button><span class="muted">還可以改 '+(S.settings.maxChanges-(e.changes||0))+' 次</span></div>';
       else if(daysUntil(o.s.date)>0) h+='<p class="hint">改日期期限已過或次數用完，要調整請聯絡行政</p>';
     }
-    if(typeof cancelUI==='function') h+=cancelUI(e,o);
     h+='</div>';
   });
   if(done.length){ h+='<div class="grp"><span>上過・已處理</span></div>';
@@ -2495,7 +2626,7 @@ LV.forEach(function(l){ if(l.n===2) l.name='學員'; });
    推課名單、體驗班批次開帳號、法會小公告（2026-11-01 第 1 階段）
    ===================================================================== */
 var PUSH_F='all';
-function isFormal(c){ return c&&(+c.price||0)>0&&!/體驗/.test(c.name); }
+function isFormal(c){ return c&&(+c.price||0)>0; }
 function trialOf(a){ return S.enroll.filter(function(e){ var c=course(e.course); return e.acct===a&&c&&!isFormal(c)&&/體驗/.test(c.name)&&(e.status==='checked'||e.status==='paid'); }); }
 function formalOf(a){ return S.enroll.filter(function(e){ return e.acct===a&&isFormal(course(e.course))&&(['paid','checked','wait'].indexOf(e.status)>=0||(e.status==='pending'&&!e.claim)); }); }
 function pushList(){
@@ -2584,67 +2715,18 @@ function ritualNote(){ var ev=(S.portalEv||[]).filter(function(e){ return e.type
   return '<div class="card rit-note"><span class="chip c-warn">法會</span><div><b>'+esc(ev.title||'法會')+'</b>　'+d(ev.date)+(ev.end&&ev.end!==ev.date?'–'+d(ev.end):'')+(ev.note?'<br><span class="muted">'+esc(ev.note)+'</span>':'')+'</div></div>'; }
 var _vm3=viewMe; viewMe=function(){ _vm3(); if(ME_SUB!=='lv') return; var pc=document.querySelector('#root .ptcard'); var n=ritualNote(); if(pc&&n) pc.insertAdjacentHTML('beforebegin',n); };
 
-/* =====================================================================
-   2026-11-12 K：塔羅、八字體驗班都是 300 元、可以取消報名、名單看得到每一場
-   ===================================================================== */
-ST.refunded=['已取消・退款','c-gray'];
-function isFree(c){ return !(c&&+c.price>0); }
-function fixPrices(){ (S.courses||[]).forEach(function(c){ if((c.name==='塔羅體驗班'||c.name==='八字體驗班')&&!(+c.price>0)){ c.price=300; c.pay=[300,300]; c.share=c.share||0; } }); }
-(function(){ fixPrices(); var _ap=apply; apply=function(d){ _ap(d); fixPrices(); if(S.admin) setTimeout(sync,0); }; })();
-function cancelUI(e,o){
-  if(['paid','wait','pending'].indexOf(e.status)<0) return '';
-  if(daysUntil(o.s.date)<0||(onDay(o.s)&&e.status!=='wait')) return '';
-  if(e.cancelReq) return '<p class="hint">已申請取消（'+esc(e.cancelReq.slice(5))+'），等行政確認'+(e.status==='paid'&&!isFree(o.c)?'並退款':'')+'。<a href="javascript:undoCancel(\''+e.id+'\')">不取消了</a></p>';
-  return '<div class="mc-act"><button class="btn gray sm" onclick="askCancel(\''+e.id+'\')">取消報名</button></div>';
-}
-function askCancel(id){ var e=S.enroll.find(function(x){return x.id===id;}); if(!e) return; var c=course(e.course);
-  var paid=e.status==='paid'&&!isFree(c);
-  sheet('<h2>取消這堂課？</h2><p><b>'+esc(c.name)+'</b></p><p>'+(paid?'送出後行政會跟你聯絡退款，退款完成就取消。':'送出後行政確認就會取消，名額會讓給其他人。')+'</p>'+
-    '<button class="btn block" onclick="doCancelReq(\''+id+'\')">確定取消</button><button class="btn gray block" onclick="closeSheet()">先不要</button>'); }
-function doCancelReq(id){ var e=S.enroll.find(function(x){return x.id===id;}); e.cancelReq=today()+' '+nowHM(); save(); closeSheet(); render(); toast('已送出取消申請'); }
-function undoCancel(id){ var e=S.enroll.find(function(x){return x.id===id;}); delete e.cancelReq; save(); render(); toast('已收回取消申請'); }
-function adCancel(id){ var e=S.enroll.find(function(x){return x.id===id;}); if(!e) return; var c=course(e.course), st=stuOf(e.acct)||{name:e.acct};
-  var paid=e.status==='paid'&&!isFree(c)&&(e.amount||0)!==0;
-  sheet('<h2>取消 '+esc(st.name)+' 的報名？</h2><p>'+esc(c.name)+'</p>'+(paid?'<p>這筆已付款，請<b>先退款</b>再按確認；推薦業績會扣回。</p>':'<p>名額會空出來給其他人。</p>')+
-    '<button class="btn block" onclick="doAdCancel(\''+id+'\')">'+(paid?'已退款，取消報名':'確定取消')+'</button><button class="btn gray block" onclick="closeSheet()">先不要</button>'); }
-function doAdCancel(id){ var e=S.enroll.find(function(x){return x.id===id;}); e.status='refunded'; e.cancelAt=today(); e.cancelBy=S.adminWho||'行政'; save(); closeSheet(); render(); toast('已取消這筆報名'); }
-function upSess(){ return allSess().filter(function(x){ return (x.s.end||x.s.date)>=today(); }); }
-function aRoster(){
-  var all=allSess(), up=upSess();
-  if(!RS||!all.some(function(x){return x.s.id===RS;})) RS=(up[0]||all[all.length-1]||{s:{}}).s.id||'';
-  var opt=function(x){ return '<option value="'+x.s.id+'" '+(x.s.id===RS?'selected':'')+'>'+sdate(x.s)+'　'+esc(x.c.name)+'（'+taken(x.s.id)+' 人）</option>'; };
-  var past=all.filter(function(x){return up.indexOf(x)<0;}).reverse();
-  var h=ahead()+'<h2>報名名單</h2><select class="t" onchange="RS=this.value;render()"><optgroup label="即將上課">'+up.map(opt).join('')+'</optgroup>'+(past.length?'<optgroup label="已結束">'+past.map(opt).join('')+'</optgroup>':'')+'</select>';
-  var x=all.find(function(y){return y.s.id===RS;}); if(!x){ $('root').innerHTML=h+'<div class="card soft">還沒有排課。</div>'; return; }
-  var list=S.enroll.filter(function(e){return e.session===RS&&!e.anon;}); var cnt=function(k){return list.filter(function(e){return e.status===k;}).length;};
-  var req=list.filter(function(e){return e.cancelReq&&e.status!=='refunded';}).length;
-  h+='<p class="muted" style="margin:10px 2px 0">'+esc(x.s.time)+'・'+esc(x.s.note||x.c.place)+'・'+(isFree(x.c)?'免費':money(x.c.price))+'</p>';
-  h+='<div class="row" style="margin:10px 0;flex-wrap:wrap;gap:6px"><span class="chip c-blue">已付款 '+cnt('paid')+'</span><span class="chip c-ok">已簽到 '+cnt('checked')+'</span>'+(cnt('pending')?'<span class="chip c-warn">待付款 '+cnt('pending')+'</span>':'')+(cnt('wait')?'<span class="chip c-warn">候補 '+cnt('wait')+'</span>':'')+(req?'<span class="chip c-warn">申請取消 '+req+'</span>':'')+(cnt('refunded')?'<span class="chip c-gray">已取消 '+cnt('refunded')+'</span>':'')+'</div>';
-  if(!list.length) h+='<div class="card soft">這場還沒有人報名。</div>';
-  var ord={paid:0,checked:0,pending:1,wait:2,refunded:3}, rq=function(e){ return e.cancelReq&&e.status!=='refunded'?1:0; };
-  list.slice().sort(function(a,b){ return rq(b)-rq(a)||(ord[a.status]||0)-(ord[b.status]||0); }).forEach(function(e){
-    var st=stuOf(e.acct)||{name:e.acct}; var s=ST[e.status]||['',''];
-    var b='';
-    if(e.status==='paid'&&onDay(x.s)) b+='<button class="btn ok sm" onclick="askAdminCheckin(\''+e.id+'\')">幫他簽到</button>';
-    if(e.status==='wait') b+='<button class="btn line sm" onclick="promote(\''+e.id+'\')">轉為正式報名</button>';
-    if(e.status==='pending') b+='<button class="btn ok sm" onclick="confirmPaid(\''+e.id+'\')">確認已收款</button>';
-    if(['paid','wait','pending'].indexOf(e.status)>=0) b+='<button class="btn gray sm" onclick="adCancel(\''+e.id+'\')">取消報名</button>';
-    h+='<div class="card"><div class="row" style="justify-content:space-between"><b style="font-size:17px">'+esc(st.name)+'</b><span class="chip '+s[1]+'">'+s[0]+'</span></div>'+
-      (rq(e)?'<p style="margin:6px 0 0;color:var(--bad)">學員申請取消（'+esc(e.cancelReq.slice(5))+'）</p>':'')+
-      '<p class="muted" style="margin:4px 0 0">'+(st.phone?esc(st.phone)+'・':'')+'推薦人：'+esc(st.referrer||'未填')+(st.second?'・第二人：'+esc(st.second)+'（'+esc(st.ratio)+'）':'')+'</p>'+
-      (b?'<div class="row" style="gap:8px;margin-top:8px;flex-wrap:wrap">'+b+'</div>':'')+'</div>';
-  });
-  $('root').innerHTML=h;
-}
-(function(){ var _at=aToday; aToday=function(){ _at();
-  var tm=allSess().filter(function(x){ return daysUntil(x.s.date)===1; }); if(!tm.length) return;
-  var h='<div class="grp"><span>明天的課</span></div>';
-  tm.forEach(function(x){ var en=S.enroll.filter(function(e){ return e.session===x.s.id&&!e.anon&&['paid','pending','wait'].indexOf(e.status)>=0; });
-    h+='<div class="card"><div class="row" style="justify-content:space-between"><b style="font-size:17px">'+esc(x.c.name)+'</b><span class="chip c-blue">'+en.filter(function(e){return e.status!=='wait';}).length+' 人</span></div><p class="muted" style="margin:2px 0 8px">'+esc(x.s.time)+'・'+esc(x.s.note||x.c.place)+'</p>'+
-      (en.length?'<ul class="roster">'+en.map(function(e){ var st=stuOf(e.acct)||{name:e.acct}, s=ST[e.status]||['',''];
-        return '<li><span class="nm"><b>'+esc(st.name)+'</b></span><span class="chip '+(e.cancelReq?'c-warn':s[1])+'">'+(e.cancelReq?'申請取消':s[0].replace('・待上課',''))+'</span></li>'; }).join('')+'</ul>':'<p class="muted">還沒有人報名</p>')+
-      '<button class="btn line sm" style="margin-top:8px" onclick="RS=\''+x.s.id+'\';aGo(\'roster\')">看完整名單 ›</button></div>'; });
-  $('root').insertAdjacentHTML('beforeend',h); }; })();
+/* 美化試看版：版面裝飾（只在 preview.html） */
+(function(){
+  function deco(){
+    var r=document.getElementById('root'); if(!r) return;
+    var tb=r.querySelector('.topbar'); if(tb&&!tb.dataset.d){ tb.dataset.d=1; tb.style.setProperty('--hero','url('+heroSrc()+')'); }
+    var cls=['tl-blue','tl-green','tl-amber','tl-purple','tl-teal'];
+    r.querySelectorAll('.tiles .tile, .tile.wide').forEach(function(t,i){ if(!t.dataset.d){ t.dataset.d=1; t.classList.add(cls[i%cls.length]); } });
+    r.querySelectorAll('.scard,.card.mc').forEach(function(c){ if(c.dataset.d) return; c.dataset.d=1; var s=c.querySelector('.stag'); if(!s) return;
+      c.classList.add(s.classList.contains('st-bazi')?'cat-bz':s.classList.contains('st-tarot')?'cat-tr':'cat-free'); });
+  }
+  new MutationObserver(deco).observe(document.body,{childList:true,subtree:true});
+})();
 
 </script>
 </body>
