@@ -562,22 +562,9 @@ input.t,select.t,textarea.t{border-radius:14px;background:#fffdf9}
 /* 分段切換（課表分類、我的分頁）：每顆是獨立的膠囊，選中的實心＋陰影 */
 .seg.sub{background:none;border:0;padding:0;gap:8px;box-shadow:none}
 .seg.sub button{background:#fff;border:1px solid var(--line)!important;border-radius:99px!important;min-height:42px;color:var(--quiet);font-weight:600;box-shadow:0 1px 3px rgba(30,40,60,.06)}
-.seg.sub button.on{background:linear-gradient(180deg,var(--pri2),var(--pri))!important;color:#fff!important;border-color:transparent!important;box-shadow:0 6px 14px color-mix(in srgb,var(--pri) 30%,transparent)!important;font-weight:700}
-/* 課表分類各自顏色 */
-.seg.sub button[onclick*="TF='bazi'"].on{background:linear-gradient(180deg,#34589a,#1d3461)!important}
-.seg.sub button[onclick*="TF='tarot'"].on{background:linear-gradient(180deg,#8a64b8,#5b3f8a)!important;box-shadow:0 6px 14px rgba(91,63,138,.3)!important}
-.seg.sub button[onclick*="TF='free'"].on{background:linear-gradient(180deg,#3f9a72,#22704f)!important;box-shadow:0 6px 14px rgba(34,112,79,.3)!important}
-.seg.sub button[onclick*="TF='bazi'"]:not(.on){color:#2c4b80}
-.seg.sub button[onclick*="TF='tarot'"]:not(.on){color:#6a479c}
-.seg.sub button[onclick*="TF='free'"]:not(.on){color:#1f7a55}
-
-/* 下方分頁列：選中的圖示放進實心圓、往上浮 */
-nav.tabs{border-radius:22px 22px 0 0;padding-top:6px}
-nav.tabs button.on::before{display:none}
-nav.tabs button svg{transition:transform .2s}
-nav.tabs button.on svg{width:40px;height:40px;padding:8px;border-radius:50%;background:linear-gradient(180deg,var(--pri2),var(--pri));color:#fff;stroke:#fff;margin-top:-18px;box-shadow:0 6px 14px color-mix(in srgb,var(--pri) 35%,transparent),0 0 0 4px #fff}
-nav.tabs button.on{color:var(--pri)}
-
+.seg.sub button.on{background:var(--pri)!important;color:#fff!important;border-color:var(--pri)!important;box-shadow:0 2px 6px color-mix(in srgb,var(--pri) 20%,transparent)!important;font-weight:700}
+/* 下方分頁列：選中的只換顏色＋淡底，不浮起 */
+nav.tabs button.on::before{display:block;width:48px;height:30px;top:5px;background:var(--pri-soft)}
 /* 月份分隔標題 */
 .grp span{font-family:"Noto Serif TC","Songti TC",serif;font-size:20px;font-weight:700;letter-spacing:.08em}
 
