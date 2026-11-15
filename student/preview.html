@@ -513,11 +513,17 @@ input.t,select.t,textarea.t{border-radius:14px;background:#fffdf9}
 
 /* 入口磚：每格一個顏色 */
 .tile{border:0}
-.tl-blue{background:linear-gradient(135deg,#cfe0f7,#e9f1fc);box-shadow:inset 0 0 0 1px #b9cfee} .tl-blue b{color:#1f3f78}
-.tl-green{background:linear-gradient(135deg,#c9ead9,#e6f5ed);box-shadow:inset 0 0 0 1px #acdcc3} .tl-green b{color:#17603f}
-.tl-amber{background:linear-gradient(135deg,#f7e2b3,#fcf1d9);box-shadow:inset 0 0 0 1px #edd08f} .tl-amber b{color:#7d520c}
-.tl-purple{background:linear-gradient(135deg,#ddd0f3,#efe8fa);box-shadow:inset 0 0 0 1px #c8b5ea} .tl-purple b{color:#4e3485}
-.tl-teal{background:linear-gradient(135deg,#c4e8ea,#e3f4f5);box-shadow:inset 0 0 0 1px #a6d8dc} .tl-teal b{color:#165e64}
+/* 入口磚：白底，只有插圖圓底＋標題＋下緣細線帶顏色 */
+.tile{background:#fff;position:relative;overflow:hidden}
+.tile::after{content:"";position:absolute;left:14px;right:14px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--tc)}
+.tile .ill{background:radial-gradient(circle,var(--tcs) 64%,transparent 65%)!important}
+.tile b{color:var(--tc)!important}
+.tile i{color:var(--tc)}
+.tl-blue{--tc:#2a4f8f;--tcs:#dce7f7}
+.tl-green{--tc:#1f7a52;--tcs:#d6efe2}
+.tl-amber{--tc:#9a6a14;--tcs:#f6e7c4}
+.tl-purple{--tc:#5e4396;--tcs:#e6dcf6}
+.tl-teal{--tc:#1b6d74;--tcs:#d3eeef}
 .tile small{color:#4f5a6b}
 .tile .ill{background:radial-gradient(circle,rgba(255,255,255,.9) 62%,transparent 63%)}
 
