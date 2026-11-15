@@ -504,6 +504,39 @@ input.t,select.t,textarea.t{border-radius:14px;background:#fffdf9}
 /* 入口磚：插圖墊一圈淡色圓 */
 .tile .ill{background:radial-gradient(circle,var(--pri-soft) 62%,transparent 63%);border-radius:50%;padding:4px}
 
+/* ---- 第三層：增加色彩與畫面 ---- */
+/* 頁首：用當月節慶主視覺當背景 */
+.topbar{background:linear-gradient(90deg,rgba(18,30,58,.78) 0%,rgba(18,30,58,.40) 50%,rgba(18,30,58,0) 85%),var(--hero,none) center 38%/cover,var(--pri);min-height:78px;align-items:center}
+.topbar::after{display:none}
+/* 首頁頁首更大一點 */
+.topbar:has(+ .status),.demo-bar+.topbar:has(+ .status){min-height:112px}
+
+/* 入口磚：每格一個顏色 */
+.tile{border:0}
+.tl-blue{background:linear-gradient(135deg,#eaf1fb,#fff 70%)} .tl-blue b{color:#24467e}
+.tl-green{background:linear-gradient(135deg,#e7f5ee,#fff 70%)} .tl-green b{color:#1f6a4a}
+.tl-amber{background:linear-gradient(135deg,#fbf1dc,#fff 70%)} .tl-amber b{color:#8a5d12}
+.tl-purple{background:linear-gradient(135deg,#f0eafa,#fff 70%)} .tl-purple b{color:#5a3f8f}
+.tl-teal{background:linear-gradient(135deg,#e3f4f5,#fff 60%)} .tl-teal b{color:#1d6970}
+.tile .ill{background:radial-gradient(circle,rgba(255,255,255,.9) 62%,transparent 63%)}
+
+/* 課程卡：八字藍、塔羅紫、免費綠 */
+.cat-bz .dblk{background:linear-gradient(180deg,#34589a,#1d3461)}
+.cat-tr .dblk{background:linear-gradient(180deg,#8a64b8,#5b3f8a)}
+.cat-free .dblk{background:linear-gradient(180deg,#3f9a72,#22704f)}
+.scard.cat-bz,.card.mc.cat-bz{border-left:4px solid #2c4b80}
+.scard.cat-tr,.card.mc.cat-tr{border-left:4px solid #7a56aa}
+.scard.cat-free,.card.mc.cat-free{border-left:4px solid #2f8a62}
+.st-tarot{color:#6a479c!important;background:#f1eafa!important}
+.st-free{color:#1f7a55!important;background:#e6f5ee!important}
+
+/* 等級金幣列：淡淡的等級色 */
+.status{background:linear-gradient(120deg,color-mix(in srgb,var(--lvc,#2f8a62) 9%,#fff),#fff 55%,#fbf3df)}
+/* 今天的課：淡藍到淡金 */
+.today{background:linear-gradient(140deg,#eef3fb 0%,#fff 50%,#fbf4e3 100%)}
+/* 最新消息、選單卡片加一點暖色 */
+.news{background:linear-gradient(180deg,#fff,#fdfaf3)}
+
 </style>
 </head>
 <body class="t-blue">
@@ -2676,6 +2709,19 @@ function ritualNote(){ var ev=(S.portalEv||[]).filter(function(e){ return e.type
   return '<div class="card rit-note"><span class="chip c-warn">法會</span><div><b>'+esc(ev.title||'法會')+'</b>　'+d(ev.date)+(ev.end&&ev.end!==ev.date?'–'+d(ev.end):'')+(ev.note?'<br><span class="muted">'+esc(ev.note)+'</span>':'')+'</div></div>'; }
 var _vm3=viewMe; viewMe=function(){ _vm3(); if(ME_SUB!=='lv') return; var pc=document.querySelector('#root .ptcard'); var n=ritualNote(); if(pc&&n) pc.insertAdjacentHTML('beforebegin',n); };
 
+</script>
+<script>/* 美化試看版：版面裝飾（只在 preview.html） */
+(function(){
+  function deco(){
+    var r=document.getElementById('root'); if(!r) return;
+    var tb=r.querySelector('.topbar'); if(tb&&!tb.dataset.d){ tb.dataset.d=1; tb.style.setProperty('--hero','url('+heroSrc()+')'); }
+    var cls=['tl-blue','tl-green','tl-amber','tl-purple','tl-teal'];
+    r.querySelectorAll('.tiles .tile, .tile.wide').forEach(function(t,i){ if(!t.dataset.d){ t.dataset.d=1; t.classList.add(cls[i%cls.length]); } });
+    r.querySelectorAll('.scard,.card.mc').forEach(function(c){ if(c.dataset.d) return; c.dataset.d=1; var s=c.querySelector('.stag'); if(!s) return;
+      c.classList.add(s.classList.contains('st-bazi')?'cat-bz':s.classList.contains('st-tarot')?'cat-tr':'cat-free'); });
+  }
+  new MutationObserver(deco).observe(document.body,{childList:true,subtree:true});
+})();
 </script>
 </body>
 </html>
