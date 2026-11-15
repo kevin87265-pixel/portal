@@ -543,6 +543,44 @@ input.t,select.t,textarea.t{border-radius:14px;background:#fffdf9}
 /* 最新消息、選單卡片加一點暖色 */
 .news{background:linear-gradient(180deg,#fff,#fdfaf3)}
 
+/* ===== 2026-11-15 第二輪：字級層次＋分頁立體感 ===== */
+/* 已繳費卡：課名大、日期塊、時間淡、名額小標 */
+.pre-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.pre-cap{display:block;font-size:13px;color:var(--ok);font-weight:700;letter-spacing:.08em}
+.pre-name{display:block;font-family:"Noto Serif TC","Songti TC",serif;font-size:22px;font-weight:700;letter-spacing:.06em;line-height:1.35;color:var(--ink)}
+.pre-head .chip{display:none}
+.pre-s{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px dashed #d6e7dc}
+.pre-d{flex:none;width:52px;height:56px;border-radius:12px;background:#fff;border:1px solid #cfe5d8;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(31,122,82,.08)}
+.pre-d b{font-size:22px;line-height:1;color:var(--ok);font-family:-apple-system,"Helvetica Neue",Arial,sans-serif}
+.pre-d span{font-size:11px;color:var(--quiet);margin-top:3px}
+.pre-m{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.pre-m b{font-size:16px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pre-t{font-size:14px;color:var(--quiet)}
+.pre-left{align-self:flex-start;margin-top:3px;font-size:12px;font-weight:700;color:var(--ok);background:var(--ok-bg);border-radius:99px;padding:1px 9px}
+.pre-left.low{color:var(--warn);background:var(--warn-bg)}
+
+/* 分段切換（課表分類、我的分頁）：每顆是獨立的膠囊，選中的實心＋陰影 */
+.seg.sub{background:none;border:0;padding:0;gap:8px;box-shadow:none}
+.seg.sub button{background:#fff;border:1px solid var(--line)!important;border-radius:99px!important;min-height:42px;color:var(--quiet);font-weight:600;box-shadow:0 1px 3px rgba(30,40,60,.06)}
+.seg.sub button.on{background:linear-gradient(180deg,var(--pri2),var(--pri))!important;color:#fff!important;border-color:transparent!important;box-shadow:0 6px 14px color-mix(in srgb,var(--pri) 30%,transparent)!important;font-weight:700}
+/* 課表分類各自顏色 */
+.seg.sub button[onclick*="TF='bazi'"].on{background:linear-gradient(180deg,#34589a,#1d3461)!important}
+.seg.sub button[onclick*="TF='tarot'"].on{background:linear-gradient(180deg,#8a64b8,#5b3f8a)!important;box-shadow:0 6px 14px rgba(91,63,138,.3)!important}
+.seg.sub button[onclick*="TF='free'"].on{background:linear-gradient(180deg,#3f9a72,#22704f)!important;box-shadow:0 6px 14px rgba(34,112,79,.3)!important}
+.seg.sub button[onclick*="TF='bazi'"]:not(.on){color:#2c4b80}
+.seg.sub button[onclick*="TF='tarot'"]:not(.on){color:#6a479c}
+.seg.sub button[onclick*="TF='free'"]:not(.on){color:#1f7a55}
+
+/* 下方分頁列：選中的圖示放進實心圓、往上浮 */
+nav.tabs{border-radius:22px 22px 0 0;padding-top:6px}
+nav.tabs button.on::before{display:none}
+nav.tabs button svg{transition:transform .2s}
+nav.tabs button.on svg{width:40px;height:40px;padding:8px;border-radius:50%;background:linear-gradient(180deg,var(--pri2),var(--pri));color:#fff;stroke:#fff;margin-top:-18px;box-shadow:0 6px 14px color-mix(in srgb,var(--pri) 35%,transparent),0 0 0 4px #fff}
+nav.tabs button.on{color:var(--pri)}
+
+/* 月份分隔標題 */
+.grp span{font-family:"Noto Serif TC","Songti TC",serif;font-size:20px;font-weight:700;letter-spacing:.08em}
+
 </style>
 </head>
 <body class="t-blue">
@@ -2240,10 +2278,13 @@ var _am0=aMore; aMore=function(){ _am0(); var r=$('root'); if(r) r.insertAdjacen
 function prepaidOf(a){ return S.enroll.filter(function(e){ return e.acct===a&&!e.session&&e.status==='paid'&&course(e.course); }); }
 function nextSess(cid,n){ var c=course(cid); if(!c) return [];
   return c.sessions.filter(function(s){ return (s.date>=today())&&left(s)>0; }).sort(function(a,b){return a.date<b.date?-1:1;}).slice(0,n||3); }
+function srange(s){ var a=s.date.split('-'), b=(s.end&&s.end!==s.date)?s.end.split('-'):null;
+  return (+a[1])+'/'+(+a[2])+'（'+wd(s.date)+'）'+(b?'– '+(b[1]===a[1]?'':(+b[1])+'/')+(+b[2])+'（'+wd(s.end)+'）':''); }
 function prepaidCard(e,full){ var c=course(e.course), ss=nextSess(e.course,full?6:2);
-  var h='<div class="card pre"><div class="pre-top"><span class="chip c-ok">已繳費</span><b>'+esc(c.name)+'</b></div><p class="muted" style="margin:6px 0 8px">不用再付款，選一天來上課就好。最近的上課時間：</p>';
+  var h='<div class="card pre"><div class="pre-head"><div><span class="pre-cap">已繳費・選一天來上課</span><b class="pre-name">'+esc(c.name)+'</b></div><span class="chip c-ok">已繳費</span></div>';
   if(!ss.length) h+='<p class="hint">目前還沒排課，排好會出現在這裡。</p>';
-  ss.forEach(function(s){ h+='<div class="pre-s"><span><b>'+sdate(s)+'</b> '+esc(s.time)+'<br><span class="muted">剩 '+left(s)+' 位</span></span><button class="btn sm" onclick="pickSess(\''+e.id+'\',\''+s.id+'\')">選這天</button></div>'; });
+  ss.forEach(function(s){ var d=new Date(s.date+'T12:00:00'), n=left(s);
+    h+='<div class="pre-s"><div class="pre-d"><b>'+d.getDate()+'</b><span>'+(d.getMonth()+1)+'月</span></div><div class="pre-m"><b>'+srange(s)+'</b><span class="pre-t">'+esc(s.time)+'</span><span class="pre-left'+(n<=5?' low':'')+'">剩 '+n+' 位</span></div><button class="btn sm" onclick="pickSess(\''+e.id+'\',\''+s.id+'\')">選這天</button></div>'; });
   return h+'</div>'; }
 function pickSess(eid,sid){ var e=S.enroll.find(function(x){return x.id===eid;}), o=sessOf(sid); if(!e||!o) return;
   sheet('<h2>選這天上課？</h2><p><b>'+esc(o.c.name)+'</b><br>'+sdate(o.s)+' '+esc(o.s.time)+'</p><p class="muted">已經繳過費，不用再付款。之後要換日期可以到「我的課」改。</p><button class="btn block" onclick="doPick(\''+eid+'\',\''+sid+'\')">確定</button><button class="btn gray block" onclick="closeSheet()">再看看</button>'); }
@@ -2378,9 +2419,10 @@ function doRetake(sid){ var o=sessOf(sid);
   save(); closeSheet(); TAB='mine'; render(); payInfo(); }
 /* 已繳費選日期：有空位直接成功，額滿送行政審核 */
 prepaidCard=function(e,full){ var c=course(e.course), ss=c.sessions.filter(function(s){return s.date>=today();}).sort(function(a,b){return a.date<b.date?-1:1;}).slice(0,full?6:2);
-  var h='<div class="card pre"><div class="pre-top"><span class="chip c-ok">已繳費</span><b>'+esc(c.name)+'</b></div><p class="muted" style="margin:6px 0 8px">不用再付款，選一天來上課就好。最近的上課時間：</p>';
+  var h='<div class="card pre"><div class="pre-head"><div><span class="pre-cap">已繳費・選一天來上課</span><b class="pre-name">'+esc(c.name)+'</b></div></div>';
   if(!ss.length) h+='<p class="hint">目前還沒排課，排好會出現在這裡。</p>';
-  ss.forEach(function(s){ var n=left(s); h+='<div class="pre-s"><span><b>'+sdate(s)+'</b> '+esc(s.time)+'<br><span class="muted">'+(n>0?'剩 '+n+' 位':'額滿・可申請加入')+'</span></span><button class="btn sm'+(n>0?'':' line')+'" onclick="pickSess(\''+e.id+'\',\''+s.id+'\')">'+(n>0?'選這天':'申請加入')+'</button></div>'; });
+  ss.forEach(function(s){ var d=new Date(s.date+'T12:00:00'), n=left(s);
+    h+='<div class="pre-s"><div class="pre-d"><b>'+d.getDate()+'</b><span>'+(d.getMonth()+1)+'月</span></div><div class="pre-m"><b>'+srange(s)+'</b><span class="pre-t">'+esc(s.time)+'</span><span class="pre-left'+(n<=0?' low':n<=5?' low':'')+'">'+(n>0?'剩 '+n+' 位':'額滿・可申請加入')+'</span></div><button class="btn sm'+(n>0?'':' line')+'" onclick="pickSess(\''+e.id+'\',\''+s.id+'\')">'+(n>0?'選這天':'申請加入')+'</button></div>'; });
   return h+'</div>'; };
 pickSess=function(eid,sid){ var o=sessOf(sid), full=left(o.s)<=0;
   sheet('<h2>'+(full?'這場已額滿':'選這天上課？')+'</h2><p><b>'+esc(o.c.name)+'</b><br>'+sdate(o.s)+' '+esc(o.s.time)+'</p><p class="muted">'+(full?'可以送出申請，行政審核通過就會幫你加入；沒通過可以再選別天。':'已經繳過費，不用再付款。之後要換日期可以到「我的課」改。')+'</p>'+
